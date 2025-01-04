@@ -6,38 +6,26 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
+	
+	"post-service/routes"
+	"post-service/db"
 )
 
 func main() {
 	err := godotenv.Load()
-	if err != nil {
-		log.Println("No .env file found, skipping...")
-	}
+	if (err != nil) { log.Println("No .env file found, skipping..."); }
 	
-	databaseURL := os.Getenv("DATABASE_URL")
-	if databaseURL == "" {
-		log.Fatal("DATABASE_URL is not set")
-	}
+	db.Connect()
+	defer db.Close()
 
-	// Connect to the database
-	conn, err := pgxpool.New(context.Background(), databaseURL)
-	if err != nil {
-		log.Fatalf("Unable to connect to database: %v", err)
-	}
-	defer conn.Close()
 
-	log.Println("Connected to the database")
 
-	// Create Fiber app
 	app := fiber.New()
 
-	// Route to test
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World!")
-	})
+	posts := app.Group("/posts")
+  posts.Post("/create", routes.CreatePostHandler)
 
-	// Start server
+
 	log.Fatal(app.Listen(":3000"))
 }
