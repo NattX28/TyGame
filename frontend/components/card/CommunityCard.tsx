@@ -7,7 +7,7 @@ import { CommunityCardProps } from "@/types/community";
 
 const CommunityCard = ({ community }: { community: CommunityCardProps }) => {
   return (
-    <Card className="w-72 bg-second border-third hover:shadow-lg transition-shadow duration-200 cursor-pointer relative ">
+    <Card className="w-full max-w-sm md:max-w-md lg:max-w-lg bg-second border-third hover:shadow-lg transition-shadow duration-200 cursor-pointer relative">
       {/* category on top-left */}
       <div className="absolute top-3 left-3">
         <div className="flex gap-2">
@@ -18,17 +18,17 @@ const CommunityCard = ({ community }: { community: CommunityCardProps }) => {
       <CardContent className="p-4">
         <div className="flex flex-col items-center justify-around space-y-4">
           {/* Community Avatar */}
-          <Avatar className="w-20 h-20">
+          <Avatar className="w-16 h-16 md:w-20 md:h-20">
             <AvatarImage src={community.image} alt="Community Avatar" />
             <AvatarFallback>GC</AvatarFallback>
           </Avatar>
 
           {/* Community Info */}
           <div className="text-center space-y-2">
-            <h3 className="font-semibold text-lg text-main-color">
+            <h3 className="font-semibold text-sm md:text-lg text-main-color">
               {community.name}
             </h3>
-            <p className="text-sm text-main-color line-clamp-2">
+            <p className="text-xs md:text-sm text-main-color line-clamp-2">
               {community.description}
             </p>
           </div>
