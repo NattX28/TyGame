@@ -36,6 +36,10 @@
   .border-third {
     border-color: #151515;
   }
+  .stroke-text {
+    color: white; 
+    text-shadow: 1px 1px 5px #151515;
+  }
 }
 
 @layer component {
