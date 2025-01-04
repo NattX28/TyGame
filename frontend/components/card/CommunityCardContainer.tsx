@@ -40,20 +40,24 @@ const CommunityCardContainer = ({
         observeParents={true}
         breakpoints={{
           320: {
-            slidesPerView: 1.5,
+            slidesPerView: 1.2,
             spaceBetween: 8,
+          },
+          480: {
+            slidesPerView: 1.5,
+            spaceBetween: 12,
           },
           640: {
             slidesPerView: 2.5,
-            spaceBetween: 12,
+            spaceBetween: 16,
           },
           768: {
-            slidesPerView: 3.5,
-            spaceBetween: 16,
+            slidesPerView: 3,
+            spaceBetween: 20,
           },
           1024: {
-            slidesPerView: 4.5,
-            spaceBetween: 16,
+            slidesPerView: 4,
+            spaceBetween: 24,
           },
         }}
         cssMode={false}>
