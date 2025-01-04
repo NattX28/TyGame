@@ -6,8 +6,10 @@ const Navbar = () => {
     <nav>
       <div className="flex justify-between items-center h-16">
         Logo
-        <Search />
-        <div className="flex gap-4">
+        <div className="hidden md:inline-block">
+          <Search />
+        </div>
+        <div className="flex gap-2 sm:gap-4">
           <div>
             <Button>Signup</Button>
           </div>
