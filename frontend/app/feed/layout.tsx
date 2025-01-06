@@ -1,20 +1,25 @@
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import FeedSidebar from "./components/FeedSidebar";
+import { Button } from "@/components/ui/button";
+
 export default function FeedLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <div className="grid grid-cols-12 gap-4 mx-auto max-w-7xl">
-      {/* Sidebar ฝั่งซ้าย */}
-      <div className="col-span-3">{/* <Sidebar /> */}</div>
+    <SidebarProvider>
+      <div className="grid grid-cols-[auto,1fr] w-full">
+        {/* Sidebar ฝั่งซ้าย */}
+        <FeedSidebar />
 
-      {/* Main content ตรงกลาง */}
-      <main className="col-span-6">
-        {children} {/* ตรงนี้จะแสดงเนื้อหาจาก page.tsx */}
-      </main>
-
-      {/* Online users ฝั่งขวา */}
-      <div className="col-span-3">{/* <OnlineUsers /> */}</div>
-    </div>
+        {/* Main content ตรงกลาง */}
+        <main className="flex flex-col overflow-x-auto">
+          <SidebarTrigger />
+          {/* <SidebarTrigger /> */}
+          {children} {/* ตรงนี้จะแสดงเนื้อหาจาก page.tsx */}
+        </main>
+      </div>
+    </SidebarProvider>
   );
 }
