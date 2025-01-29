@@ -13,11 +13,10 @@ import {
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import {
-  Calendar,
-  ChevronDown,
+  CircleUserRound,
   Home,
-  Inbox,
-  Search,
+  MessageCircleMore,
+  LogOut,
   Settings,
 } from "lucide-react";
 
@@ -29,19 +28,14 @@ const items = [
     icon: Home,
   },
   {
-    title: "Inbox",
+    title: "My Profile",
     url: "#",
-    icon: Inbox,
+    icon: CircleUserRound,
   },
   {
-    title: "Calendar",
+    title: "Message",
     url: "#",
-    icon: Calendar,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
+    icon: MessageCircleMore,
   },
   {
     title: "Settings",
@@ -52,7 +46,7 @@ const items = [
 
 const FeedSidebar = () => {
   return (
-    <Sidebar variant="floating" collapsible="icon">
+    <Sidebar variant="floating" collapsible="icon" className="text-main-color">
       {/* header */}
       <SidebarHeader className="border-b">
         <SidebarMenuButton size={"lg"}>
@@ -70,7 +64,9 @@ const FeedSidebar = () => {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-red-500">
+            Application
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
@@ -87,14 +83,17 @@ const FeedSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      {/* Footer */}
       <SidebarFooter>
-        {/* Footer */}
-        <SidebarMenuButton>
-          <a href="#">
-            icon
-            <span>log out</span>
-          </a>
-        </SidebarMenuButton>
+        <SidebarMenuItem>
+          <SidebarMenuButton asChild>
+            <a href="#">
+              <LogOut />
+              <span>log out</span>
+            </a>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
       </SidebarFooter>
     </Sidebar>
   );
