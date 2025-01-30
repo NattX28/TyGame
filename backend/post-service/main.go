@@ -9,7 +9,8 @@ import (
 	"github.com/joho/godotenv"
 	
 	"post-service/middleware"
-	"post-service/routes"
+	"post-service/routes/post"
+	"post-service/routes/comment"
 	"post-service/db"
 )
 
@@ -31,21 +32,28 @@ func main() {
 
 	posts := v1.Group("/posts")
 	posts.Use(middleware.JWTMiddleware)
-  posts.Get("/", routes.CreatePostHandler)
-  posts.Post("/:community_id", routes.CreatePostHandler)
-	posts.Put("/:community_id/:post_id", updatePost)
-	posts.Delete("/:community_id/:post_id", deletePost)
+  posts.Get("/", post.GetPostHandler)
+  posts.Post("/", post.CreatePostHandler)
 
-	comments := v1.Group("/comments")
-	posts.Post("/add", routes.CreatePostHandler)
+	postFocus := posts.Group("/:post_id")
+	postFocus.Put("/", post.EditPostHandler)
+	postFocus.Delete("/", post.DeletePostHandler)
 
+	posts_likes := postFocus.Group("/likes")
+	posts_likes.Post("/", post.LikePostHandler)
+	posts_likes.Delete("/", post.UnlikePostHandler)
 
-	likes := v1.Group("/likes")
+	comments := postFocus.Group("/comments")
+	comments.Get("/", comment.GetCommentsHandler)
+	comments.Post("/", comment.CreateCommentHandler)
 
+	comments_likes := comments.Group("/:comment_id")
+	comments.Put("/", comment.EditCommentHandler)
+	comments.Delete("/", comment.DeleteCommentHandler)
 
-
-
-
+	comments_likes := comments.Group("/likes")
+	comments_likes.Post("/", comment.LikeCommentHandler)
+	comments_likes.Delete("/", comment.UnlikeCommentHandler)
 
 	log.Fatal(app.Listen(":3000"))
 }

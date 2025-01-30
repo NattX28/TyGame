@@ -17,8 +17,7 @@ func createTable() {
 		user_id INT NOT NULL,
 		content TEXT NOT NULL,
 		visibility VARCHAR(20) DEFAULT 'public' CHECK (visibility IN ('public', 'private', 'friends')),
-		created_at TIMESTAMPTZ DEFAULT NOW(),
-		FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+		created_at TIMESTAMPTZ DEFAULT NOW()
 	);
 
 	CREATE TABLE IF NOT EXISTS comments (
@@ -27,8 +26,7 @@ func createTable() {
 		user_id INT NOT NULL,
 		content TEXT NOT NULL,
 		created_at TIMESTAMPTZ DEFAULT NOW(),
-		FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
-		FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+		FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE
 	);
 
 	CREATE TABLE IF NOT EXISTS likes (
@@ -37,7 +35,6 @@ func createTable() {
 		post_id INT NULL,
 		comment_id INT NULL,
 		created_at TIMESTAMPTZ DEFAULT NOW(),
-		FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
 		FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
 		FOREIGN KEY (comment_id) REFERENCES comments(id) ON DELETE CASCADE,
 		CONSTRAINT unique_like UNIQUE (user_id, post_id, comment_id)
