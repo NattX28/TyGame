@@ -2,26 +2,22 @@ package models
 
 import (
 	"time"
-	"gorm.io/gorm"
 )
 
 type Post struct {
-	ID            uint        `json:"id" gorm:"primaryKey"`
-	UserID        uint        `json:"user_id" binding:"required"`
-	CommunityID   uint        `json:"community_id" binding:"required"`
-	Content       string      `json:"content" binding:"required"`
-	Visibility    *string     `json:"visibility,omitempty"`
-	CreatedAt     time.Time		`json:"created_at"`
-	UpdatedAt 	  time.Time 	`json:"updated_at"`
-}
+	ID          uint      `gorm:"primaryKey;autoIncrement;index"`
+	CommunityID uint      `gorm:"not null"`
+	UserID      uint      `gorm:"not null"`
+	Content     string    `gorm:"not null"`
+	Visibility  string    `gorm:"type:varchar(20);default:'public';check:visibility IN ('public', 'private', 'friends')"`
+	Image       string    `gorm:"type:text;"`
+	CreatedAt   time.Time `gorm:"default:current_timestamp"`
 
-type CreatePostRequest struct {
-	CommunityID uint    `json:"community_id" binding:"required"`
-	Content     string  `json:"content" binding:"required"`
-	Visibility  *string `json:"visibility,omitempty"`
+	Comments    []Comment `gorm:"foreignKey:PostID;onDelete:CASCADE"`
+	Likes       []Like    `gorm:"foreignKey:PostID;onDelete:CASCADE"`
 }
 
 type EditPostRequest struct {
 	Content       string      `json:"content" binding:"required"`
-	Visibility    *string     `json:"visibility,omitempty"`
+	Visibility    string     `json:"visibility,omitempty"`
 }

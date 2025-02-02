@@ -2,14 +2,15 @@ package models
 
 import (
 	"time"
-	"gorm.io/gorm"
 )
 
 type Comment struct {
-	ID          uint       `json:"id" gorm:"primaryKey"`
-	UserID      uint       `json:"user_id" binding:"required"`
-	PostID      uint       `json:"post_id" binding:"required"`
-	Content     string    `json:"content" binding:"required"`
-	CreatedAt   time.Time		`json:"created_at" gorm:"autoCreateTime"`
-	UpdatedAt 	time.Time 	`json:"updated_at" gorm:"autoUpdateTime"`
+	ID        uint      `gorm:"primaryKey;autoIncrement;index"`
+	PostID    uint      `gorm:"not null"`
+	UserID    uint      `gorm:"not null"`
+	Content   string    `gorm:"not null"`
+	CreatedAt time.Time `gorm:"default:current_timestamp"`
+	
+	Post      Post      `gorm:"foreignKey:PostID;onDelete:CASCADE"`
+	Likes     []Like    `gorm:"foreignKey:CommentID;onDelete:CASCADE"`
 }

@@ -8,9 +8,12 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
-var jwtSecret = []byte(os.Getenv("Token"))
+var jwtSecret []byte
 
 func JWTMiddleware(c *fiber.Ctx) error {
+	if jwtSecret == nil {
+		jwtSecret = []byte(os.Getenv("Token"))
+	}
 	authHeader := c.Get("Authorization")
 	if authHeader == "" {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
@@ -46,10 +49,10 @@ func JWTMiddleware(c *fiber.Ctx) error {
 		})
 	}
 
-	userIDFloat, ok := claims["sub"].(float64)
+	userIDFloat, ok := claims["userid"].(float64)
 	if !ok {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"error": "UserID not found in token",
+			"error": "Authtentication error",
 		})
 	}
 	userID := uint(userIDFloat)

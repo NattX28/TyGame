@@ -1,8 +1,9 @@
 package post
 
 import (
-	"github.com/gofiber/fiber/v2"
 	"strconv"
+	"github.com/gofiber/fiber/v2"
+	"github.com/microcosm-cc/bluemonday"
 
 	"post-service/db"
 	"post-service/models"
@@ -28,13 +29,15 @@ func EditPostHandler(c *fiber.Ctx) error {
 	}
 
 	// Unpack Body To EditPost Form
-	var editPostReq EditPostRequest
+	var editPostReq models.EditPostRequest
 	if err := c.BodyParser(&editPostReq); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
 	}
 
 	// Replace Data
-	postReq.Content = editPostReq.Content
+	policy := bluemonday.StrictPolicy()
+	safeContent := policy.Sanitize(editPostReq.Content)
+	postReq.Content = safeContent
 	postReq.Visibility = editPostReq.Visibility
 
 	// Store Data

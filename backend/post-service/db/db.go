@@ -1,35 +1,42 @@
 package db
 
 import (
-	"context"
 	"log"
 	"os"
-	"github.com/jackc/pgx/v5/pgxpool"
+
+	"post-service/models"
+
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
-var DB *pgxpool.Pool
+var DB *gorm.DB
 
 func Connect() {
 	databaseURL := os.Getenv("DATABASE_URL")
 	if databaseURL == "" {
 		log.Fatal("DATABASE_URL is not set")
 	}
-
-	// Connect to the database
-	conn, err := pgxpool.New(context.Background(), databaseURL)
+	var err error
+	DB, err = gorm.Open(postgres.Open(databaseURL), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("Unable to connect to database: %v", err)
+		log.Fatalf("Unable to connect to the database: %v", err)
 	}
-
-	DB = conn
 
 	log.Println("Connected to the database")
+	
+	Migrate()
 }
 
+func Migrate() {
+	err := DB.AutoMigrate(&models.Post{}, &models.Comment{}, &models.Like{})
+	if err != nil {
+		log.Fatalf("Unable to migrate models: %v", err)
+	}
+
+	log.Println("Database migrated")
+}
 
 func Close() {
-	if DB != nil {
-		DB.Close()
-		log.Println("Database connection closed")
-	}
+	log.Println("Database connection closed (handled by GORM at shutdown)")
 }
