@@ -12,7 +12,7 @@ import {
 
 const PostCard = () => {
   return (
-    <Card className="w-3/5 px-0 mx-0 bg-main text-main-color">
+    <Card className="w-full px-0 mx-0 bg-main text-main-color">
       <CardHeader className="p-4">
         <CardTitle>Joney Star</CardTitle>
         <CardTitle className="text-sm">17 January 2025 16:45:31</CardTitle>
