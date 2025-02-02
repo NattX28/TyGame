@@ -11,6 +11,17 @@ type Post struct {
 	CommunityID   uint        `json:"community_id" binding:"required"`
 	Content       string      `json:"content" binding:"required"`
 	Visibility    *string     `json:"visibility,omitempty"`
-	CreatedAt     time.Time		`json:"created_at" gorm:"autoCreateTime"`
-	UpdatedAt 	  time.Time 	`json:"updated_at" gorm:"autoUpdateTime"`
+	CreatedAt     time.Time		`json:"created_at"`
+	UpdatedAt 	  time.Time 	`json:"updated_at"`
+}
+
+type CreatePostRequest struct {
+	CommunityID uint    `json:"community_id" binding:"required"`
+	Content     string  `json:"content" binding:"required"`
+	Visibility  *string `json:"visibility,omitempty"`
+}
+
+type EditPostRequest struct {
+	Content       string      `json:"content" binding:"required"`
+	Visibility    *string     `json:"visibility,omitempty"`
 }

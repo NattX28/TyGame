@@ -35,7 +35,7 @@ func main() {
   posts.Get("/", post.GetPostHandler)
   posts.Post("/", post.CreatePostHandler)
 
-	postFocus := posts.Group("/:post_id")
+	postFocus := posts.Group("/:PostID")
 	postFocus.Put("/", post.EditPostHandler)
 	postFocus.Delete("/", post.DeletePostHandler)
 
@@ -47,7 +47,7 @@ func main() {
 	comments.Get("/", comment.GetCommentsHandler)
 	comments.Post("/", comment.CreateCommentHandler)
 
-	comments_likes := comments.Group("/:comment_id")
+	comments_likes := postFocus.Group("/:CommentID")
 	comments.Put("/", comment.EditCommentHandler)
 	comments.Delete("/", comment.DeleteCommentHandler)
 

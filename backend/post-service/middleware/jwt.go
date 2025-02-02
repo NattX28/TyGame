@@ -1,13 +1,14 @@
 package middleware
 
 import (
+	"os"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 )
 
-var jwtSecret = []byte("your-secret-key") // Replace with an environment variable in production
+var jwtSecret = []byte(os.Getenv("Token"))
 
 func JWTMiddleware(c *fiber.Ctx) error {
 	authHeader := c.Get("Authorization")
@@ -38,9 +39,21 @@ func JWTMiddleware(c *fiber.Ctx) error {
 		})
 	}
 
-	if claims, ok := token.Claims.(jwt.MapClaims); ok {
-		c.Locals("user_id", claims)
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": "Invalid token claims",
+		})
 	}
+
+	userIDFloat, ok := claims["sub"].(float64)
+	if !ok {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": "UserID not found in token",
+		})
+	}
+	userID := uint(userIDFloat)
+	c.Locals("UserID", userID)
 
 	return c.Next()
 }

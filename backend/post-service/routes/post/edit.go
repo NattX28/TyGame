@@ -9,19 +9,36 @@ import (
 )
 
 func EditPostHandler(c *fiber.Ctx) error {
-	postIDStr := c.Params("post_id")
+	postIDStr := c.Params("PostID")
 	postID, err := strconv.Atoi(postIDStr)
-	
-	var post models.Post
-	if err := db.DB.First(&post, postID).Error; err != nil {
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid post ID"})
+	}
+
+	// Pull Data
+	var postReq models.Post
+	if err := db.DB.First(&postReq, postID).Error; err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Post not found"})
 	}
 
-	if err := c.BodyParser(&post); err != nil {
+	// Check Auth
+	userID := c.Locals("UserID").(uint);
+	if postReq.UserID != userID {
+		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"error": "You are not allowed to edit this post"})
+	}
+
+	// Unpack Body To EditPost Form
+	var editPostReq EditPostRequest
+	if err := c.BodyParser(&editPostReq); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
 	}
 
-	if err := db.DB.Save(&post).Error; err != nil {
+	// Replace Data
+	postReq.Content = editPostReq.Content
+	postReq.Visibility = editPostReq.Visibility
+
+	// Store Data
+	if err := db.DB.Save(&postReq).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to update post"})
 	}
 

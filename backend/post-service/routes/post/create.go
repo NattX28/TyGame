@@ -8,10 +8,21 @@ import (
 )
 
 func CreatePostHandler(c *fiber.Ctx) error {
-	var post models.Post
+	// Unpack Body To CreatePost Form
+	var createPostReq models.CreatePostRequest
+	if err := c.BodyParser(&createPostReq); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid request body",
+		})
+	}
 
-	if err := c.BodyParser(&post); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
+	var postReq models.Post
+	userID := c.Locals("UserID").(uint);
+	post := postReq{
+		UserID:      userID,
+		CommunityID: createPostReq.CommunityID,
+		Content:     createPostReq.Content,
+		Visibility:  createPostReq.Visibility,
 	}
 
 	result := db.DB.Create(&post)
