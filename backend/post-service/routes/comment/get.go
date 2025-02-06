@@ -1,17 +1,15 @@
-package post
+package comment
 
 import (
-	"strconv"
 	"github.com/gofiber/fiber/v2"
-	"github.com/microcosm-cc/bluemonday"
+	"github.com/google/uuid"
 
 	"post-service/db"
 	"post-service/models"
 )
 
 func GetCommentsHandler(c *fiber.Ctx) error {
-	postIDStr := c.Params("PostID")
-	postID, err := strconv.Atoi(postIDStr)
+	postID, err := uuid.Parse(c.Params("PostID"))
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid post ID"})
 	}
@@ -22,10 +20,13 @@ func GetCommentsHandler(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Post not found"})
 	}
 
-	userID := c.Locals("UserID")
+	userID, ok := c.Locals("UserID").(uuid.UUID)
+	if !ok {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid UserID"})
+	}
 
 	// Can Access
-	if (postReq.Visibility != "public") {
+	if (postReq.Visibility != "public" && postReq.UserID != userID) {
 		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"error": "No Authorization"})
 	}
 

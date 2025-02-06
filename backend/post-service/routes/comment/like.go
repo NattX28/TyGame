@@ -1,18 +1,16 @@
-package post
+package comment
 
 import (
-	"strconv"
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 
 	"post-service/db"
 	"post-service/models"
 )
 
 func LikeCommentHandler(c *fiber.Ctx) error {
-	postIDStr := c.Params("PostID")
-	commentIDStr := c.Params("CommentID")
-	postID, err1 := strconv.Atoi(postIDStr)
-	commentID, err2 := strconv.Atoi(commentIDStr)
+	postID, err1 := uuid.Parse(c.Params("PostID"))
+	commentID, err2 := uuid.Parse(c.Params("CommentID"))
 	if err1 != nil || err2 != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid Param"})
 	}
@@ -24,15 +22,19 @@ func LikeCommentHandler(c *fiber.Ctx) error {
 	}
 
 	// Check if already liked the comment
-	userID := c.Locals("UserID")
+	userID, ok := c.Locals("UserID").(uuid.UUID)
+	if !ok {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid UserID"})
+	}
+
 	var likeReq models.Like
 	if err := db.DB.Where("user_id = ? AND comment_id = ?", userID, commentID).First(&likeReq).Error; err == nil {
 		return c.Status(fiber.StatusConflict).JSON(fiber.Map{"error": "You have already liked this comment"})
 	}
 
 	likeReq = models.Like{
-		UserID:  userID,
-		CommentID:  uint(commentID),
+		UserID: 		userID,
+		CommentID: 	&commentID,
 	}
 
 	if err := db.DB.Create(&likeReq).Error; err != nil {

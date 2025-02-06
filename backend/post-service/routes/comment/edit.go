@@ -1,19 +1,17 @@
-package post
+package comment
 
 import (
-	"strconv"
 	"github.com/gofiber/fiber/v2"
 	"github.com/microcosm-cc/bluemonday"
+	"github.com/google/uuid"
 
 	"post-service/db"
 	"post-service/models"
 )
 
 func EditCommentHandler(c *fiber.Ctx) error {
-	postIDStr := c.Params("PostID")
-	commentIDStr := c.Params("CommentID")
-	postID, err1 := strconv.Atoi(postIDStr)
-	commentID, err2 := strconv.Atoi(commentIDStr)
+	postID, err1 := uuid.Parse(c.Params("PostID"))
+	commentID, err2 := uuid.Parse(c.Params("CommentID"))
 	if err1 != nil || err2 != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid Param"})
 	}
@@ -30,7 +28,10 @@ func EditCommentHandler(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Comment not found"})
 	}
 
-	userID := c.Locals("UserID")
+	userID, ok := c.Locals("UserID").(uuid.UUID)
+	if !ok {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid UserID"})
+	}
 
 	// Check Auth
 	if (comment.UserID != userID) {
@@ -43,7 +44,7 @@ func EditCommentHandler(c *fiber.Ctx) error {
 	comment.Content = safeContent
 
 	// Store Data
-	if err := db.DB.Save(&postReq).Error; err != nil {
+	if err := db.DB.Save(&comment).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to edit comment"})
 	}
 

@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
 	"time"
 	"github.com/gofiber/fiber/v2"
 	"github.com/microcosm-cc/bluemonday"
+	"github.com/google/uuid"
 
 	"post-service/db"
 	"post-service/models"
@@ -17,9 +17,9 @@ import (
 var imagePath = "./uploads/posts/%s"
 
 func CreatePostHandler(c *fiber.Ctx) error {
-	userID, ok := c.Locals("UserID").(uint)
+	userID, ok := c.Locals("UserID").(uuid.UUID)
 	if !ok {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Unauthorized"})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid UserID"})
 	}
 
 	// Parse form values
@@ -34,9 +34,9 @@ func CreatePostHandler(c *fiber.Ctx) error {
 	}
 
 	// Convert CommunityID to uint
-	communityID, err := strconv.ParseUint(communityIDStr, 10, 32)
+	communityID, err := uuid.Parse(communityIDStr)
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid community_id format"})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid UUID format"})
 	}
 
 	// Validate Visibility Value
@@ -54,7 +54,7 @@ func CreatePostHandler(c *fiber.Ctx) error {
 
 	post := models.Post{
 		UserID:      userID,
-		CommunityID: uint(communityID),
+		CommunityID: communityID,
 		Content:     safeContent,
 		Visibility:  visibility,
 	}

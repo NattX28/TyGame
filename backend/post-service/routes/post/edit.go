@@ -1,17 +1,16 @@
 package post
 
 import (
-	"strconv"
 	"github.com/gofiber/fiber/v2"
 	"github.com/microcosm-cc/bluemonday"
+	"github.com/google/uuid"
 
 	"post-service/db"
 	"post-service/models"
 )
 
 func EditPostHandler(c *fiber.Ctx) error {
-	postIDStr := c.Params("PostID")
-	postID, err := strconv.Atoi(postIDStr)
+	postID, err := uuid.Parse(c.Params("PostID"))
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid post ID"})
 	}
@@ -29,8 +28,11 @@ func EditPostHandler(c *fiber.Ctx) error {
 	}
 
 	// Check Auth
-	userID := c.Locals("UserID")
-	if postReq.UserID != userID {
+	userID, ok := c.Locals("UserID").(uuid.UUID)
+	if !ok {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid UserID"})
+	}
+	if (postReq.UserID != userID) {
 		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"error": "No Authorization"})
 	}
 

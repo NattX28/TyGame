@@ -10,7 +10,8 @@ import (
 	"post-service/middleware"
 	"post-service/routes/post"
 	"post-service/routes/feed"
-	// "post-service/routes/comment"
+	"post-service/routes/comment"
+	
 	"post-service/db"
 )
 
@@ -21,18 +22,17 @@ func main() {
 	db.Connect()
 	defer db.Close()
 
-	app := fiber.New(
-		fiber.Config{
-			ReadTimeout: 10 * time.Second,
-			WriteTimeout: 10 * time.Second,
-		},
-	)
+	app := fiber.New(fiber.Config{
+		StrictRouting: false,
+		ReadTimeout: 10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	})
 
 	v1 := app.Group("/v1")
 
 	feeds := v1.Group("/feeds")
-	feeds.Get("/", middleware.JWTMiddleware, post.LikePostHandler)
-	feeds.Get("community/:CommunityID", post.LikePostHandler)
+	// feeds.Get("/", middleware.JWTMiddleware, post.LikePostHandler)
+	feeds.Get("community/:CommunityID", feed.GetFeedCommunity)
 	// feeds.Get("friend/", middleware.JWTMiddleware, post.LikePostHandler)
 	// feeds.Get("friend/:CommunityID", middleware.JWTMiddleware, post.LikePostHandler)
 

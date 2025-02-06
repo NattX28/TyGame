@@ -1,23 +1,18 @@
-package post
+package comment
 
 import (
-	"strconv"
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 
 	"post-service/db"
 	"post-service/models"
 )
 
 func DeleteCommentHandler(c *fiber.Ctx) error {
-	postIDStr := c.Params("PostID")
-	postID, err := strconv.Atoi(postIDStr)
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid post ID"})
-	}
-	commentIDStr := c.Params("CommentID")
-	commentID, err := strconv.Atoi(commentIDStr)
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid comment ID"})
+	postID, err1 := uuid.Parse(c.Params("PostID"))
+	commentID, err2 := uuid.Parse(c.Params("CommentID"))
+	if err1 != nil || err2 != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid Param"})
 	}
 
 	// Pull Comment
@@ -27,7 +22,11 @@ func DeleteCommentHandler(c *fiber.Ctx) error {
 	}
 
 	// Check Auth
-	userID := c.Locals("UserID")
+	userID, ok := c.Locals("UserID").(uuid.UUID)
+	if !ok {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid UserID"})
+	}
+
 	if (comment.UserID != userID) {
 		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"error": "No Authorization"})
 	}
