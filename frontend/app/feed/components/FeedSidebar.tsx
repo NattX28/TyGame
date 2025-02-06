@@ -1,16 +1,5 @@
 "use client";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import {
   CircleUserRound,
@@ -19,8 +8,9 @@ import {
   LogOut,
   Settings,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
-// Menu items.
 const items = [
   {
     title: "Home",
@@ -46,64 +36,51 @@ const items = [
 
 const FeedSidebar = () => {
   return (
-    <>
-      <Sidebar
-        variant="floating"
-        collapsible="icon"
-        className="text-main-color">
-        {/* header */}
-        <SidebarHeader className="border-b">
-          <SidebarMenuButton size={"lg"}>
-            <div className="flex items-center gap-2 px-0 py-1.5 text-left text-sm">
-              <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage
-                  src="https://github.com/shadcn.png"
-                  alt="@shadcn"
-                />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-              </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">username</span>
-                <span className="truncate text-xs">example@email</span>
-              </div>
-            </div>
-          </SidebarMenuButton>
-        </SidebarHeader>
-        <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupLabel className="text-red-500">
-              Application
-            </SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <a href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        </SidebarContent>
+    <div className="px-4 py-8 h-full flex flex-col">
+      {/* Top section */}
+      <div className="space-y-8">
+        {/* Header sidebar */}
+        <div className="flex flex-col items-center justify-center gap-3">
+          <Avatar className="h-24 w-24 ">
+            <AvatarImage
+              src="https://github.com/shadcn.png"
+              alt="@shadcn"
+              className="rounded-full"
+            />
+            <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+          </Avatar>
+          <div className="grid flex-1 text-center text-sm leading-tight">
+            <span className="truncate font-semibold">username</span>
+            <span className="truncate text-xs">example@email</span>
+          </div>
+        </div>
 
-        {/* Footer */}
-        <SidebarFooter>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <a href="#">
-                <LogOut />
-                <span>log out</span>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarFooter>
-      </Sidebar>
-    </>
+        {/* Navigation links */}
+        <div className="flex flex-col gap-1">
+          {items.map((item, index) => (
+            <Button
+              key={index}
+              className="w-full h-12 justify-start gap-2 rounded-sm"
+              variant={"ghost"}>
+              <item.icon className="h-4 w-4" />
+              <Link href={item.url}>{item.title}</Link>
+            </Button>
+          ))}
+        </div>
+      </div>
+
+      {/* footer */}
+      {/* Logout button */}
+      <div className="mt-auto pt-4">
+        <Button
+          className="w-full h-12 justify-start gap-2 rounded-sm"
+          variant={"ghost"}>
+          <LogOut className="h-4 w-4" />
+          <span>Logout</span>
+        </Button>
+      </div>
+    </div>
   );
 };
+
 export default FeedSidebar;
