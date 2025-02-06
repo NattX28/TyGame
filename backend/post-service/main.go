@@ -9,6 +9,7 @@ import (
 	
 	"post-service/middleware"
 	"post-service/routes/post"
+	"post-service/routes/feed"
 	// "post-service/routes/comment"
 	"post-service/db"
 )
@@ -29,28 +30,32 @@ func main() {
 
 	v1 := app.Group("/v1")
 
+	feeds := v1.Group("/feeds")
+	feeds.Get("/", middleware.JWTMiddleware, post.LikePostHandler)
+	feeds.Get("community/:CommunityID", post.LikePostHandler)
+	// feeds.Get("friend/", middleware.JWTMiddleware, post.LikePostHandler)
+	// feeds.Get("friend/:CommunityID", middleware.JWTMiddleware, post.LikePostHandler)
+
 	posts := v1.Group("/posts")
 	posts.Use(middleware.JWTMiddleware)
-  // posts.Get("/", post.GetPostHandler)
   posts.Post("/", post.CreatePostHandler)
 
 	postFocus := posts.Group("/:PostID")
+  // postFocus.Get("/", post.GetPostHandler)
 	postFocus.Put("/", post.EditPostHandler)
 	postFocus.Delete("/", post.DeletePostHandler)
-	postFocus.Post("/like", post.LikePostHandler)
-	postFocus.Post("/unlike", post.UnlikePostHandler)
+	postFocus.Get("/like", post.LikePostHandler)
+	postFocus.Get("/unlike", post.UnlikePostHandler)
 
-	// comments := postFocus.Group("/comments")
-	// // comments.Get("/", comment.GetCommentsHandler)
-	// // comments.Post("/", comment.CreateCommentHandler)
+	comments := postFocus.Group("/comments")
+	comments.Get("/", comment.GetCommentsHandler)
+	comments.Post("/", comment.CreateCommentHandler)
 
-	// comments_likes := postFocus.Group("/:CommentID")
-	// // comments.Put("/", comment.EditCommentHandler)
-	// // comments.Delete("/", comment.DeleteCommentHandler)
-
-	// comments_likes := comments.Group("/likes")
-	// // comments_likes.Post("/", comment.LikeCommentHandler)
-	// // comments_likes.Delete("/", comment.UnlikeCommentHandler)
+	commentFocus := postFocus.Group("/:CommentID")
+	commentFocus.Put("/", comment.EditCommentHandler)
+	commentFocus.Delete("/", comment.DeleteCommentHandler)
+	commentFocus.Get("/like", comment.LikeCommentHandler)
+	commentFocus.Get("/unlike", comment.UnlikeCommentHandler)
 
 	log.Fatal(app.Listen(":3000"))
 }

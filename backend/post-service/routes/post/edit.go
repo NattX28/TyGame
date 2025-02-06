@@ -16,6 +16,12 @@ func EditPostHandler(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid post ID"})
 	}
 
+	// Unpack Body To EditPost Form
+	var editPostReq models.EditPostRequest
+	if err := c.BodyParser(&editPostReq); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
+	}
+
 	// Pull Data
 	var postReq models.Post
 	if err := db.DB.First(&postReq, postID).Error; err != nil {
@@ -23,15 +29,9 @@ func EditPostHandler(c *fiber.Ctx) error {
 	}
 
 	// Check Auth
-	userID := c.Locals("UserID").(uint);
+	userID := c.Locals("UserID")
 	if postReq.UserID != userID {
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"error": "You are not allowed to edit this post"})
-	}
-
-	// Unpack Body To EditPost Form
-	var editPostReq models.EditPostRequest
-	if err := c.BodyParser(&editPostReq); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
+		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"error": "No Authorization"})
 	}
 
 	// Replace Data

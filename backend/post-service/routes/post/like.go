@@ -15,12 +15,13 @@ func LikePostHandler(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid post ID"})
 	}
 
+	// Pull Post
 	var postReq models.Post
 	if err := db.DB.First(&postReq, postID).Error; err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Post not found"})
 	}
 
-	userID := c.Locals("UserID").(uint);
+	userID := c.Locals("UserID")
 	var likeReq models.Like
 	if err := db.DB.Where("user_id = ? AND post_id = ?", userID, postID).First(&likeReq).Error; err == nil {
 		return c.Status(fiber.StatusConflict).JSON(fiber.Map{"error": "You have already liked this post"})

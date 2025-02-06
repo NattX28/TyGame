@@ -15,7 +15,7 @@ func UnlikePostHandler(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid post ID"})
 	}
 
-	userID := c.Locals("UserID").(uint);
+	userID := c.Locals("UserID")
 	var likeReq models.Like
 	if err := db.DB.Where("user_id = ? AND post_id = ?", userID, postID).First(&likeReq).Error; err != nil {
 		return c.Status(fiber.StatusConflict).JSON(fiber.Map{"error": "You have not liked this post before"})

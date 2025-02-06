@@ -1,8 +1,8 @@
 package post
 
 import (
-	"github.com/gofiber/fiber/v2"
 	"strconv"
+	"github.com/gofiber/fiber/v2"
 
 	"post-service/db"
 	"post-service/models"
@@ -22,9 +22,9 @@ func DeletePostHandler(c *fiber.Ctx) error {
 	}
 
 	// Check Auth
-	userID := c.Locals("UserID").(uint);
+	userID := c.Locals("UserID")
 	if post.UserID != userID {
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"error": "You are not allowed to edit this post"})
+		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"error": "No Authorization"})
 	}
 
 	// Delete Data

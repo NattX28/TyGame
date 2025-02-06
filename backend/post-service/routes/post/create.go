@@ -36,9 +36,7 @@ func CreatePostHandler(c *fiber.Ctx) error {
 	// Convert CommunityID to uint
 	communityID, err := strconv.ParseUint(communityIDStr, 10, 32)
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid community_id format",
-		})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid community_id format"})
 	}
 
 	// Validate Visibility Value
