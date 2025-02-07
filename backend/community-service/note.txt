@@ -1,0 +1,13 @@
+## Community Service
+### Communities
+- `GET /communities` - ดึงรายการชุมชน
+- `POST /communities` - สร้างชุมชนใหม่
+- `GET /communities/{communityId}` - ดึงข้อมูลชุมชน
+- `PUT /communities/{communityId}` - แก้ไขข้อมูลชุมชน
+- `DELETE /communities/{communityId}` - ลบชุมชน
+
+### Community Members
+- `GET /communities/{communityId}/members` - ดึงรายชื่อสมาชิก
+- `POST /communities/{communityId}/members` - เพิ่มสมาชิก
+- `PUT /communities/{communityId}/members/{userId}` - อัพเดทบทบาทสมาชิก
+- `DELETE /communities/{communityId}/members/{userId}` - ลบสมาชิก
