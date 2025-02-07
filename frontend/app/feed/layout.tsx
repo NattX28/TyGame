@@ -1,6 +1,7 @@
 import OnlineFriend from "@/components/friends/OnlineFriend";
 import FeedSidebar from "./components/FeedSidebar";
 import { Button } from "@/components/ui/button";
+import OnlineFriendList from "@/components/friends/OnlineFriendList";
 
 export default function FeedLayout({
   children,
@@ -31,18 +32,8 @@ export default function FeedLayout({
       {/* Right Sidebar (hidden on mobile) */}
       <aside className="hidden lg:block h-screen sticky top-0">
         <div className="h-full bg-main p-4 overflow-y-auto border-second border-l-2">
-          <h2 className="text-lg font-semibold">Online</h2>
-          <ul>
-            <li>
-              <OnlineFriend />
-            </li>
-            <li>
-              <OnlineFriend />
-            </li>
-            <li>
-              <OnlineFriend />
-            </li>
-          </ul>
+          <h2 className="text-xl font-semibold mb-6">Online</h2>
+          <OnlineFriendList />
         </div>
       </aside>
     </div>

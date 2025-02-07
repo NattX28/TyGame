@@ -1,7 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import Link from "next/link";
 
-const OnlineFriend = () => {
+const OnlineFriend = ({
+  friend,
+}: {
+  friend: { id: number; name: string; avatar: string };
+}) => {
   return (
     <>
       <Link href={"/"}>
@@ -19,7 +23,7 @@ const OnlineFriend = () => {
             {/* status online */}
             <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-third rounded-full"></div>
           </div>
-          <p className="mx-2">Allan Marl</p>
+          <p className="mx-2">{friend.name}</p>
         </div>
       </Link>
     </>
