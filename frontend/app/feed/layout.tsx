@@ -1,3 +1,4 @@
+import OnlineFriend from "@/components/friends/OnlineFriend";
 import FeedSidebar from "./components/FeedSidebar";
 import { Button } from "@/components/ui/button";
 
@@ -32,9 +33,15 @@ export default function FeedLayout({
         <div className="h-full bg-main p-4 overflow-y-auto border-second border-l-2">
           <h2 className="text-lg font-semibold">Online</h2>
           <ul>
-            <li>👤 User 1</li>
-            <li>👤 User 2</li>
-            <li>👤 User 3</li>
+            <li>
+              <OnlineFriend />
+            </li>
+            <li>
+              <OnlineFriend />
+            </li>
+            <li>
+              <OnlineFriend />
+            </li>
           </ul>
         </div>
       </aside>
