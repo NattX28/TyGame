@@ -14,6 +14,13 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { loginSchema } from "@/utils/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+type LoginFormValues = z.infer<typeof loginSchema>;
+
+const onSubmit = (values: LoginFormValues) => {
+  console.log(values);
+};
 
 const LoginForm = () => {
   const form = useForm({
@@ -26,9 +33,8 @@ const LoginForm = () => {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(() => console.log("Login"))}
-        className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-">
+        {/* user name field */}
         <FormField
           control={form.control}
           name="username"

@@ -18,15 +18,15 @@
   .text-main-color {
     color: #ffffff;
   }
-  /* .text-second-color {
-    color: #dadada;
+  .text-second-color {
+    color: #222222;
   }
   .text-third-color {
-    color: #373a40;
+    color: #151515;
   }
   .text-contrast-color {
     color: #8b5dff;
-  } */
+  }
   .border-main {
     border-color: #ff0000;
   }
