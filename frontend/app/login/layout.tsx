@@ -1,13 +1,12 @@
-import React from 'react'
+import React from "react";
+import LoginForm from "./components/LoginForm";
 
-const Loginpagelayout = ({
-    children,
-  }: {
-    children: React.ReactNode;
-  }) => {
+const Loginpagelayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div>layout</div>
-  )
-}
+    <div>
+      <LoginForm />
+    </div>
+  );
+};
 
-export default Loginpagelayout
+export default Loginpagelayout;
