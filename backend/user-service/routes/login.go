@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"log"
 	"os"
 	"time"
 	"user-service/db"
@@ -25,13 +26,6 @@ func LoginHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	// Check if email and password are provided
-	if req.Email == "" || req.Password == "" {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Email and password are required",
-		})
-	}
-
 	// Fetch user from the database
 	var user models.User
 	result := db.DB.Where("email = ?", req.Email).First(&user)
@@ -53,15 +47,8 @@ func LoginHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	// Ensure JWT secret is set
-	secret := os.Getenv("JWT_SECRET")
-	if secret == "" {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "JWT secret is not configured",
-		})
-	}
-
 	// Generate JWT token
+	secret := os.Getenv("JWT_SECRET")
 	claims := jwt.MapClaims{
 		"user_id":   user.ID,
 		"username":  user.Username,
@@ -79,10 +66,13 @@ func LoginHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	// Set the Authorization cookie with the JWT token
+	// Debug: Log the generated token
+	log.Println("Generated Token:", tokenString)
+
+	// Set the JWT token as a cookie
 	c.Cookie(&fiber.Cookie{
 		Name:     "Authorization",
-		Value:    "Bearer " + tokenString,
+		Value:    "Bearer " + tokenString, // <-- This adds "Bearer " prefix
 		Expires:  time.Now().Add(24 * time.Hour),
 		HTTPOnly: true,
 		Secure:   true,

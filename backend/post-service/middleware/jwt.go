@@ -6,6 +6,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/google/uuid"
 )
 
 var jwtSecret []byte
@@ -49,13 +50,13 @@ func JWTMiddleware(c *fiber.Ctx) error {
 		})
 	}
 
-	userIDFloat, ok := claims["userid"].(float64)
+	userID, ok := claims["userid"].(uuid.UUID)
 	if !ok {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Authtentication error",
 		})
 	}
-	userID := uint(userIDFloat)
+
 	c.Locals("UserID", userID)
 
 	return c.Next()

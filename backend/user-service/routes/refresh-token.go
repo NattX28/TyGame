@@ -3,35 +3,30 @@ package routes
 import (
 	"os"
 	"time"
-	"user-service/db"
-	"user-service/models"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
 )
 
-// RefreshTokenHandler generates a new JWT for an authenticated user
+// RefreshTokenHandler generates a new token if the old one is valid
 func RefreshTokenHandler(c *fiber.Ctx) error {
-	// Get the existing token from cookies
+	// Get token from cookies
 	tokenString := c.Cookies("Authorization")
+
 	if tokenString == "" {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"error": "No token provided",
+			"error": "Token is missing",
 		})
+	}
+
+	// Remove "Bearer " prefix if present
+	if len(tokenString) > 7 && tokenString[:7] == "Bearer " {
+		tokenString = tokenString[7:]
 	}
 
 	// Parse and validate the token
 	secret := os.Getenv("JWT_SECRET")
-	if secret == "" {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "JWT secret is not configured",
-		})
-	}
-
-	token, err := jwt.Parse(tokenString[7:], func(t *jwt.Token) (interface{}, error) {
-		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fiber.ErrUnauthorized
-		}
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		return []byte(secret), nil
 	})
 
@@ -41,37 +36,31 @@ func RefreshTokenHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	// Extract claim and fetch user data
+	// Extract claims (user data)
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"error": "Invalid token claims",
+			"error": "Failed to parse token claims",
 		})
 	}
 
-	var user models.User
-	if err := db.DB.First(&user, claims["user_id"]).Error; err != nil {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"error": "User not found",
-		})
-	}
-
-	// Generate a new token with extended expiration
+	// Create a new token with the same user ID and email
 	newClaims := jwt.MapClaims{
-		"user_id":  user.ID,
-		"username": user.Username,
-		"email":    user.Email,
-		"exp":      time.Now().Add(24 * time.Hour).Unix(), // Extend expiration
+		"user_id":  claims["user_id"],
+		"username": claims["username"],
+		"email":    claims["email"],
+		"exp":      time.Now().Add(24 * time.Hour).Unix(),
 	}
+
 	newToken := jwt.NewWithClaims(jwt.SigningMethodHS256, newClaims)
 	newTokenString, err := newToken.SignedString([]byte(secret))
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Failed to generate token",
+			"error": "Failed to generate new token",
 		})
 	}
 
-	// Set new JWT in the cookie
+	// Set the new token as a cookie
 	c.Cookie(&fiber.Cookie{
 		Name:     "Authorization",
 		Value:    "Bearer " + newTokenString,

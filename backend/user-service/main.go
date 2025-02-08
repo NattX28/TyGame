@@ -8,8 +8,9 @@ import (
 
 	"user-service/db"
 	"user-service/middleware"
-	"user-service/models" // Import the models package
+	"user-service/models"
 	"user-service/routes"
+	"user-service/usersmanagement"
 )
 
 func main() {
@@ -38,6 +39,7 @@ func main() {
 	// Define protected routes (require JWT)
 	protectedRoutes := app.Group("/protected")
 	protectedRoutes.Use(middleware.JWTMiddleware)
+	protectedRoutes.Put("/update", usersmanagement.UpdateUserHandler)
 
 	// Handle 404 - catch-all route
 	app.Use(func(c *fiber.Ctx) error {
