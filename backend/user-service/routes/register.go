@@ -57,6 +57,8 @@ func RegisterHandler(c *fiber.Ctx) error {
 		Username: req.Username,
 		Email:    req.Email,
 		Password: string(hashedPassword),
+		Role:     "User",
+		Name:     req.Username,
 	}
 
 	if err := db.DB.Create(&newUser).Error; err != nil {

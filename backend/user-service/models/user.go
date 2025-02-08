@@ -7,10 +7,13 @@ import (
 
 // User model for authentication (registration & login)
 type User struct {
-	ID       uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
-	Username string    `gorm:"size:255;not null"`
-	Email    string    `gorm:"size:255;unique;not null"`
-	Password string    `gorm:"not null"`
+	ID        uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
+	Username  string    `gorm:"size:255;not null"`
+	Email     string    `gorm:"size:255;unique;not null"`
+	Password  string    `gorm:"not null"`
+	Role      string    `gorm:"size:50;not null;default:'User'"`
+	ImageName string    `gorm:"size:255"`
+	Name      string    `gorm:"size:255;not null"`
 }
 
 // BeforeCreate hook to generate a UUID if not set

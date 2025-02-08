@@ -6,7 +6,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// LogoutHandler handles user logout by clearing the Authorization cookie
 func LogoutHandler(c *fiber.Ctx) error {
 	// Clear the Authorization cookie
 	c.Cookie(&fiber.Cookie{
@@ -14,8 +13,10 @@ func LogoutHandler(c *fiber.Ctx) error {
 		Value:    "",                             // Empty value to remove the cookie
 		Expires:  time.Now().Add(-1 * time.Hour), // Set an expired time to delete
 		HTTPOnly: true,
-		Secure:   true,     // Make sure the cookie is cleared securely
-		SameSite: "Strict", // Match the SameSite attribute used during login
+		Secure:   true,         // Ensure the cookie is cleared securely
+		SameSite: "Lax",        // Consistent with login cookie
+		Path:     "/",          // Ensure it's removed globally
+		Domain:   c.Hostname(), // Ensure it applies to the correct domain
 	})
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
