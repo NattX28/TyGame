@@ -1,7 +1,6 @@
 package usersmanagement
 
 import (
-	"fmt"
 	"os"
 	"user-service/db"
 	"user-service/models"
@@ -25,8 +24,6 @@ func UpdateUserHandler(c *fiber.Ctx) error {
 	if len(tokenString) > 7 && tokenString[:7] == "Bearer " {
 		tokenString = tokenString[7:]
 	}
-
-	fmt.Println("Received Token:", tokenString) // Debugging: Print token
 
 	secret := os.Getenv("JWT_SECRET")
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {

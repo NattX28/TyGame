@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
@@ -13,11 +12,9 @@ import (
 func JWTMiddleware(c *fiber.Ctx) error {
 
 	tokenString := c.Get("Authorization")
-	fmt.Println("Token from Header:", tokenString) // Debugging
 
 	if tokenString == "" {
 		tokenString = c.Cookies("Authorization")
-		fmt.Println("Token from Cookie:", tokenString) // Debugging
 	}
 
 	if tokenString == "" {
@@ -30,8 +27,6 @@ func JWTMiddleware(c *fiber.Ctx) error {
 	if len(tokenString) > 7 && tokenString[:7] == "Bearer " {
 		tokenString = tokenString[7:]
 	}
-
-	fmt.Println("Final Token Used:", tokenString) // Debugging
 
 	// Parse the token
 	secret := os.Getenv("JWT_SECRET")
