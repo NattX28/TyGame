@@ -7,6 +7,7 @@ import (
 	"github.com/joho/godotenv"
 
 	"user-service/db"
+	"user-service/friendmanagement"
 	"user-service/middleware"
 	"user-service/models"
 	"user-service/routes"
@@ -24,6 +25,7 @@ func main() {
 
 	// Auto-migrate User model to ensure the table exists
 	db.DB.AutoMigrate(&models.User{})
+	db.DB.AutoMigrate(&models.Friend{})
 
 	app := fiber.New()
 
@@ -33,6 +35,13 @@ func main() {
 	userRoutes.Post("/login", routes.LoginHandler)
 	userRoutes.Post("/logout", routes.LogoutHandler)
 	userRoutes.Post("/refresh-token", routes.RefreshTokenHandler)
+
+	// Define friend management routes
+	friendRoutes := app.Group("/friends")
+	friendRoutes.Use(middleware.JWTMiddleware)
+	friendRoutes.Post("/add", friendmanagement.AddFriendHandler)
+	friendRoutes.Get("/get", friendmanagement.GetFriendsHandler)
+	friendRoutes.Delete("/remove", friendmanagement.RemoveFriendHandler)
 
 	// Define protected routes (require JWT)
 	protectedRoutes := app.Group("/protected")
