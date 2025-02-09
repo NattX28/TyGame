@@ -69,7 +69,7 @@ func EditCommunityHandler(c *fiber.Ctx) error {
 	community.Name = safeName
 	community.Description = safeDes
 	if filename != "" {
-		// db.DeleteFile(community.Image)
+		err := os.Remove(fmt.Sprintf(imagePath, community.Image));
 		community.Image = filename
 	}
 

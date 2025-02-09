@@ -9,6 +9,7 @@ import (
 )
 
 func DeleteCommunityHandler(c *fiber.Ctx) error {
+	var imagePath = "./uploads/profile/%s"
 	commuID, err1 := uuid.Parse(c.Params("CommuID"))
 	if err1 != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid Param"})
@@ -21,7 +22,7 @@ func DeleteCommunityHandler(c *fiber.Ctx) error {
 	}
 
 	// Delete Data
-	// db.DeleteFile(community.Image)
+	err := os.Remove(fmt.Sprintf(imagePath, community.Image));
 	if err := db.DB.Delete(&community).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to delete community"})
 	}
