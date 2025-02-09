@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"post-service/models"
+	"community-service/models"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -13,11 +13,9 @@ import (
 var DB *gorm.DB
 
 func Connect() {
-	databaseURL := os.Getenv("DATABASE_URL")
-	if databaseURL == "" {
-		log.Fatal("DATABASE_URL is not set")
-	}
 	var err error
+
+	databaseURL := os.Getenv("DATABASE_URL")
 	DB, err = gorm.Open(postgres.Open(databaseURL), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Unable to connect to the database: %v", err)
@@ -29,7 +27,7 @@ func Connect() {
 }
 
 func Migrate() {
-	err := DB.AutoMigrate(&models.Post{}, &models.Comment{}, &models.Like{})
+	err := DB.AutoMigrate(&models.Community{}, &models.CommunityMember{})
 	if err != nil {
 		log.Fatalf("Unable to migrate models: %v", err)
 	}

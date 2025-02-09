@@ -49,14 +49,8 @@ func JWTMiddleware(c *fiber.Ctx) error {
 		})
 	}
 
-	userIDFloat, ok := claims["userid"].(float64)
-	if !ok {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"error": "Authtentication error",
-		})
-	}
-	userID := uint(userIDFloat)
-	c.Locals("UserID", userID)
+	c.Locals("Role", claims["role"])
+	c.Locals("UserID", claims["userid"])
 
 	return c.Next()
 }
