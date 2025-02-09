@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"fmt"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/google/uuid"
@@ -10,7 +12,10 @@ import (
 	"community-service/models"
 )
 
+
 func CreateCommunityHandler(c *fiber.Ctx) error {
+	var imagePath = "./uploads/profile/%s"
+
 	name := c.FormValue("name")
 	description := c.FormValue("description")
 	image, err := c.FormFile("image")
@@ -65,7 +70,7 @@ func CreateCommunityHandler(c *fiber.Ctx) error {
 	if result.Error != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to create community"})
 	}
-	if err := c.SaveFile(image, filename); err != nil {
+	if err := c.SaveFile(image, fmt.Sprintf(imagePath, filename)); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to save image",
 		})

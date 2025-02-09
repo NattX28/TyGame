@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"fmt"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/google/uuid"
@@ -11,7 +13,10 @@ import (
 	"community-service/utils"
 )
 
+
 func EditCommunityHandler(c *fiber.Ctx) error {
+	var imagePath = "./uploads/profile/%s"
+
 	commuID, err1 := uuid.Parse(c.Params("CommuID"))
 	if err1 != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid Param"})
@@ -73,7 +78,7 @@ func EditCommunityHandler(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to edit community"})
 	}
 	if imageErr != nil {
-		if err := c.SaveFile(image, filename); err != nil {
+		if err := c.SaveFile(image, fmt.Sprintf(imagePath, filename)); err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 				"error": "Failed to save image",
 			})
