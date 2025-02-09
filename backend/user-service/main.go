@@ -14,7 +14,6 @@ import (
 )
 
 func main() {
-	// Load environment variables
 	err := godotenv.Load()
 	if err != nil {
 		log.Println("No .env file found, skipping...")
@@ -24,9 +23,8 @@ func main() {
 	db.Connect()
 
 	// Auto-migrate User model to ensure the table exists
-	db.DB.AutoMigrate(&models.User{}) // Use models.User instead of db.User
+	db.DB.AutoMigrate(&models.User{})
 
-	// Initialize Fiber app
 	app := fiber.New()
 
 	// Define public routes
@@ -40,6 +38,7 @@ func main() {
 	protectedRoutes := app.Group("/protected")
 	protectedRoutes.Use(middleware.JWTMiddleware)
 	protectedRoutes.Put("/update", usersmanagement.UpdateUserHandler)
+	protectedRoutes.Delete("/delete", usersmanagement.DeleteUserHandler)
 
 	// Handle 404 - catch-all route
 	app.Use(func(c *fiber.Ctx) error {
