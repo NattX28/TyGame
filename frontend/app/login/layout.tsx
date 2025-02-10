@@ -1,6 +1,6 @@
 const Loginpagelayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen w-screen">
       {/* Left side */}
       <div className="w-4/6 bg-main flex flex-col items-center justify-center p-8">
         <h1 className="text-4xl font-bold mb-4">Welcome to Tygame</h1>

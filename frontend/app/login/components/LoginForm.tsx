@@ -42,7 +42,7 @@ const LoginForm = () => {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder="Enter your username" {...field} />
+                <Input placeholder="Enter your username" className="text-gray-600"{...field} />
               </FormControl>
               <FormDescription>
                 This is your public display name.
@@ -62,6 +62,7 @@ const LoginForm = () => {
                 <Input
                   type="password"
                   placeholder="Enter your password"
+                  className="text-gray-600"
                   {...field}
                 />
               </FormControl>
@@ -69,7 +70,7 @@ const LoginForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button className="mt-2" type="submit">Submit</Button>
       </form>
     </Form>
   );
