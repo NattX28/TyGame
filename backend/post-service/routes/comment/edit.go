@@ -28,9 +28,11 @@ func EditCommentHandler(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Comment not found"})
 	}
 
-	userID, ok := c.Locals("UserID").(uuid.UUID)
-	if !ok {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid UserID"})
+	userID, err := uuid.Parse(c.Locals("UserID").(string))
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to get userID",
+		})
 	}
 
 	// Check Auth
