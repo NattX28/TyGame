@@ -23,9 +23,8 @@ func main() {
 	// Connect to the database
 	db.Connect()
 
-	// Auto-migrate User model to ensure the table exists
-	db.DB.AutoMigrate(&models.User{})
-	db.DB.AutoMigrate(&models.Friend{})
+	// Auto-migrate User and Friend models
+	db.DB.AutoMigrate(&models.User{}, &models.Friend{})
 
 	app := fiber.New()
 
@@ -36,18 +35,20 @@ func main() {
 	userRoutes.Post("/logout", routes.LogoutHandler)
 	userRoutes.Post("/refresh-token", routes.RefreshTokenHandler)
 
-	// Define friend management routes
+	// Define friend management routes (Require JWT)
 	friendRoutes := app.Group("/friends")
 	friendRoutes.Use(middleware.JWTMiddleware)
 	friendRoutes.Post("/add", friendmanagement.AddFriendHandler)
 	friendRoutes.Get("/get", friendmanagement.GetFriendsHandler)
 	friendRoutes.Delete("/remove", friendmanagement.RemoveFriendHandler)
 
-	// Define protected routes (require JWT)
+	// Define protected user routes (Require JWT)
 	protectedRoutes := app.Group("/protected")
 	protectedRoutes.Use(middleware.JWTMiddleware)
 	protectedRoutes.Put("/update", usersmanagement.UpdateUserHandler)
 	protectedRoutes.Delete("/delete", usersmanagement.DeleteUserHandler)
+	protectedRoutes.Post("/upload-profile", usersmanagement.UploadProfileHandler)
+	protectedRoutes.Get("/profile", usersmanagement.GetUserProfileHandler)
 
 	// Handle 404 - catch-all route
 	app.Use(func(c *fiber.Ctx) error {
