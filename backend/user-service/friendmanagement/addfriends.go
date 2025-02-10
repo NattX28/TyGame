@@ -10,6 +10,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// AddFriendHandler ensures a friend cannot be added twice
 func AddFriendHandler(c *fiber.Ctx) error {
 	// Get the JWT token from the cookie
 	tokenString := c.Cookies("Authorization")
@@ -65,6 +66,13 @@ func AddFriendHandler(c *fiber.Ctx) error {
 	friendID, err := uuid.Parse(c.FormValue("friend_id"))
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid friend ID"})
+	}
+
+	// Check if the friendship already exists
+	var existingFriendship models.Friend
+	result := db.DB.Where("(user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?)", userID, friendID, friendID, userID).First(&existingFriendship)
+	if result.RowsAffected > 0 {
+		return c.Status(fiber.StatusConflict).JSON(fiber.Map{"error": "Already friends"})
 	}
 
 	// Create the friendship in the database

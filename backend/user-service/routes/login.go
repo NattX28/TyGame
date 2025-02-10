@@ -15,7 +15,7 @@ import (
 
 func LoginHandler(c *fiber.Ctx) error {
 	type LoginRequest struct {
-		Email    string `json:"email"`
+		Username string `json:"username"`
 		Password string `json:"password"`
 	}
 
@@ -26,13 +26,13 @@ func LoginHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	// Fetch user from the database
+	// Fetch user from the database by username
 	var user models.User
-	result := db.DB.Where("email = ?", req.Email).First(&user)
+	result := db.DB.Where("username = ?", req.Username).First(&user)
 	if result.Error != nil {
 		if result.Error == gorm.ErrRecordNotFound {
 			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-				"error": "Invalid email or password",
+				"error": "Invalid username or password",
 			})
 		}
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -43,7 +43,7 @@ func LoginHandler(c *fiber.Ctx) error {
 	// Compare hashed password
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)); err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"error": "Invalid email or password",
+			"error": "Invalid username or password",
 		})
 	}
 
@@ -72,7 +72,7 @@ func LoginHandler(c *fiber.Ctx) error {
 	// Set the JWT token as a cookie
 	c.Cookie(&fiber.Cookie{
 		Name:     "Authorization",
-		Value:    "Bearer " + tokenString, // <-- This adds "Bearer " prefix
+		Value:    "Bearer " + tokenString,
 		Expires:  time.Now().Add(24 * time.Hour),
 		HTTPOnly: true,
 		Secure:   true,
