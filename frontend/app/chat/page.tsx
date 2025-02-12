@@ -4,7 +4,7 @@
 const page = () => {
   return (
     <div className="flex flex-col justify-center items-center">
-      <h2 className="text-3xl font-bold text-second-color">Login</h2>
+      <h2 className="text-3xl font-bold text-second-color">Login 999</h2>
     </div>
   );
 };
