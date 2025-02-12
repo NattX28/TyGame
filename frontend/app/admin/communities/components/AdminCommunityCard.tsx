@@ -2,6 +2,7 @@ import { CommunityCardProps } from "@/types/community";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Pencil } from "lucide-react";
 import Link from "next/link";
+
 const AdminCommunityCard = ({
   community,
 }: {
