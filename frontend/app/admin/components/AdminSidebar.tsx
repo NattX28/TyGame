@@ -1,20 +1,14 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import {
-  Handshake,
-  Home,
-  MessageCircleMore,
-  LogOut,
-  Settings,
-} from "lucide-react";
+import { Handshake, Home, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 const items = [
   {
     title: "Dashboard",
-    url: "#",
+    url: "/admin/dashboard",
     icon: Home,
   },
   {
