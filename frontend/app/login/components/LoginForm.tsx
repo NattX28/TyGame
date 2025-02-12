@@ -32,8 +32,8 @@ const LoginForm = () => {
   });
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-">
+    <Form {...form} >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 text-xl">
         {/* user name field */}
         <FormField
           control={form.control}
@@ -70,7 +70,7 @@ const LoginForm = () => {
             </FormItem>
           )}
         />
-        <Button className="mt-2" type="submit">Submit</Button>
+        <Button type="submit">Submit</Button>
       </form>
     </Form>
   );
