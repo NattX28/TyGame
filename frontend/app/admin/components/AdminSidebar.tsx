@@ -8,12 +8,12 @@ import Link from "next/link";
 const items = [
   {
     title: "Dashboard",
-    url: "/admin/dashboard",
+    url: "/admin",
     icon: Home,
   },
   {
     title: "Communities",
-    url: "#",
+    url: "/admin/communities",
     icon: Handshake,
   },
 ];

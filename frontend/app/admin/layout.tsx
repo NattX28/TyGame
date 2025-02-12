@@ -9,7 +9,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
         </div>
       </aside>
       {/* page.tsx */}
-      <div>{children}</div>
+      <main>{children}</main>
     </div>
   );
 };

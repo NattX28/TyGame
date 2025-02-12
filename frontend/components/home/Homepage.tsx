@@ -3,6 +3,7 @@ import CommunityCardContainer from "../card/CommunityCardContainer";
 import HeroHompage from "./HeroHompage";
 import { CommunityCardProps } from "@/types/community";
 
+// Mock Data
 const communityCards: CommunityCardProps[] = [
   {
     commuID: 1,
@@ -13,6 +14,7 @@ const communityCards: CommunityCardProps[] = [
     category: "Sandbox",
     image: "https://example.com/images/minecraft.jpg",
     created_at: new Date("2020-03-15"),
+    members: 45000,
   },
   {
     commuID: 2,
@@ -23,6 +25,7 @@ const communityCards: CommunityCardProps[] = [
     category: "MOBA",
     image: "https://example.com/images/league_of_legends.jpg",
     created_at: new Date("2019-08-10"),
+    members: 72000,
   },
   {
     commuID: 3,
@@ -33,6 +36,7 @@ const communityCards: CommunityCardProps[] = [
     category: "Shooter",
     image: "https://example.com/images/valorant.jpg",
     created_at: new Date("2021-04-22"),
+    members: 38000,
   },
   {
     commuID: 4,
@@ -43,6 +47,7 @@ const communityCards: CommunityCardProps[] = [
     category: "RPG",
     image: "https://example.com/images/genshin_impact.jpg",
     created_at: new Date("2020-09-28"),
+    members: 60000,
   },
   {
     commuID: 5,
@@ -53,6 +58,7 @@ const communityCards: CommunityCardProps[] = [
     category: "Action RPG",
     image: "https://example.com/images/elden_ring.jpg",
     created_at: new Date("2022-02-25"),
+    members: 25000,
   },
   {
     commuID: 6,
@@ -63,6 +69,7 @@ const communityCards: CommunityCardProps[] = [
     category: "Party",
     image: "https://example.com/images/among_us.jpg",
     created_at: new Date("2018-11-16"),
+    members: 54000,
   },
   {
     commuID: 7,
@@ -73,6 +80,7 @@ const communityCards: CommunityCardProps[] = [
     category: "Shooter",
     image: "https://example.com/images/call_of_duty.jpg",
     created_at: new Date("2003-10-29"),
+    members: 82000,
   },
   {
     commuID: 8,
@@ -83,6 +91,7 @@ const communityCards: CommunityCardProps[] = [
     category: "Battle Royale",
     image: "https://example.com/images/fortnite.jpg",
     created_at: new Date("2017-07-25"),
+    members: 91000,
   },
   {
     commuID: 9,
@@ -93,6 +102,7 @@ const communityCards: CommunityCardProps[] = [
     category: "Simulation",
     image: "https://example.com/images/the_sims.jpg",
     created_at: new Date("2000-02-04"),
+    members: 34000,
   },
   {
     commuID: 10,
@@ -103,6 +113,7 @@ const communityCards: CommunityCardProps[] = [
     category: "Adventure",
     image: "https://example.com/images/zelda_botw.jpg",
     created_at: new Date("2017-03-03"),
+    members: 27000,
   },
 ];
 

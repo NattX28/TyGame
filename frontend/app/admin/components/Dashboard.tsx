@@ -149,7 +149,7 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
           title={"Total User"}
-          value={totalUsers}
+          value={totalUsers.toLocaleString()}
           change={{
             type: "increase",
             value: "11%",
@@ -159,7 +159,7 @@ const Dashboard = () => {
         />
         <StatCard
           title={"Total Communities"}
-          value={totalCommunities}
+          value={totalCommunities.toLocaleString()}
           change={{
             type: "increase",
             value: "40%",
