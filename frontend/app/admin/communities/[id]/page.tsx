@@ -14,7 +14,7 @@ interface User {
   status: "approved" | "pending" | "denied";
   date: Date;
 }
-const users = [
+const users: User[] = [
   {
     name: "Alice Johnson",
     username: "alice.johnson@email.com",
