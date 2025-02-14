@@ -15,6 +15,12 @@
   .bg-contrast {
     background-color: #ff0000;
   }
+  .bg-frame {
+    background-color: #171717;
+  }
+  .bg-sub-frame {
+    background-color: #1f1f1f;
+  }
   .text-main-color {
     color: #ffffff;
   }
@@ -135,5 +141,24 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .overflow-y-auto::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3); /* Set the color and transparency */
+    border-radius: 8px;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.5); /* Change color on hover */
   }
 }

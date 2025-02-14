@@ -1,10 +1,23 @@
 // import LoginForm from "./components/LoginForm";
-
+import Scrollbar from "./components/FriendList";
+import Search from "./components/Search";
 
 const page = () => {
   return (
-    <div className="flex flex-col justify-center items-center">
-      <h2 className="text-3xl font-bold text-second-color">Login</h2>
+    <div className="p-4 h-screen bg-frame flex flex-row gap-4">
+      <div className="bg-sub-frame h-full w-full max-md:hidden max-w-sm flex flex-col gap-4 px-4 py-4 ">
+        <div className="w-full">
+          <h1 className="">CHAT</h1>
+          <h1 className="">ฟหกฟกฟไก</h1>
+        </div>
+        <Search pholder={"Search chat"} />
+        <div className="h-full w-full overflow-y-auto rounded-lg p-4 scrollbar-transparent">
+          {}
+        </div>
+      </div>
+      <div className="bg-sub-frame h-full w-full">
+      </div>
+      {/* <div className="bg-sub-frame h-full"></div> */}
     </div>
   );
 };
