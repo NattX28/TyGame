@@ -10,7 +10,7 @@ const AdminCommunityCard = ({
 }) => {
   return (
     <Link href={`communities/${community.commuID}`}>
-      <div className="flex justify-between items-center bg-second p-3 m-2 rounded-md">
+      <div className="flex justify-between items-center bg-second p-3 m-2 rounded-md sm:w-36 md:w-auto">
         <Avatar className="w-4 h-4 md:w-8 md:h-8">
           <AvatarImage src={community.image} alt="Community Avatar" />
           <AvatarFallback>GC</AvatarFallback>
