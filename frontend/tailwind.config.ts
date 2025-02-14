@@ -9,6 +9,10 @@ export default {
   ],
   theme: {
   	extend: {
+			screens: {
+        'xs': '300px',
+				'max-md': {'max': '680px'},
+      },
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -65,7 +69,9 @@ export default {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
-  		}
+  		},
+			
+    
   	}
   },
   plugins: [require("tailwindcss-animate")],
