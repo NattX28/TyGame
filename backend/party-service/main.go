@@ -3,12 +3,13 @@ package main
 import (
 	"log"
 	"os"
-	"party-service/db"
 	
+	"party-service/db"
+	"party-service/handler"
 	"party-service/websocket"
-	"github.com/joho/godotenv"
-	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/contrib/websocket"
+	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
 )
 
 func main() {

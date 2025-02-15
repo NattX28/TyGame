@@ -8,7 +8,7 @@ import (
 )
 
 // create party
-func createParty(partyID uint) error {
+func CreateParty(partyID uint) error {
 	party := models.Party{
 		ID:partyID,
 	}
