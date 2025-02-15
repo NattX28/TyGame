@@ -1,37 +1,80 @@
 package repository
 
 import (
-	"party-service/db"
-	"party-service/models"
-
-	"github.com/google/uuid"
+    "errors"
+    "time"
+    "party-service/db"
+    "party-service/models"
+    "github.com/google/uuid"
 )
 
-// create party
-func CreateParty(partyID uint) error {
-	party := models.Party{
-		ID:partyID,
-	}
-
-	return db.DB.Create(&party).Error
+func FindAvailableParty() (*models.Party, error) {
+    var party models.Party
+    
+    result := db.DB.Preload("Members").
+        Where("status = ?", models.PartyStatusOpen).
+        First(&party)
+    
+    if result.Error != nil {
+        return nil, result.Error
+    }
+    
+    return &party, nil
 }
 
-// Add User To Party
-func AddUserToParty(userID uuid.UUID, partyID uint) error {
-	member := models.PartyMember{UserID:userID, PartyID:partyID}
-	return db.DB.Create(&member).Error
+func CreateParty(maxSlots int) (*models.Party, error) {
+    party := &models.Party{
+        Status:    models.PartyStatusOpen,
+        MaxSlots:  maxSlots,
+        CreatedAt: time.Now(),
+    }
+    
+    if err := db.DB.Create(party).Error; err != nil {
+        return nil, err
+    }
+    
+    return party, nil
 }
 
-// Remove User From Party
-func removeUserFromParty(userID uuid.UUID,partyID uint) error {
-	if err := db.DB.Where("user_id = ? AND party_id = ?",userID,partyID).Delete(&models.PartyMember{}).Error; err != nil {
-		return err
-	}
+func JoinParty(partyID uint, userID uuid.UUID) error {
+    var party models.Party
+    
+    tx := db.DB.Begin()
+    
+    if err := tx.Preload("Members").First(&party, partyID).Error; err != nil {
+        tx.Rollback()
+        return err
+    }
+    
+    if len(party.Members) >= party.MaxSlots {
+        tx.Rollback()
+        return errors.New("party is full")
+    }
+    
+    member := models.PartyMember{
+        PartyID:  partyID,
+        UserID:   userID,
+        JoinedAt: time.Now(),
+    }
+    
+    if err := tx.Create(&member).Error; err != nil {
+        tx.Rollback()
+        return err
+    }
+    
+    if len(party.Members)+1 >= party.MaxSlots {
+        party.Status = models.PartyStatusFull
+        if err := tx.Save(&party).Error; err != nil {
+            tx.Rollback()
+            return err
+        }
+    }
+    
+    return tx.Commit().Error
+}
 
-	var count int64
-	db.DB.Model(&models.PartyMember{}).Where("party_id = ?",partyID).Count(&count)
-	if count == 0 {
-		db.DB.Delete(&models.Party{}, "id = ?",partyID)
-	}
-	return nil
+func GetPartyMembers(partyID uint) ([]models.PartyMember, error) {
+    var members []models.PartyMember
+    err := db.DB.Where("party_id = ?", partyID).Find(&members).Error
+    return members, err
 }

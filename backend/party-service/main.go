@@ -3,40 +3,59 @@ package main
 import (
 	"log"
 	"os"
-	
+	"strconv"
+
 	"party-service/db"
 	"party-service/handler"
-	"party-service/websocket"
+	wsServer "party-service/websocket" // change name import
+
 	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 	"github.com/joho/godotenv"
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Println("No .env file found, skipping...")
-	}
+    err := godotenv.Load()
+    if err != nil {
+        log.Println("No .env file found")
+    }
 
-	db.Connect()
-	defer db.Close()
+    db.Connect()
+    defer db.Close()
 
-	hub := websocket.NewHub()
-	go hub.Run()
+    hub := wsServer.NewHub()
+    go hub.Run()
 
-	app := fiber.New()
+    app := fiber.New()
 
-	app.Post("/party", handler.CreatePartyHandler)
+    // Websocket middleware
+    app.Use("/ws", func(c *fiber.Ctx) error {
+        // IsWebSocketUpgrade returns true if the client
+        // requested upgrade to the WebSocket protocol.
+        if websocket.IsWebSocketUpgrade(c) {
+            return c.Next()
+        }
+        return fiber.ErrUpgradeRequired
+    })
 
-	app.Get("/ws", websocket.New(func(c *websocket.Conn) {
-		websocket.ServeWs(hub, c)
-	}))
+    app.Post("/party/find", handler.FindPartyHandler)
+    
+    app.Get("/ws/:party_id", websocket.New(func(c *websocket.Conn) {
+        partyID := c.Params("party_id")
+        userID := c.Query("user_id")
+        
+        partyIDUint, _ := strconv.ParseUint(partyID, 10, 64)
+        userIDUUID, _ := uuid.Parse(userID)
+        
+        wsServer.ServeWs(hub, c, uint(partyIDUint), userIDUUID)
+    }))
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
+    port := os.Getenv("PORT")
+    if port == "" {
+        port = "8080"
+    }
 
-	log.Println("Party Service running on port", port)
-	log.Fatal(app.Listen(":" + port))
+    log.Printf("Server starting on port %s", port)
+    log.Fatal(app.Listen(":" + port))
 }
