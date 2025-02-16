@@ -7,7 +7,7 @@ const Profile = ({
     person: Person;
 }) => {
   return (
-    <div className="py-2 flex items-center hover:bg-second transition">
+    <div className="py-2 px-4 flex items-center hover:bg-second transition">
         <div className="h-14 w-14 relative">
             <img
                 src={person.avatar}

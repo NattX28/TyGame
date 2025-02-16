@@ -26,12 +26,12 @@ const FriendList = () => {
 const page = () => {
   return (
     <div className="h-screen flex flex-row bg-black">
-      <div className="border-r border-second h-full w-full max-md:hidden max-w-sm flex flex-col gap-4 p-4">
-        <div className="w-full mx-2">
+      <div className="border-r border-second h-full w-full max-md:hidden max-w-sm flex flex-col gap-4 py-4">
+        <div className="px-8 pt-4">
           <p className="text-2xl font-bold tracking-widest">CHAT</p> 
         </div>
         <Search pholder={"Search chat"} />
-        <div className="h-full w-full overflow-y-auto rounded-lg p-4 scrollbar-transparent">
+        <div className="h-full w-full overflow-y-auto rounded-lg scrollbar-transparent">
           <FriendList />
         </div>
       </div>
