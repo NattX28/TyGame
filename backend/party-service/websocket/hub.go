@@ -1,8 +1,8 @@
 package websocket
 
 import (
-    "encoding/json"
-    "sync"
+	"encoding/json"
+	"sync"
 )
 
 type Hub struct {
@@ -27,7 +27,7 @@ func NewHub() *Hub {
 func (h *Hub) Run() {
     for {
         select {
-        case client := <-h.Register:
+        case client :=  <-h.Register:
             h.mu.Lock()
             h.Clients[client] = true
             h.PartyClients[client.PartyID] = append(h.PartyClients[client.PartyID], client)

@@ -79,7 +79,10 @@ func (c *Client) readPump(hub *Hub) {
     }
 }
 
+
 func ServeWs(hub *Hub, c *websocket.Conn, partyID uint, userID uuid.UUID) {
+    log.Printf("New WebSocket connection: Party ID: %d, User ID: %s", partyID, userID)
+    
     client := &Client{
         Conn:    c,
         PartyID: partyID,
@@ -89,6 +92,12 @@ func ServeWs(hub *Hub, c *websocket.Conn, partyID uint, userID uuid.UUID) {
 
     hub.Register <- client
 
+    // defer เพื่อให้แน่ใจว่า connection จะถูก close เมื่อจบ function
+    defer func() {
+        hub.Unregister <- client
+        c.Close()
+    }()
+
     go client.writePump()
-    go client.readPump(hub)
+    client.readPump(hub) // blocking call
 }
