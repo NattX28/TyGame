@@ -13,6 +13,26 @@ import {
 } from "chart.js";
 import { UsersRound, Flame, Activity, Handshake } from "lucide-react";
 
+//new
+import { TrendingUp } from "lucide-react"
+import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart"
+
+
+// end new
 Chart.register(
   CategoryScale,
   LinearScale,
@@ -121,30 +141,21 @@ const Dashboard = () => {
     },
   };
 
-  // Data for Pie Chart (Active Users)
-  const pieData = {
-    labels: ["Active Users", "Inactive Users"],
-    datasets: [
-      {
-        data: [activeUsers, totalUsers - activeUsers],
-        backgroundColor: ["#36A2EB", "#FF6384"],
-        hoverBackgroundColor: ["#36A2EB", "#FF6384"],
-      },
-    ],
-  };
-
-  const pieOptions = {
-    plugins: {
-      legend: {
-        labels: {
-          color: "white", // เปลี่ยนสีของ Legend เป็นสีขาว
-        },
-      },
+ // config chart & chartdata
+  const chartConfig = {
+    Active: {
+      label: "Active",
+      color: "hsl(var(--dark-chart-2))",
     },
-  };
-
+    Inactive: {
+      label: "Inactive",
+      color: "hsl(var(--dark-chart-4))",
+    },
+  } satisfies ChartConfig
+  const chartData = [{ month: "abc", Active: activeUsers, Inactive: totalUsers - activeUsers }]
+  
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="container mx-auto px-4 py-6 w-full">
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
@@ -187,7 +198,80 @@ const Dashboard = () => {
               Active Users
             </h2>
           </div>
-          <Pie data={pieData} options={pieOptions} />
+
+          <Card className="flex flex-col bg-second border-none shadow-none">
+            <CardHeader className="items-center pb-0">
+              <CardTitle className="text-white">Radial Chart - Users</CardTitle>
+              <CardDescription>January - June 2025</CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-1 items-center pb-0">
+              <ChartContainer
+                config={chartConfig}
+                className="mx-auto aspect-square w-full max-w-[250px]"
+              >
+                <RadialBarChart
+                  data={chartData}
+                  endAngle={180}
+                  innerRadius={80}
+                  outerRadius={130}
+                >
+                  <ChartTooltip
+                    cursor={false}
+                    content={<ChartTooltipContent hideLabel />}
+                  />
+                  <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
+                    <Label
+                      content={({ viewBox }) => {
+                        if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                          return (
+                            <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle">
+                              <tspan
+                                x={viewBox.cx}
+                                y={(viewBox.cy || 0) - 16}
+                                className="fill-white text-2xl font-bold"
+                              >
+                                {totalUsers.toLocaleString()}
+                              </tspan>
+                              <tspan
+                                x={viewBox.cx}
+                                y={(viewBox.cy || 0) + 4}
+                                className="fill-muted-foreground"
+                              >
+                                Total Users
+                              </tspan>
+                            </text>
+                          )
+                        }
+                      }}
+                    />
+                  </PolarRadiusAxis>
+                  <RadialBar
+                    dataKey="Active"
+                    stackId="a"
+                    cornerRadius={5}
+                    fill="var(--color-Active)"
+                    className="stroke-transparent stroke-2"
+                  />
+                  <RadialBar
+                    dataKey="Inactive"
+                    fill="var(--color-Inactive)"
+                    stackId="a"
+                    cornerRadius={5}
+                    className="stroke-transparent stroke-2"
+                  />
+                </RadialBarChart>
+              </ChartContainer>
+            </CardContent>
+            <CardFooter className="flex-col gap-2 text-sm">
+              <div className=" text-white flex items-center gap-2 font-medium leading-none">
+                Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+              </div>
+              <div className="leading-none text-muted-foreground">
+                Showing total users for the last 6 months
+              </div>
+            </CardFooter>
+        </Card>
+
         </div>
       </div>
     </div>

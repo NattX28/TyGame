@@ -7,10 +7,10 @@ import { cn } from "@/lib/utils";
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className="flex">
+    <div className="flex h-screen justify-around sm:justify-normal">
       {/* Mobile Toggle Button */}
       <button
-        className="lg:hidden p-3 fixed top-4 left-4 z-50 bg-main text-white rounded-md"
+        className="md:hidden p-3 fixed top-4 left-4 z-50 bg-main text-white rounded-md"
         onClick={() => setIsOpen(!isOpen)}
       >
         <Menu className="w-6 h-6" />
@@ -19,8 +19,8 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
       {/* Sidebar */}
       <div
         className={cn(
-          "fixed inset-y-0 left-0 w-64 bg-main text-white p-4 flex flex-col transition-all",
-          "lg:relative lg:translate-x-0 lg:w-64",
+          "fixed  inset-y-0 left-0 w-64 bg-main text-white p-4 flex flex-col transition-all",
+          "md:relative md:translate-x-0 md:w-64",
           isOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
