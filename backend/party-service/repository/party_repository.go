@@ -1,11 +1,13 @@
 package repository
 
 import (
-    "errors"
-    "time"
-    "party-service/db"
-    "party-service/models"
-    "github.com/google/uuid"
+	"errors"
+	"party-service/db"
+	"party-service/models"
+	"time"
+
+	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 func FindAvailableParty() (*models.Party, error) {
@@ -15,7 +17,11 @@ func FindAvailableParty() (*models.Party, error) {
         Where("status = ?", models.PartyStatusOpen).
         First(&party)
     
+    // ถ้าไม่เจอข้อมูล ให้ return nil, nil แทน
     if result.Error != nil {
+        if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+            return nil, nil
+        }
         return nil, result.Error
     }
     

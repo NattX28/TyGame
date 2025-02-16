@@ -19,7 +19,9 @@ func FindPartyHandler(c *fiber.Ctx) error {
     }
 
     party, err := repository.FindAvailableParty()
-    if err != nil {
+    // ถ้าไม่เจอห้องที่ว่าง (party == nil) หรือมี error
+    if err != nil || party == nil {
+        // สร้างห้องใหม่
         party, err = repository.CreateParty(5)
         if err != nil {
             return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
