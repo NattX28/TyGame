@@ -27,48 +27,10 @@ func NewHub() *Hub {
 func (h *Hub) Run() {
     for {
         select {
-        case client :=  <-h.Register:
-            h.mu.Lock()
-            h.Clients[client] = true
-            h.PartyClients[client.PartyID] = append(h.PartyClients[client.PartyID], client)
-            h.mu.Unlock()
-
-            msg := WebSocketMessage{
-                Type:    TypeUserJoined,
-                PartyID: client.PartyID,
-                UserID:  client.UserID,
-            }
-            msgBytes, _ := json.Marshal(msg)
-            h.broadcastToParty(client.PartyID, msgBytes)
-
+        case client := <-h.Register:
+            h.addClient(client)
         case client := <-h.Unregister:
-            h.mu.Lock()
-            if _, ok := h.Clients[client]; ok {
-                delete(h.Clients, client)
-                close(client.Send)
-                
-                partyClients := h.PartyClients[client.PartyID]
-                for i, c := range partyClients {
-                    if c == client {
-                        h.PartyClients[client.PartyID] = append(partyClients[:i], partyClients[i+1:]...)
-                        break
-                    }
-                }
-
-                if len(h.PartyClients[client.PartyID]) == 0 {
-                    delete(h.PartyClients, client.PartyID)
-                } else {
-                    msg := WebSocketMessage{
-                        Type:    TypeUserLeft,
-                        PartyID: client.PartyID,
-                        UserID:  client.UserID,
-                    }
-                    msgBytes, _ := json.Marshal(msg)
-                    h.broadcastToParty(client.PartyID, msgBytes)
-                }
-            }
-            h.mu.Unlock()
-
+            h.removeClient(client)
         case message := <-h.Broadcast:
             var wsMessage WebSocketMessage
             if err := json.Unmarshal(message, &wsMessage); err != nil {
@@ -78,6 +40,50 @@ func (h *Hub) Run() {
             h.broadcastToParty(wsMessage.PartyID, message)
         }
     }
+}
+
+func (h *Hub) addClient(client *Client) {
+    h.mu.Lock()
+    h.Clients[client] = true
+    h.PartyClients[client.PartyID] = append(h.PartyClients[client.PartyID], client)
+    h.mu.Unlock()
+
+    msg := WebSocketMessage{
+        Type:    TypeUserJoined,
+        PartyID: client.PartyID,
+        UserID:  client.UserID,
+    }
+    msgBytes, _ := json.Marshal(msg)
+    h.broadcastToParty(client.PartyID, msgBytes)
+}
+
+func (h *Hub) removeClient(client *Client) {
+     h.mu.Lock()
+    if _, ok := h.Clients[client]; ok {
+        delete(h.Clients, client)
+        close(client.Send)
+        
+        partyClients := h.PartyClients[client.PartyID]
+        for i, c := range partyClients {
+            if c == client {
+                h.PartyClients[client.PartyID] = append(partyClients[:i], partyClients[i+1:]...)
+                break
+            }
+        }
+
+        if len(h.PartyClients[client.PartyID]) == 0 {
+            delete(h.PartyClients, client.PartyID)
+        } else {
+            msg := WebSocketMessage{
+                Type:    TypeUserLeft,
+                PartyID: client.PartyID,
+                UserID:  client.UserID,
+            }
+            msgBytes, _ := json.Marshal(msg)
+            h.broadcastToParty(client.PartyID, msgBytes)
+        }
+    }
+    h.mu.Unlock()
 }
 
 func (h *Hub) broadcastToParty(partyID uint, message []byte) {

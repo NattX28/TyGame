@@ -10,11 +10,11 @@ import (
 	"gorm.io/gorm"
 )
 
-func FindAvailableParty() (*models.Party, error) {
+func FindAvailableParty(maxSlots int) (*models.Party, error) {
     var party models.Party
-    
+    // หาห้องที่ว่างและกำหนดจำนวนคนที่ผู้ใช้อยากเข้าด้วย
     result := db.DB.Preload("Members").
-        Where("status = ?", models.PartyStatusOpen).
+        Where("status = ? AND MaxSlots = ?", models.PartyStatusOpen,maxSlots).
         First(&party)
     
     // ถ้าไม่เจอข้อมูล ให้ return nil, nil แทน

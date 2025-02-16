@@ -7,6 +7,7 @@ import (
 
 	"party-service/db"
 	"party-service/handler"
+	"party-service/middleware"
 	wsServer "party-service/websocket" // change name import
 
 	"github.com/gofiber/contrib/websocket"
@@ -28,6 +29,7 @@ func main() {
     go hub.Run()
 
     app := fiber.New()
+    app.Use(middleware.JWTMiddleware)
 
     // Websocket middleware
     app.Use("/ws", func(c *fiber.Ctx) error {
@@ -53,7 +55,7 @@ func main() {
 
     port := os.Getenv("PORT")
     if port == "" {
-        port = "80"
+        port = "3001"
     }
 
     log.Printf("Server starting on port %s", port)
