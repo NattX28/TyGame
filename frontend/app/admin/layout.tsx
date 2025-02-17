@@ -21,7 +21,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
         className={cn(
           "fixed  inset-y-0 left-0 w-64 bg-main text-white p-4 flex flex-col transition-all",
           "md:relative md:translate-x-0 md:w-64",
-          isOpen ? "translate-x-0" : "-translate-x-full"
+          isOpen ? "translate-x-0  z-10" : "-translate-x-full"
         )}
       >
         {/* User Profile */}

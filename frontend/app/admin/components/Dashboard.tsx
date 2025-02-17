@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { Bar, Pie } from "react-chartjs-2";
+import { Bar, BarChart, XAxis } from "recharts"
 import {
   Chart,
   CategoryScale,
@@ -13,7 +13,6 @@ import {
 } from "chart.js";
 import { UsersRound, Flame, Activity, Handshake } from "lucide-react";
 
-//new
 import { TrendingUp } from "lucide-react"
 import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts"
 import {
@@ -30,9 +29,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
+import { string } from "zod";
 
-
-// end new
 Chart.register(
   CategoryScale,
   LinearScale,
@@ -89,60 +87,25 @@ const Dashboard = () => {
 
   // Mock data
   const totalUsers = 10500;
-  const totalCommunities = 120;
   const activeUsers = 6800;
+  const totalCommunities = 120;
   const topCommunities = [
-    { name: "League of legends", members: 2300 },
-    { name: "valorant", members: 1800 },
-    { name: "ROV", members: 1500 },
-    { name: "Call of duty", members: 1200 },
-    { name: "Dead by daylight", members: 900 },
+    { name: "League of legends", shortname:"LOL", members: 2300, color:"hsl(var(--chart-5))"},
+    { name: "Valorant", shortname:"Valorant", members: 1800, color:"hsl(var(--chart-5))"},
+    { name: "ROV", shortname:"ROV", members: 1500, color:"hsl(var(--chart-5))"},
+    { name: "Call of duty", shortname:"COD", members: 1200, color:"hsl(var(--chart-5))"},
+    { name: "Dead by daylight", shortname:"DBD", members: 900, color:"hsl(var(--chart-5))"},
   ];
 
-  // Data for Bar Chart (Top 5 Communities)
-  const barData = {
-    labels: topCommunities.map((c) => c.name),
-    datasets: [
-      {
-        label: "Members",
-        data: topCommunities.map((c) => c.members),
-        backgroundColor: "rgba(54, 162, 235, 0.6)",
-        borderColor: "rgba(54, 162, 235, 1)",
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const barOptions = {
-    scales: {
-      x: {
-        ticks: {
-          color: "white", // เปลี่ยนสีตัวเลขบนแกน X เป็นสีขาว
-        },
-        grid: {
-          color: "rgba(255, 255, 255, 0.2)", // เปลี่ยนสีเส้น Grid เป็นสีขาวจางๆ
-        },
-      },
-      y: {
-        ticks: {
-          color: "white", // เปลี่ยนสีตัวเลขบนแกน Y เป็นสีขาว
-        },
-        grid: {
-          color: "rgba(255, 255, 255, 0.2)", // เปลี่ยนสีเส้น Grid เป็นสีขาวจางๆ
-        },
-      },
+  // Config Bar Chart
+  const BarConfig ={
+    commu: {
+      color: "hsl(var(--dark-chart-1))",
     },
-    plugins: {
-      legend: {
-        labels: {
-          color: "white", // เปลี่ยนสีตัวหนังสือของ Legend เป็นสีขาว
-        },
-      },
-    },
-  };
+  } satisfies ChartConfig
 
- // config chart & chartdata
-  const chartConfig = {
+ // Config Radial Chart & Chartdata
+  const RadialConfig = {
     Active: {
       label: "Active",
       color: "hsl(var(--dark-chart-2))",
@@ -152,7 +115,7 @@ const Dashboard = () => {
       color: "hsl(var(--dark-chart-4))",
     },
   } satisfies ChartConfig
-  const chartData = [{ month: "abc", Active: activeUsers, Inactive: totalUsers - activeUsers }]
+  const RadialData = [{ month: "abc", Active: activeUsers, Inactive: totalUsers - activeUsers }]
   
   return (
     <div className="container mx-auto px-4 py-6 w-full">
@@ -189,7 +152,41 @@ const Dashboard = () => {
               Top 5 Communities
             </h2>
           </div>
-          <Bar data={barData} options={barOptions} />
+          
+          {/* Bar Chart */}
+          <Card className="bg-second border-none shadow-none z-0">
+            <CardHeader className="text-white">
+              <CardTitle>Admin Analysis</CardTitle>
+              <CardDescription>
+                Tools For Analysis Top Community.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ChartContainer config={BarConfig} >
+                <BarChart accessibilityLayer data={topCommunities}>
+                  <XAxis
+                    dataKey="name"
+                    tickLine={false}
+                    tickMargin={10}
+                    axisLine={false}
+                    tickFormatter={(_,index) => topCommunities[index].shortname}
+                  />
+                  <Bar
+                    dataKey="members"
+                    stackId="a"
+                    fill="var(--color-commu)"
+                    radius={[4, 4, 0, 0]}
+                  />
+                  <ChartTooltip
+                    content={<ChartTooltipContent />}
+                    cursor={false}
+                    defaultIndex={1}
+                  />
+                </BarChart>
+              </ChartContainer>
+            </CardContent>
+          </Card>
+
         </div>
         <div className="bg-second p-6 rounded-lg">
           <div className="flex gap-2">
@@ -198,7 +195,7 @@ const Dashboard = () => {
               Active Users
             </h2>
           </div>
-
+          {/* Radial Chart */}
           <Card className="flex flex-col bg-second border-none shadow-none">
             <CardHeader className="items-center pb-0">
               <CardTitle className="text-white">Radial Chart - Users</CardTitle>
@@ -206,11 +203,11 @@ const Dashboard = () => {
             </CardHeader>
             <CardContent className="flex flex-1 items-center pb-0">
               <ChartContainer
-                config={chartConfig}
+                config={RadialConfig}
                 className="mx-auto aspect-square w-full max-w-[250px]"
               >
                 <RadialBarChart
-                  data={chartData}
+                  data={RadialData}
                   endAngle={180}
                   innerRadius={80}
                   outerRadius={130}
