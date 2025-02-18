@@ -58,7 +58,8 @@ func main() {
 		})
 	})
 
-	port := os.Getenv("PORT")
+	//test test
+	port := os.Getenv("PORT_USER_SERVICE")
 	if port == "" {
 		port = "5001"
 	}
