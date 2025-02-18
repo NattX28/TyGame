@@ -4,6 +4,20 @@ import { useParams } from "next/navigation";
 import { Pencil } from "lucide-react";
 import Link from "next/link";
 
+import React, { useState,useEffect } from "react";
+ 
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import AdminModal from "../components/AdminCommunityModal"
+
 // Mock data
 //Types
 interface User {
@@ -11,16 +25,17 @@ interface User {
   username: string;
   role: "user" | "admin" | "moderator";
   image: string;
-  status: "approved" | "pending" | "denied";
+  detail: string;
   date: Date;
 }
 const users: User[] = [
   {
+    
     name: "Alice Johnson",
     username: "alice.johnson@email.com",
     role: "admin",
     image: "https://randomuser.me/api/portraits/women/1.jpg",
-    status: "approved",
+    detail: "spamming",
     date: new Date("2023-11-01"),
   },
   {
@@ -28,7 +43,7 @@ const users: User[] = [
     username: "bob.smith@email.com",
     role: "user",
     image: "https://randomuser.me/api/portraits/men/2.jpg",
-    status: "denied",
+    detail: "spamming",
     date: new Date("2024-01-12"),
   },
   {
@@ -36,7 +51,7 @@ const users: User[] = [
     username: "charlie.brown@email.com",
     role: "moderator",
     image: "https://randomuser.me/api/portraits/men/3.jpg",
-    status: "approved",
+    detail: "spamming",
     date: new Date("2023-12-15"),
   },
   {
@@ -44,7 +59,7 @@ const users: User[] = [
     username: "diana.prince@email.com",
     role: "user",
     image: "https://randomuser.me/api/portraits/women/4.jpg",
-    status: "approved",
+    detail: "spamming",
     date: new Date("2024-02-05"),
   },
   {
@@ -52,7 +67,7 @@ const users: User[] = [
     username: "ethan.hunt@email.com",
     role: "user",
     image: "https://randomuser.me/api/portraits/men/5.jpg",
-    status: "denied",
+    detail: "spamming",
     date: new Date("2024-01-25"),
   },
   {
@@ -60,7 +75,7 @@ const users: User[] = [
     username: "fiona.gallagher@email.com",
     role: "admin",
     image: "https://randomuser.me/api/portraits/women/6.jpg",
-    status: "approved",
+    detail: "spamming",
     date: new Date("2023-10-10"),
   },
   {
@@ -68,7 +83,7 @@ const users: User[] = [
     username: "george.clooney@email.com",
     role: "moderator",
     image: "https://randomuser.me/api/portraits/men/7.jpg",
-    status: "denied",
+    detail: "spamming",
     date: new Date("2024-02-08"),
   },
   {
@@ -76,7 +91,7 @@ const users: User[] = [
     username: "hannah.montana@email.com",
     role: "user",
     image: "https://randomuser.me/api/portraits/women/8.jpg",
-    status: "approved",
+    detail: "spamming",
     date: new Date("2023-11-30"),
   },
   {
@@ -84,7 +99,7 @@ const users: User[] = [
     username: "isaac.newton@email.com",
     role: "moderator",
     image: "https://randomuser.me/api/portraits/men/9.jpg",
-    status: "approved",
+    detail: "spamming",
     date: new Date("2023-12-22"),
   },
   {
@@ -92,7 +107,7 @@ const users: User[] = [
     username: "jessica.alba@email.com",
     role: "user",
     image: "https://randomuser.me/api/portraits/women/10.jpg",
-    status: "denied",
+    detail: "spamming",
     date: new Date("2024-01-18"),
   },
   {
@@ -100,7 +115,7 @@ const users: User[] = [
     username: "kevin.hart@email.com",
     role: "admin",
     image: "https://randomuser.me/api/portraits/men/11.jpg",
-    status: "approved",
+    detail: "spamming",
     date: new Date("2024-02-01"),
   },
   {
@@ -108,7 +123,7 @@ const users: User[] = [
     username: "laura.dern@email.com",
     role: "user",
     image: "https://randomuser.me/api/portraits/women/12.jpg",
-    status: "denied",
+    detail: "spamming",
     date: new Date("2024-01-27"),
   },
   {
@@ -116,7 +131,7 @@ const users: User[] = [
     username: "michael.jordan@email.com",
     role: "moderator",
     image: "https://randomuser.me/api/portraits/men/13.jpg",
-    status: "approved",
+    detail: "spamming",
     date: new Date("2023-12-05"),
   },
   {
@@ -124,7 +139,7 @@ const users: User[] = [
     username: "nina.dobrev@email.com",
     role: "user",
     image: "https://randomuser.me/api/portraits/women/14.jpg",
-    status: "approved",
+    detail: "spamming",
     date: new Date("2024-02-07"),
   },
   {
@@ -132,7 +147,7 @@ const users: User[] = [
     username: "oscar.wilde@email.com",
     role: "admin",
     image: "https://randomuser.me/api/portraits/men/15.jpg",
-    status: "denied",
+    detail: "spamming",
     date: new Date("2024-01-20"),
   },
   {
@@ -140,7 +155,7 @@ const users: User[] = [
     username: "penelope.cruz@email.com",
     role: "user",
     image: "https://randomuser.me/api/portraits/women/16.jpg",
-    status: "approved",
+    detail: "spamming",
     date: new Date("2023-11-17"),
   },
   {
@@ -148,7 +163,7 @@ const users: User[] = [
     username: "quentin.tarantino@email.com",
     role: "moderator",
     image: "https://randomuser.me/api/portraits/men/17.jpg",
-    status: "approved",
+    detail: "spamming",
     date: new Date("2023-12-30"),
   },
   {
@@ -156,7 +171,7 @@ const users: User[] = [
     username: "rachel.green@email.com",
     role: "user",
     image: "https://randomuser.me/api/portraits/women/18.jpg",
-    status: "denied",
+    detail: "spamming",
     date: new Date("2024-01-22"),
   },
   {
@@ -164,7 +179,7 @@ const users: User[] = [
     username: "steve.jobs@email.com",
     role: "admin",
     image: "https://randomuser.me/api/portraits/men/19.jpg",
-    status: "approved",
+    detail: "spamming",
     date: new Date("2023-10-05"),
   },
   {
@@ -172,7 +187,7 @@ const users: User[] = [
     username: "taylor.swift@email.com",
     role: "user",
     image: "https://randomuser.me/api/portraits/women/20.jpg",
-    status: "approved",
+    detail: "spamming",
     date: new Date("2024-02-10"),
   },
 ];
@@ -185,24 +200,70 @@ const formatDate = (date: Date) => {
   });
 };
 
-const getStatusColor = (status: User["status"]) => {
-  switch (status) {
-    case "approved":
-      return "text-green-700 bg-green-100 dark:text-green-100 dark:bg-green-800";
-    case "pending":
-      return "text-orange-700 bg-orange-100 dark:text-orange-100 dark:bg-orange-800";
-    case "denied":
-      return "text-red-700 bg-red-100 dark:text-red-100 dark:bg-red-800";
+// UUID
+const page = () => {
+  
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedAction, setSelectedAction] = useState("");
+  const [selectedUser, setSelectedUser] = useState("");
+  
+const openModal = (username: string, action: string) => {
+  if (action !== "pending") {
+    setSelectedUser(username);
+    setSelectedAction(action);
+    setIsOpen(true);
   }
 };
 
-const page = () => {
-  const { uuid } = useParams();
+  // Create Object to store status (PK -> username)
+  const [positions, setPositions] = useState(() =>
+    users.reduce((acc, user) => {
+      acc[user.username] = "pending";
+      return acc;
+    }, {} as Record<string, string>)
+    ,
+  );
+
+  // Function to update a specific user's status
+  const updatePosition = (userId: string, newPosition: string) => {
+    setPositions((prev) => ({
+      ...prev,
+      [userId]: newPosition,
+    }));
+  };
+
+  // Function to update all statuses at once
+  const updateAllStatuses = (newPosition: string) => {
+    setPositions((prev) =>
+      Object.keys(prev).reduce((acc, username) => {
+        acc[username] = newPosition;
+        return acc;
+      }, {} as Record<string, string>)
+    );
+  };
 
   return (
-    // table
     <div className="bg-second rounded-lg overflow-hidden">
       <div className="p-6">
+        {/* Bulk Status Dropdown */}
+        <div className="mb-4 flex justify-end">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant={"ghost"} className="border border-zinc-200">Set All Status</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuLabel>Change All Users' Status</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuRadioGroup onValueChange={updateAllStatuses}>
+                <DropdownMenuRadioItem value="pending">Pending</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="banned">Banned</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="kick">Kick</DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        {/* Table Header */}
         <div className="md:grid md:grid-cols-5 gap-4 mb-4 text-xs font-semibold uppercase tracking-wide text-gray-400">
           <div>No.</div>
           <div>Members</div>
@@ -210,65 +271,60 @@ const page = () => {
           <div>Status</div>
           <div>Edit</div>
         </div>
-        {/* table body */}
+
+        {/* Table Body */}
         <div className="divide-y divide-gray-700">
           {users.map((user, index) => (
-            <div
-              key={index}
-              className="py-4 space-y-3 md:space-y-0 md:grid md:grid-cols-5 md:gap-3 md:items-center">
-              {/* Number*/}
-              <div className="flex items-center justify-between md:block">
-                <span className="text-sm font-medium text-gray-500 dark:text-gray-400 md:hidden">
-                  No:
-                </span>
-                <span className="text-sm text-white">{index + 1}</span>
-              </div>
-              {/* user info (row display) */}
+            <div key={user.username} className="py-4 space-y-3 md:space-y-0 md:grid md:grid-cols-5 md:gap-3 md:items-center">
+              {/* Number */}
+              <div className="text-sm text-white">{index + 1}</div>
+
+              {/* User Info */}
               <div className="flex items-center">
-                <img
-                  src={user.image}
-                  alt={user.name}
-                  className="h-8 w-8 rounded-full"
-                />
+                <img src={user.image} alt={user.name} className="h-8 w-8 rounded-full" />
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-main-color">
-                    {user.name}
-                  </p>
+                  <p className="text-sm font-medium text-main-color">{user.name}</p>
                   <p className="text-sm text-gray-400">{user.username}</p>
                 </div>
               </div>
-              {/* Date */}
-              <div className="flex items-center justify-between md:block">
-                <span className="text-sm font-medium text-gray-500 dark:text-gray-400 md:hidden">
-                  Date:
-                </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  {formatDate(user.date)}
-                </span>
-              </div>
 
-              {/* Status */}
-              <div className="flex items-center justify-between md:block">
-                <span className="text-sm font-medium text-gray-400 md:hidden">
-                  Status:
-                </span>
-                <span
-                  className={`px-2 py-1 text-xs rounded-full ${getStatusColor(
-                    user.status
-                  )}`}>
-                  {user.status}
-                </span>
+              {/* Date */}
+              <div className="text-sm text-gray-500 dark:text-gray-400">{formatDate(user.date)}</div>
+
+              {/* Status Dropdown */}
+              <div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant={"ghost"} className="border border-red-600">{positions[user.username]}</Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56">
+                    <DropdownMenuLabel>Permission :</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuRadioGroup value={positions[user.username]} onValueChange={(value) => updatePosition(user.username, value)}>
+                      <DropdownMenuRadioItem value="banned">Banned</DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="kick">Kick</DropdownMenuRadioItem>
+                    </DropdownMenuRadioGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
 
               {/* Edit */}
-              <div className="flex items-center justify-between ">
-                <Link href="#">
+              <div className="flex items-center justify-between">
+                <Link href="#" onClick={()=>openModal(user.username, positions[user.username])}>
                   <Pencil className="w-4 h-4" />
                 </Link>
               </div>
             </div>
           ))}
         </div>
+        {selectedUser && selectedAction && (
+        <AdminModal 
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          username={selectedUser}
+          action={selectedAction}
+        />
+      )}
       </div>
     </div>
   );

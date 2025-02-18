@@ -20,7 +20,7 @@ const items = [
 
 const AdminSidebar = () => {
   return (
-    <div className="px-4 py-8 h-full flex flex-col">
+    <div className="px-4 py-8 h-full md:h-auto flex flex-col">
       {/* Top section */}
       <div className="space-y-8">
         {/* Header sidebar */}
@@ -55,7 +55,7 @@ const AdminSidebar = () => {
 
       {/* footer */}
       {/* Logout button */}
-      <div className="mt-auto pt-4">
+      <div className="mt-auto pt-6">
         <Button
           className="w-full h-12 justify-start gap-2 rounded-sm"
           variant={"ghost"}>
