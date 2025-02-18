@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
@@ -27,10 +28,20 @@ func main() {
 	// Auto-migrate User and Friend models
 	db.DB.AutoMigrate(&models.User{}, &models.Friend{})
 
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		StrictRouting: false,
+		ReadTimeout:   10 * time.Second,
+		WriteTimeout:  10 * time.Second,
+	})
 
 	// Define public routes
 	userRoutes := app.Group("/users")
+	userRoutes.Get("/", func(c *fiber.Ctx) error {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": "Hello world",
+		})
+	})
+
 	userRoutes.Post("/register", routes.RegisterHandler)
 	userRoutes.Post("/login", routes.LoginHandler)
 	userRoutes.Post("/logout", routes.LogoutHandler)
