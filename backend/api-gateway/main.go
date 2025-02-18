@@ -13,55 +13,59 @@ func main() {
 		DisableStartupMessage: false,
 	})
 
-	// ตรวจสอบว่าอยู่ใน production หรือ development
+	// กำหนดค่า URL ของ Services จาก ENV หรือใช้ค่า Default (บน Railway)
 	userServiceURL := os.Getenv("USER_SERVICE_URL")
 	if userServiceURL == "" {
-		userServiceURL = "user-service-production-25e2.up.railway.app:5001"
+		userServiceURL = "https://user-service.up.railway.app" // แก้ให้ตรงกับ Railway ของคุณ
 	}
 
 	postServiceURL := os.Getenv("POST_SERVICE_URL")
 	if postServiceURL == "" {
-		postServiceURL = "http://127.0.0.1:5002"
+		postServiceURL = "https://post-service.up.railway.app" // แก้ให้ตรงกับ Railway ของคุณ
 	}
 
-	// Forward request ไปที่ User Service ด้วย proxy
+	log.Printf("🔗 User Service URL: %s", userServiceURL)
+	log.Printf("🔗 Post Service URL: %s", postServiceURL)
+
+	// Proxy ไปยัง User Service
 	app.All("/users/*", func(c *fiber.Ctx) error {
-		path := c.Path()
-		url := userServiceURL + path
-		log.Printf("Path : %s", url)
+		url := userServiceURL + c.OriginalURL()
+		log.Printf("➡️ Forwarding to User Service: %s", url)
 		if err := proxy.Do(c, url); err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-				"error": "User service unavailable",
+			log.Printf("❌ User Service unavailable: %v", err)
+			return c.Status(fiber.StatusServiceUnavailable).JSON(fiber.Map{
+				"error": "User Service unavailable",
 			})
 		}
 		return nil
 	})
 
-	// Forward request ไปที่ Post Service ด้วย proxy
+	// Proxy ไปยัง Post Service
 	app.All("/posts/*", func(c *fiber.Ctx) error {
-		path := c.Path()
-		url := postServiceURL + path
+		url := postServiceURL + c.OriginalURL()
+		log.Printf("➡️ Forwarding to Post Service: %s", url)
 		if err := proxy.Do(c, url); err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-				"error": "Post service unavailable",
+			log.Printf("❌ Post Service unavailable: %v", err)
+			return c.Status(fiber.StatusServiceUnavailable).JSON(fiber.Map{
+				"error": "Post Service unavailable",
 			})
 		}
 		return nil
 	})
 
-	// Default route สำหรับเส้นทางที่ไม่ได้ระบุ
+	// Route Default (404)
 	app.Use(func(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"error": "Route not found",
 		})
 	})
 
-	// ตรวจสอบว่ามีการกำหนดพอร์ตจาก environment variable หรือเปล่า
+	// ใช้ PORT จาก ENV หรือ Default เป็น 8080
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
 
-	log.Printf("API Gateway starting on port %s", port)
+	log.Printf("🚀 API Gateway started on port %s", port)
 	log.Fatal(app.Listen(":" + port))
 }
