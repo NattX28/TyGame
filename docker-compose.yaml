@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  api-gateway:
+    build: ./backend/api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - user-service
+      # - post-service
+
+  user-service:
+    build: ./backend/user-service
+    ports:
+      - "5001:5001"
+
+  # post-service:
+  #   build: ./backend/post-service
+  #   ports:
+  #     - "5002:5002"
+
+  # chat-service:
+  #   build: ./backend/chat-service
+  #   ports:
+  #     - "5003:5003"
+
+  # community-service:
+  #   build: ./backend/community-service
+  #   ports:
+  #     - "5004:5004"
+
+  # frontend:
+  #   build: ./frontend
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - api-gateway
+
+  # db:
+  #   image: postgres:15
+  #   environment:
+  #     POSTGRES_USER: admin
+  #     POSTGRES_PASSWORD: password
+  #     POSTGRES_DB: mydatabase
+  #   ports:
+  #     - "5432:5432"
