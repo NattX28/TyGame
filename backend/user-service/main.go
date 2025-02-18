@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
@@ -57,6 +58,12 @@ func main() {
 		})
 	})
 
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "5001"
+	}
+
 	// Start the server
-	log.Fatal(app.Listen(":3000"))
+	log.Printf("User-Service starting on port %s", port)
+	log.Fatal(app.Listen(":" + port))
 }
