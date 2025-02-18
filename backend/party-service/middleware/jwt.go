@@ -12,7 +12,7 @@ var jwtSecret []byte
 
 func JWTMiddleware(c *fiber.Ctx) error {
 	if jwtSecret == nil {
-		jwtSecret = []byte(os.Getenv("Token"))
+		jwtSecret = []byte(os.Getenv("JWT_SECRET"))
 	}
 	authHeader := c.Get("Authorization")
 	if authHeader == "" {

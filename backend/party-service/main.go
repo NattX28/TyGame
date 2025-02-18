@@ -53,9 +53,9 @@ func main() {
         wsServer.ServeWs(hub, c, uint(partyIDUint), userIDUUID)
     }))
 
-    port := os.Getenv("PORT")
+    port := os.Getenv("PORT_PARTY_SERVICE")
     if port == "" {
-        port = "3001"
+        port = "5005"
     }
 
     log.Printf("Server starting on port %s", port)
