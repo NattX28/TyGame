@@ -16,7 +16,7 @@ func main() {
 	// ตรวจสอบว่าอยู่ใน production หรือ development
 	userServiceURL := os.Getenv("USER_SERVICE_URL")
 	if userServiceURL == "" {
-		userServiceURL = "http://127.0.0.1:5001"
+		userServiceURL = "user-service-production-25e2.up.railway.app:5001"
 	}
 
 	postServiceURL := os.Getenv("POST_SERVICE_URL")
