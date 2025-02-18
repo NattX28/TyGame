@@ -8,7 +8,6 @@ import (
 )
 
 // JWTMiddleware checks the JWT token from the Authorization header or cookie
-// JWTMiddleware checks the JWT token from the Authorization header or cookie
 func JWTMiddleware(c *fiber.Ctx) error {
 
 	tokenString := c.Get("Authorization")
@@ -23,7 +22,6 @@ func JWTMiddleware(c *fiber.Ctx) error {
 		})
 	}
 
-	// ✅ Remove "Bearer " prefix if it exists
 	if len(tokenString) > 7 && tokenString[:7] == "Bearer " {
 		tokenString = tokenString[7:]
 	}

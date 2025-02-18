@@ -13,7 +13,7 @@ import (
 var DB *gorm.DB
 
 func Connect() {
-	dsn := os.Getenv("DATABASE_URL")
+	dsn := os.Getenv("DATABASE_URL_USER_SERVICE")
 	if dsn == "" {
 		log.Fatal("DATABASE_URL is not set")
 	}
