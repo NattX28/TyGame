@@ -32,7 +32,7 @@ func main() {
 
 	feeds := v1.Group("/feeds")
 	// feeds.Get("/", middleware.JWTMiddleware, post.LikePostHandler)
-	// feeds.Get("community/:CommunityID", feed.GetFeedCommunity)
+	feeds.Get("community/:CommunityID", feed.GetFeedCommunity)
 	// feeds.Get("friend/", middleware.JWTMiddleware, post.LikePostHandler)
 	// feeds.Get("friend/:CommunityID", middleware.JWTMiddleware, post.LikePostHandler)
 

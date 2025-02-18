@@ -15,9 +15,11 @@ func UnlikeCommentHandler(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid Param"})
 	}
 
-	userID, ok := c.Locals("UserID").(uuid.UUID)
-	if !ok {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid UserID"})
+	userID, err := uuid.Parse(c.Locals("UserID").(string))
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to get userID",
+		})
 	}
 
 	var likeReq models.Like
