@@ -53,6 +53,18 @@ func main() {
 		return nil
 	})
 
+	// test forward
+	app.All("/pokemon/", func(c *fiber.Ctx) error {
+        log.Printf("➡️ Forwarding to Pokemon Service: %s","pokemon")
+        if err := proxy.Do(c, "https://pokeapi.co/api/v2/pokemon/ditto"); err != nil {
+            log.Printf("❌ Pokemon Service unavailable: %v", err)
+            return c.Status(fiber.StatusServiceUnavailable).JSON(fiber.Map{
+                "error": "Pokemon Service unavailable",
+            })
+        }
+        return nil
+    })
+
 	// Route Default (404)
 	app.Use(func(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
