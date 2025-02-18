@@ -28,6 +28,7 @@ func main() {
 	app.All("/users/*", func(c *fiber.Ctx) error {
 		path := c.Path()
 		url := userServiceURL + path
+		log.Printf("Path : %s", url)
 		if err := proxy.Do(c, url); err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 				"error": "User service unavailable",
