@@ -1,7 +1,5 @@
-import CommunityCard from "../card/CommunityCard";
-import CommunityCardContainer from "../card/CommunityCardContainer";
-import HeroHompage from "./HeroHompage";
 import { CommunityCardProps } from "@/types/community";
+import AdminCommunityList from "./components/AdminCommunityList";
 
 // Mock Data
 const communityCards: CommunityCardProps[] = [
@@ -117,12 +115,11 @@ const communityCards: CommunityCardProps[] = [
   },
 ];
 
-const Homepage = () => {
+const CommunitiesPage = () => {
   return (
-    <section>
-      <HeroHompage />
-      <CommunityCardContainer communities={communityCards} />
-    </section>
+    <>
+      <AdminCommunityList communities={communityCards} />
+    </>
   );
 };
-export default Homepage;
+export default CommunitiesPage;
