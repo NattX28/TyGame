@@ -16,12 +16,12 @@ func main() {
 	// ตรวจสอบว่าอยู่ใน production หรือ development
 	userServiceURL := os.Getenv("USER_SERVICE_URL")
 	if userServiceURL == "" {
-		userServiceURL = "http://user-service:5001"
+		userServiceURL = "http://127.0.0.1:5001"
 	}
 
 	postServiceURL := os.Getenv("POST_SERVICE_URL")
 	if postServiceURL == "" {
-		postServiceURL = "http://post-service:5002"
+		postServiceURL = "http://127.0.0.1:5002"
 	}
 
 	// Forward request ไปที่ User Service ด้วย proxy
