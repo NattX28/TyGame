@@ -30,6 +30,12 @@
   .text-third-color {
     color: #151515;
   }
+  .text-title {
+    color: #f5f5f5;
+  }
+  .text-sub-title {
+    color: #a8a8a8;
+  }
   .text-contrast-color {
     color: #8b5dff;
   }
@@ -160,5 +166,9 @@
 
   .overflow-y-auto::-webkit-scrollbar-thumb:hover {
     background-color: rgba(0, 0, 0, 0.5); /* Change color on hover */
+  }
+
+  .scrollbar-transparent::-webkit-scrollbar {
+    width: 0px;
   }
 }

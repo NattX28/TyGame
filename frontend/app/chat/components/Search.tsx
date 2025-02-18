@@ -11,7 +11,7 @@ const Search = ({pholder}:{pholder:string}) => {
         <input 
           type="text" 
           placeholder={pholder}
-          className="w-full bg-[#3a3b3c] text-gray-100 placeholder-gray-500 rounded-full py-2 pl-10 pr-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="w-full bg-transparent text-title placeholder-gray-500 rounded-full py-2 pl-10 pr-4 border-2 border-second focus:outline-none focus:border-second"
         />
       </div>
     </div>
