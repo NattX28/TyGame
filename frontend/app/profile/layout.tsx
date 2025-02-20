@@ -18,15 +18,15 @@ const ProfileLayout = ({ children }: { children: React.ReactNode }) => {
       {/* Sidebar */}
       <div
         className={cn(
-          "fixed inset-y-0 left-0 w-64 bg-main text-white p-4 flex flex-col transition-all",
-          "md:relative md:translate-x-0 md:w-64",
+          "fixed inset-y-0 left-0 w-64 bg-main text-white flex flex-col transition-all border-second border-r-2",
+          "md:relative md:translate-x-0 md:w-[280px]",
           isOpen ? "translate-x-0  z-10" : "-translate-x-full"
         )}>
         {/* User Profile */}
         <FeedSidebar />
       </div>
       {/* page.tsx */}
-      <main>{children}</main>
+      <main className="flex-1 overflow-y-auto h-screen ">{children}</main>
     </div>
   );
 };
