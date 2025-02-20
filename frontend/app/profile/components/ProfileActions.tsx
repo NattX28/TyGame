@@ -1,15 +1,23 @@
 import { Button } from "@/components/ui/button";
+import { UserRoundPlus, Settings } from "lucide-react";
 
-interface ProfileActionsProps {
+const ProfileActions = ({
+  username,
+  btnText,
+  btnIcon,
+}: {
   username: string;
-}
-
-const ProfileActions = ({ username }: ProfileActionsProps) => {
+  btnText: string;
+  btnIcon: string;
+}) => {
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-6">
       <h1 className="text-xl font-semibold"> {username} </h1>
-      <Button className="rounded-sm" size={"sm"}>
-        Edit Profile
+      <Button className="rounded-md" size={"sm"}>
+        // in the future we will change this state when added friend from add
+        friend to delete this friend.
+        {btnIcon === "Settings" ? <Settings /> : <UserRoundPlus />}
+        {btnText}
       </Button>
     </div>
   );
