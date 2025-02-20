@@ -14,6 +14,8 @@ const ProfileActions = ({
     <div className="flex items-center gap-6">
       <h1 className="text-xl font-semibold"> {username} </h1>
       <Button className="rounded-md" size={"sm"}>
+        // in the future we will change this state when added friend from add
+        friend to delete friend
         {btnIcon === "Settings" ? <Settings /> : <UserRoundPlus />}
         {btnText}
       </Button>
