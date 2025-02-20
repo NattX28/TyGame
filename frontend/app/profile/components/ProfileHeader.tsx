@@ -4,21 +4,17 @@ import { Settings } from "lucide-react";
 import ProfileActions from "./ProfileActions";
 import { ProfileStats } from "./ProfileStats";
 import ProfileBio from "./ProfileBio";
+import { ProfileData } from "@/types/person";
 
-interface ProfileData {
-  username: string;
-  fullName: string;
-  avatar: string;
-  posts: number;
-  friends: number;
-  bio: string;
-}
-
-interface ProfileHeaderProps {
+const ProfileHeader = ({
+  profile,
+  btnText,
+  btnIcon,
+}: {
   profile: ProfileData;
-}
-
-const ProfileHeader = ({ profile }: ProfileHeaderProps) => {
+  btnText: string;
+  btnIcon: string;
+}) => {
   return (
     <div className="flex items-start gap-24 mb-8 px-8">
       {/* Avatar */}
@@ -33,7 +29,11 @@ const ProfileHeader = ({ profile }: ProfileHeaderProps) => {
 
       {/* profile info */}
       <div className="flex-1 space-y-6">
-        <ProfileActions username={profile.username} />
+        <ProfileActions
+          username={profile.username}
+          btnText={btnText}
+          btnIcon={btnIcon}
+        />
         <ProfileStats posts={profile.posts} friends={profile.friends} />
         <ProfileBio fullName={profile.fullName} bio={profile.bio} />
       </div>

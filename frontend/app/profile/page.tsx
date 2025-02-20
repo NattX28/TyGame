@@ -15,7 +15,11 @@ const profileData = {
 const Profile = () => {
   return (
     <div className="max-w-4xl mx-auto pt-16 pb-4 px-12 space-y-16">
-      <ProfileHeader profile={profileData} />
+      <ProfileHeader
+        profile={profileData}
+        btnText={"Edit Profile"}
+        btnIcon={"Settings"}
+      />
       <div className="w-full bg-second h-[1px]"></div>
       <CreatePostTrigger profile={profileData} />
       <ProfileFeed profile={profileData} />
