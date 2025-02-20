@@ -1,5 +1,5 @@
 import OnlineFriend from "@/components/friends/OnlineFriend";
-import FeedSidebar from "./components/FeedSidebar";
+import FeedSidebar from "../../components/shared/FeedSidebar";
 import Button from "./components/ModalBtn";
 import OnlineFriendList from "@/components/friends/OnlineFriendList";
 
@@ -22,7 +22,7 @@ export default function FeedLayout({
         {/* Header */}
         <header className="p-2 md:p-4 bg-main shadow-md sticky top-0 z-30 flex justify-between items-center">
           <h1 className="text-2xl font-bold">TyGame</h1>
-          <Button/>
+          <Button />
         </header>
 
         {/* Main Content */}

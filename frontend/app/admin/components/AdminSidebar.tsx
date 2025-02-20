@@ -20,7 +20,7 @@ const items = [
 
 const AdminSidebar = () => {
   return (
-    <div className="px-4 py-8 h-full md:h-auto flex flex-col">
+    <div className="px-4 py-8 h-full flex flex-col">
       {/* Top section */}
       <div className="space-y-8">
         {/* Header sidebar */}
@@ -44,10 +44,13 @@ const AdminSidebar = () => {
           {items.map((item, index) => (
             <Button
               key={index}
-              className="w-full h-12 justify-start gap-2 rounded-sm"
-              variant={"ghost"}>
-              <item.icon className="h-4 w-4" />
-              <Link href={item.url}>{item.title}</Link>
+              asChild
+              className="w-full h-12 justify-start gap-2 rounded-sm px-4"
+              variant="ghost">
+              <Link href={item.url}>
+                <item.icon className="h-4 w-4" />
+                {item.title}
+              </Link>
             </Button>
           ))}
         </div>
@@ -55,12 +58,15 @@ const AdminSidebar = () => {
 
       {/* footer */}
       {/* Logout button */}
-      <div className="mt-auto pt-6">
+      <div className="mt-auto pt-4">
         <Button
-          className="w-full h-12 justify-start gap-2 rounded-sm"
-          variant={"ghost"}>
-          <LogOut className="h-4 w-4" />
-          <span>Logout</span>
+          className="w-full h-12 justify-start gap-2 rounded-sm px-4"
+          variant={"ghost"}
+          asChild>
+          <Link href={"#"}>
+            <LogOut className="h-4 w-4" />
+            <span>{"Logout"}</span>
+          </Link>
         </Button>
       </div>
     </div>

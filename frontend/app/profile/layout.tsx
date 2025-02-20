@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
 import { Menu } from "lucide-react";
-import AdminSidebar from "./components/AdminSidebar";
 import { cn } from "@/lib/utils";
+import FeedSidebar from "@/components/shared/FeedSidebar";
 
-const AdminLayout = ({ children }: { children: React.ReactNode }) => {
+const ProfileLayout = ({ children }: { children: React.ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="flex h-screen justify-around sm:justify-normal">
@@ -18,16 +18,16 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
       {/* Sidebar */}
       <div
         className={cn(
-          "fixed inset-y-0 left-0 w-64 bg-main text-white flex flex-col transition-all",
-          "md:relative md:translate-x-0 md:w-[280px] border-second border-r-2",
+          "fixed inset-y-0 left-0 w-64 bg-main text-white flex flex-col transition-all border-second border-r-2",
+          "md:relative md:translate-x-0 md:w-[280px]",
           isOpen ? "translate-x-0  z-10" : "-translate-x-full"
         )}>
         {/* User Profile */}
-        <AdminSidebar />
+        <FeedSidebar />
       </div>
       {/* page.tsx */}
-      <main>{children}</main>
+      <main className="flex-1 overflow-y-auto h-screen">{children}</main>
     </div>
   );
 };
-export default AdminLayout;
+export default ProfileLayout;

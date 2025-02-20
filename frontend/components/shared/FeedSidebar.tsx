@@ -14,17 +14,17 @@ import Link from "next/link";
 const items = [
   {
     title: "Home",
-    url: "#",
+    url: "/feed",
     icon: Home,
   },
   {
     title: "My Profile",
-    url: "#",
+    url: "/profile",
     icon: CircleUserRound,
   },
   {
     title: "Message",
-    url: "#",
+    url: "/chat",
     icon: MessageCircleMore,
   },
   {
@@ -60,10 +60,13 @@ const FeedSidebar = () => {
           {items.map((item, index) => (
             <Button
               key={index}
-              className="w-full h-12 justify-start gap-2 rounded-sm"
-              variant={"ghost"}>
-              <item.icon className="h-4 w-4" />
-              <Link href={item.url}>{item.title}</Link>
+              asChild
+              className="w-full h-12 justify-start gap-2 rounded-sm px-4"
+              variant="ghost">
+              <Link href={item.url}>
+                <item.icon className="h-4 w-4" />
+                {item.title}
+              </Link>
             </Button>
           ))}
         </div>
@@ -73,10 +76,13 @@ const FeedSidebar = () => {
       {/* Logout button */}
       <div className="mt-auto pt-4">
         <Button
-          className="w-full h-12 justify-start gap-2 rounded-sm"
-          variant={"ghost"}>
-          <LogOut className="h-4 w-4" />
-          <span>Logout</span>
+          className="w-full h-12 justify-start gap-2 rounded-sm px-4"
+          variant={"ghost"}
+          asChild>
+          <Link href={"#"}>
+            <LogOut className="h-4 w-4" />
+            <span>{"Logout"}</span>
+          </Link>
         </Button>
       </div>
     </div>

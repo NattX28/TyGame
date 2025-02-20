@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @layer components {
+  /* Background */
   .bg-main {
     background-color: #151515;
   }
@@ -11,6 +12,12 @@
   }
   .bg-third {
     background-color: #ce1212;
+  }
+  .bg-forth {
+    background-color: #2d2d2d;
+  }
+  .bg-fifth {
+    background-color: #3d3d3d;
   }
   .bg-contrast {
     background-color: #ff0000;
@@ -21,6 +28,8 @@
   .bg-sub-frame {
     background-color: #1f1f1f;
   }
+
+  /* Text */
   .text-main-color {
     color: #ffffff;
   }
@@ -29,6 +38,12 @@
   }
   .text-third-color {
     color: #151515;
+  }
+  .text-forth-color {
+    color: #2d2d2d;
+  }
+  .text-fifth-color {
+    color: #3d3d3d;
   }
   .text-title {
     color: #f5f5f5;
@@ -39,6 +54,8 @@
   .text-contrast-color {
     color: #8b5dff;
   }
+
+  /* Border */
   .border-main {
     border-color: #ff0000;
   }
@@ -48,6 +65,13 @@
   .border-third {
     border-color: #151515;
   }
+  .border-forth {
+    border-color: #2d2d2d;
+  }
+  .border-fifth {
+    border-color: #3d3d3d;
+  }
+
   .stroke-text {
     color: white;
     text-shadow: 1px 1px 5px #151515;
@@ -60,6 +84,71 @@
 @layer component {
   .container {
     @apply px-16 mx-auto;
+  }
+}
+
+@layer components {
+  /* Background hovers */
+  .hover\:bg-main:hover {
+    background-color: #1a1a1a;
+  }
+  .hover\:bg-second:hover {
+    background-color: #2a2a2a;
+  }
+  .hover\:bg-third:hover {
+    background-color: #e51515;
+  }
+  .hover\:bg-forth:hover {
+    background-color: #343434;
+  }
+  .hover\:bg-fifth:hover {
+    background-color: #454545;
+  }
+  .hover\:bg-contrast:hover {
+    background-color: #ff1a1a;
+  }
+  .hover\:bg-frame:hover {
+    background-color: #1c1c1c;
+  }
+  .hover\:bg-sub-frame:hover {
+    background-color: #252525;
+  }
+
+  /* Text color hovers */
+  .hover\:text-main-color:hover {
+    color: #f0f0f0;
+  }
+  .hover\:text-second-color:hover {
+    color: #2a2a2a;
+  }
+  .hover\:text-third-color:hover {
+    color: #1a1a1a;
+  }
+  .hover\:text-forth-color:hover {
+    color: #343434;
+  }
+  .hover\:text-fifth-color:hover {
+    color: #454545;
+  }
+  .hover\:text-contrast-color:hover {
+    color: #9b6dff;
+  }
+
+  /* Border color hovers */
+  .hover\:border-main:hover {
+    border-color: #ff1a1a;
+  }
+  .hover\:border-second:hover {
+    border-color: #2a2a2a;
+  }
+  .hover\:border-third:hover {
+    border-color: #1a1a1a;
+  }
+  .hover\:border-forth:hover {
+    border-color: #343434;
+  }
+  .hover\:border-fifth:hover {
+    border-color: #454545;
   }
 }
 
@@ -175,7 +264,7 @@
   .overflow-y-auto::-webkit-scrollbar-thumb:hover {
     background-color: rgba(0, 0, 0, 0.5); /* Change color on hover */
   }
-
+  
   .scrollbar-transparent::-webkit-scrollbar {
     width: 0px;
   }
