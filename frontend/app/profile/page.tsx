@@ -12,9 +12,9 @@ const profileData = {
 };
 const Profile = () => {
   return (
-    <div className="max-w-4xl mx-auto pt-16 p-12 space-y-16">
+    <div className="max-w-4xl mx-auto pt-16 px-12 space-y-16">
       <ProfileHeader profile={profileData} />
-      <hr />
+      <div className="w-full bg-second h-[1px]"></div>
       <ProfileFeed />
     </div>
   );
