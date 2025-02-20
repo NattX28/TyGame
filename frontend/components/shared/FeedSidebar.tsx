@@ -14,17 +14,17 @@ import Link from "next/link";
 const items = [
   {
     title: "Home",
-    url: "#",
+    url: "/feed",
     icon: Home,
   },
   {
     title: "My Profile",
-    url: "#",
+    url: "/profile",
     icon: CircleUserRound,
   },
   {
     title: "Message",
-    url: "#",
+    url: "/chat",
     icon: MessageCircleMore,
   },
   {
