@@ -45,6 +45,12 @@
   .text-fifth-color {
     color: #3d3d3d;
   }
+  .text-title {
+    color: #f5f5f5;
+  }
+  .text-sub-title {
+    color: #a8a8a8;
+  }
   .text-contrast-color {
     color: #8b5dff;
   }
@@ -69,6 +75,9 @@
   .stroke-text {
     color: white;
     text-shadow: 1px 1px 5px #151515;
+  }
+  .chat-bg {
+    background-color: #3797F0;
   }
 }
 
@@ -254,5 +263,9 @@
 
   .overflow-y-auto::-webkit-scrollbar-thumb:hover {
     background-color: rgba(0, 0, 0, 0.5); /* Change color on hover */
+  }
+  
+  .scrollbar-transparent::-webkit-scrollbar {
+    width: 0px;
   }
 }
