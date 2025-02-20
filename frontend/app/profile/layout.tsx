@@ -26,7 +26,7 @@ const ProfileLayout = ({ children }: { children: React.ReactNode }) => {
         <FeedSidebar />
       </div>
       {/* page.tsx */}
-      <main className="flex-1 overflow-y-auto h-screen ">{children}</main>
+      <main className="flex-1 overflow-y-auto h-screen">{children}</main>
     </div>
   );
 };

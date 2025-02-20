@@ -20,9 +20,9 @@ interface ProfileHeaderProps {
 
 const ProfileHeader = ({ profile }: ProfileHeaderProps) => {
   return (
-    <div className="flex items-start gap-8 mb-8">
+    <div className="flex items-start gap-24 mb-8 px-8">
       {/* Avatar */}
-      <Avatar className="h-32 w-32 ">
+      <Avatar className="h-48 w-48 ">
         <AvatarImage
           src="https://github.com/shadcn.png"
           alt="@shadcn"
@@ -32,7 +32,7 @@ const ProfileHeader = ({ profile }: ProfileHeaderProps) => {
       </Avatar>
 
       {/* profile info */}
-      <div className="flex-1 space-y-4">
+      <div className="flex-1 space-y-6">
         <ProfileActions username={profile.username} />
         <ProfileStats posts={profile.posts} friends={profile.friends} />
         <ProfileBio fullName={profile.fullName} bio={profile.bio} />
