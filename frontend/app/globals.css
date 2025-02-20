@@ -52,6 +52,9 @@
     color: white;
     text-shadow: 1px 1px 5px #151515;
   }
+  .chat-bg {
+    background-color: #3797F0;
+  }
 }
 
 @layer component {
