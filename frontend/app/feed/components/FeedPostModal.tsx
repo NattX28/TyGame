@@ -10,7 +10,6 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { ImageIcon, X } from "lucide-react";
-import { Form } from "react-hook-form";
 import { z } from "zod";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
