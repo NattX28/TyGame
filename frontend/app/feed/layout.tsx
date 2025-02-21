@@ -1,12 +1,30 @@
+"use client";
+import { useRouter } from "next/navigation";
 import UserSidebar from "../../components/shared/UserSidebar";
 import Button from "./components/ModalBtn";
 import OnlineFriendList from "@/components/friends/OnlineFriendList";
+import { useEffect, useState } from "react";
 
 export default function FeedLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // const router = useRouter();
+  // const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // useEffect(() => {
+  //   fetch("/api/auth/check")
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setIsAuthenticated(data.authenticated);
+  //       if (!data.authenticated) {
+  //         router.push("/communities"); // ถ้ายังไม่ได้ Login ให้ไปเลือก Community ก่อน
+  //       }
+  //     });
+  // }, [router]);
+
+  // if (!isAuthenticated) return null;
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-[280px,1fr,240px] w-full">
       {/* Left Sidebar (hidden on mobile) */}

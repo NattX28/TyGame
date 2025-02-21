@@ -1,11 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import UserSidebar from "@/components/shared/UserSidebar";
 
 const UserLayout = ({ children }: { children: React.ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div className="flex h-screen justify-around sm:justify-normal">
       {/* Mobile Toggle Button */}
@@ -25,6 +26,7 @@ const UserLayout = ({ children }: { children: React.ReactNode }) => {
         {/* User Profile */}
         <UserSidebar />
       </div>
+
       {/* page.tsx */}
       <main className="flex-1 overflow-y-auto h-screen">{children}</main>
     </div>

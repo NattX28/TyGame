@@ -4,8 +4,22 @@ import { Badge } from "../ui/badge";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { CommunityCardProps } from "@/types/community";
+import Router, { useRouter } from "next/navigation";
 
 const CommunityCard = ({ community }: { community: CommunityCardProps }) => {
+  const router = useRouter();
+  const handleJoin = (id: number) => {
+    fetch("/api/auth/check")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.authenticated) {
+          router.push(`/feed/${id}`); // ไปหน้า Feed Community
+        } else {
+          router.push("/login"); // ถ้ายังไม่ได้ Login ให้ไปหน้า Login ก่อน
+        }
+      });
+  };
+
   return (
     <Card className="w-full max-w-sm md:max-w-md lg:max-w-lg bg-second border-third hover:shadow-lg transition-shadow duration-200 cursor-pointer relative">
       {/* category on top-left */}
@@ -40,7 +54,11 @@ const CommunityCard = ({ community }: { community: CommunityCardProps }) => {
           </div>
 
           {/* Join Button */}
-          <Button className="w-24">Join</Button>
+          <Button
+            className="w-24"
+            onClick={() => handleJoin(community.commuID)}>
+            Join
+          </Button>
         </div>
       </CardContent>
     </Card>
