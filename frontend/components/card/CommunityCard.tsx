@@ -5,19 +5,17 @@ import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { CommunityCardProps } from "@/types/community";
 import Router, { useRouter } from "next/navigation";
+import { checkAuth } from "@/lib/auth";
 
 const CommunityCard = ({ community }: { community: CommunityCardProps }) => {
   const router = useRouter();
-  const handleJoin = (id: number) => {
-    fetch("/api/auth/check")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.authenticated) {
-          router.push(`/feed/${id}`); // ไปหน้า Feed Community
-        } else {
-          router.push("/login"); // ถ้ายังไม่ได้ Login ให้ไปหน้า Login ก่อน
-        }
-      });
+  const handleJoin = async (id: number) => {
+    const { authenticated } = await checkAuth();
+    if (authenticated) {
+      router.push(`/feed/${id}`);
+    } else {
+      router.push("/login");
+    }
   };
 
   return (

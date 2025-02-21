@@ -3,9 +3,16 @@ import { useEffect, useState } from "react";
 import { Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import UserSidebar from "@/components/shared/UserSidebar";
+import { useRouter } from "next/navigation";
+import { requireAuth } from "@/lib/auth";
 
 const UserLayout = ({ children }: { children: React.ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    requireAuth(router);
+  }, [router]);
 
   return (
     <div className="flex h-screen justify-around sm:justify-normal">

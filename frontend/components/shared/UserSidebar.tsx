@@ -21,6 +21,7 @@ import {
 import { CommunityCardProps } from "@/types/community";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { logout } from "@/lib/auth";
 
 const items = [
   {
@@ -170,13 +171,16 @@ const UserSidebar = () => {
   const [selectedCommunity, setSelectedCommunity] = useState<number | null>(
     null
   );
-  const [isOpen, setIsOpen] = useState(false);
+
   const router = useRouter();
 
   const handleCommunityChange = (id: number) => {
     setSelectedCommunity(id);
     router.push(`feed/${id}`);
-    setIsOpen(false); // Close dropdown after selection
+  };
+
+  const handleLogout = async () => {
+    await logout(router);
   };
   return (
     <div className="px-4 py-8 h-full flex flex-col">
@@ -244,11 +248,9 @@ const UserSidebar = () => {
         <Button
           className="w-full h-12 justify-start gap-2 rounded-sm px-4"
           variant={"ghost"}
-          asChild>
-          <Link href={"#"}>
-            <LogOut className="h-4 w-4" />
-            <span>{"Logout"}</span>
-          </Link>
+          onClick={handleLogout}>
+          <LogOut className="h-4 w-4" />
+          <span>{"Logout"}</span>
         </Button>
       </div>
     </div>

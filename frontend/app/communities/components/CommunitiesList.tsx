@@ -1,5 +1,6 @@
 "use client";
 import CommunityCard from "@/components/card/CommunityCard";
+import { redirectIfAuth } from "@/lib/auth";
 import { CommunityCardProps } from "@/types/community";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -124,14 +125,7 @@ const CommunitiesList = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // if login
-    fetch("/api/auth/check")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.authenticated) {
-          router.push("/feed");
-        }
-      });
+    redirectIfAuth(router);
 
     // load coummunities List
     fetch("/api/communities")
