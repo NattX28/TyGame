@@ -5,6 +5,7 @@ import {
   CircleUserRound,
   Home,
   MessageCircleMore,
+  Joystick,
   LogOut,
   Settings,
 } from "lucide-react";
@@ -26,6 +27,11 @@ const items = [
     title: "Message",
     url: "/chat",
     icon: MessageCircleMore,
+  },
+  {
+    title: "Communities",
+    url: "#",
+    icon: Joystick,
   },
   {
     title: "Settings",
