@@ -34,7 +34,7 @@ const items = [
   },
 ];
 
-const FeedSidebar = () => {
+const UserSidebar = () => {
   return (
     <div className="px-4 py-8 h-full flex flex-col">
       {/* Top section */}
@@ -89,4 +89,4 @@ const FeedSidebar = () => {
   );
 };
 
-export default FeedSidebar;
+export default UserSidebar;

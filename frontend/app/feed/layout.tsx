@@ -1,5 +1,4 @@
-import OnlineFriend from "@/components/friends/OnlineFriend";
-import FeedSidebar from "../../components/shared/FeedSidebar";
+import UserSidebar from "../../components/shared/UserSidebar";
 import Button from "./components/ModalBtn";
 import OnlineFriendList from "@/components/friends/OnlineFriendList";
 
@@ -13,7 +12,7 @@ export default function FeedLayout({
       {/* Left Sidebar (hidden on mobile) */}
       <aside className="hidden md:block h-screen sticky top-0">
         <div className="h-full bg-main overflow-y-auto border-second border-r-2">
-          <FeedSidebar />
+          <UserSidebar />
         </div>
       </aside>
 
