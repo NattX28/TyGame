@@ -2,11 +2,10 @@ import type { Metadata } from "next";
 import { Kanit } from "next/font/google";
 import "./globals.css";
 
-
 const kanit = Kanit({
-  weight: ['100', '200', '300', '400', '500'],
-  subsets: ['thai'],
-  variable: '--font-kanit'  
+  weight: ["100", "200", "300", "400", "500"],
+  subsets: ["thai"],
+  variable: "--font-kanit",
 });
 
 export const metadata: Metadata = {
@@ -22,9 +21,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={` ${kanit.className} antialiased min-h-screen bg-main`}>
-        <main className="text-main-color max-w-[1920px]">{children}
-
-        
+        <main className="text-main-color max-w-[1920px] mx-auto">
+          {children}
         </main>
       </body>
     </html>
