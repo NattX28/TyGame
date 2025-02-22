@@ -67,5 +67,5 @@ func BanUserHandler(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to ban user"})
 	}
 
-	return c.JSON(fiber.Map{"message": "User has been banned successfully"})
+	return c.JSON(fiber.Map{"message": "User with ID " + banUserID + " has been banned successfully"})
 }
