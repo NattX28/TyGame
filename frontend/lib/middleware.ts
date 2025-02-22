@@ -2,10 +2,10 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import axios from "axios";
 
-// Paths ที่ไม่ต้องการการ authentication
+// ระบุ paths ที่ไม่ต้องการการ authentication
 const PUBLIC_PATHS = ["/", "/login", "/register", "/communities"];
 
-// Paths ที่ต้องการการ authentication
+// ระบุ paths ที่ต้องการการ authentication
 const PROTECTED_PATHS = ["/feed", "/profile", "/friends", "/chat"];
 
 export async function middleware(request: NextRequest) {
@@ -23,17 +23,23 @@ export async function middleware(request: NextRequest) {
   );
 
   try {
-    const { data } = await axios.get("/api/auth/check", {
-      headers: { cookie: request.headers.get("cookie") || "" },
-      withCredentials: true,
-    });
+    //  base URL
+    const { data } = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/auth/check`,
+      {
+        headers: { cookie: request.headers.get("cookie") || "" },
+        withCredentials: true,
+      }
+    );
 
     const isAuthenticated = data.authenticated;
 
+    // กรณีที่ผู้ใช้ auth แล้วแต่เข้าหน้า communities ให้ redirect ไปที่ /feed
     if (isAuthenticated && path === "/communities") {
       return NextResponse.redirect(new URL("/feed", request.url));
     }
 
+    // ถ้าไม่ auth และเข้าหน้า protected ให้ redirect ไปหน้า login
     if (!isAuthenticated && isProtectedPath) {
       const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("from", path);
@@ -51,7 +57,7 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-// กำหนด path ที่จะใช้ middleware
+// กำหนด paths ที่จะใช้ middleware
 export const config = {
   matcher: [
     "/",

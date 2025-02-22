@@ -3,14 +3,16 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Badge } from "../ui/badge";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
-import { Community } from "@/utils/types";
+import { Community } from "@/types/types";
 import Router, { useRouter } from "next/navigation";
-import { requireAuth } from "@/lib/auth";
+import { checkAuthentication } from "@/hooks/useAuth";
 
 const CommunityCard = ({ community }: { community: Community }) => {
   const router = useRouter();
+
   const handleJoin = async (id: number) => {
-    const authenticated = await requireAuth();
+    // ใช้ checkAuthentication แทนการเรียก hook
+    const authenticated = await checkAuthentication();
     if (authenticated) {
       router.push(`/feed/${id}`);
     } else {

@@ -1,22 +1,12 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { withAuth } from "@/components/auth/withAuth";
 import UserSidebar from "../../components/shared/UserSidebar";
 import Button from "./components/ModalBtn";
 import OnlineFriendList from "@/components/friends/OnlineFriendList";
-import { useEffect, useState } from "react";
-import { requireAuth } from "@/lib/auth";
-import { Router } from "lucide-react";
+import { checkAuthentication, useRequireAuth } from "@/hooks/useAuth";
 
-export default function FeedLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const router = useRouter();
-  useEffect(() => {
-    requireAuth();
-  }, [router]);
-
+const FeedLayout = ({ children }: { children: React.ReactNode }) => {
+  useRequireAuth();
   return (
     <div className="grid grid-cols-1 md:grid-cols-[280px,1fr,240px] w-full">
       {/* Left Sidebar (hidden on mobile) */}
@@ -47,4 +37,5 @@ export default function FeedLayout({
       </aside>
     </div>
   );
-}
+};
+export default FeedLayout;
