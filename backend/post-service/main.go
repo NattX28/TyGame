@@ -3,6 +3,7 @@ package main
 import (
 	"time"
 	"log"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
@@ -56,5 +57,10 @@ func main() {
 	commentFocus.Get("/like", comment.LikeCommentHandler)
 	commentFocus.Get("/unlike", comment.UnlikeCommentHandler)
 
-	log.Fatal(app.Listen(":3000"))
+	port := os.Getenv("PORT_POST_SERVICE")
+  if port == "" {
+    port = "5002"
+  }
+	log.Printf("Server starting on port %s", port)
+	log.Fatal(app.Listen(":" + port))
 }
