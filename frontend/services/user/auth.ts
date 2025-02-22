@@ -1,6 +1,7 @@
 import { AuthResponse } from "@/utils/types";
 import api from "../api";
 
+//// Check
 export const checkAuth = async (): Promise<AuthResponse> => {
   try {
     const { data } = await api.get("/auth/check");
@@ -11,6 +12,7 @@ export const checkAuth = async (): Promise<AuthResponse> => {
   }
 };
 
+//// POST
 //login
 export const login = async (username: string, password: string) => {
   try {

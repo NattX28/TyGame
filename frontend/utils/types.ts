@@ -21,6 +21,19 @@ export interface Community {
   created_at: Date;
 }
 
+export interface Post {
+  ID: string;
+  CommunityID: string;
+  UserID: string;
+  Content: string;
+  Visibility: string;
+  Image: string;
+  CreatedAt: string;
+
+  Comments: string;
+  Likes: string;
+}
+
 // Type definition for auth response
 export interface AuthResponse {
   authenticated: boolean;
