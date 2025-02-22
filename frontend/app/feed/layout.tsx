@@ -14,7 +14,7 @@ export default function FeedLayout({
 }) {
   const router = useRouter();
   useEffect(() => {
-    requireAuth(router);
+    requireAuth();
   }, [router]);
 
   return (

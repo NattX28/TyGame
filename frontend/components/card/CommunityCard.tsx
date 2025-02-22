@@ -3,14 +3,14 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Badge } from "../ui/badge";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
-import { CommunityCardProps } from "@/types/community";
+import { Community } from "@/utils/types";
 import Router, { useRouter } from "next/navigation";
-import { checkAuth } from "@/lib/auth";
+import { requireAuth } from "@/lib/auth";
 
-const CommunityCard = ({ community }: { community: CommunityCardProps }) => {
+const CommunityCard = ({ community }: { community: Community }) => {
   const router = useRouter();
   const handleJoin = async (id: number) => {
-    const { authenticated } = await checkAuth();
+    const authenticated = await requireAuth();
     if (authenticated) {
       router.push(`/feed/${id}`);
     } else {

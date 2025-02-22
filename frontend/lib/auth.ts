@@ -1,28 +1,9 @@
-import axios from "axios";
+// src/utils/auth.ts
+import { checkAuth, logout as apiLogout } from "@/services/user/auth";
+import { useRouter } from "next/router";
 
-// Type definition for auth response
-interface AuthResponse {
-  authenticated: boolean;
-  user?: {
-    id: string;
-    username: string;
-    email: string;
-  };
-}
-
-export const checkAuth = async (): Promise<AuthResponse> => {
-  try {
-    const { data } = await axios.get("/api/auth/check", {
-      withCredentials: true,
-    });
-    return data;
-  } catch (error) {
-    console.error("Auth check failed:", error);
-    return { authenticated: false };
-  }
-};
-
-export const requireAuth = async (router: any): Promise<boolean> => {
+export const requireAuth = async (): Promise<boolean> => {
+  const router = useRouter();
   const { authenticated } = await checkAuth();
   if (!authenticated) {
     router.push("/login");
@@ -32,9 +13,9 @@ export const requireAuth = async (router: any): Promise<boolean> => {
 };
 
 export const redirectIfAuth = async (
-  router: any,
   path: string = "/feed"
 ): Promise<boolean> => {
+  const router = useRouter();
   const { authenticated } = await checkAuth();
   if (authenticated) {
     router.push(path);
@@ -43,11 +24,8 @@ export const redirectIfAuth = async (
   return false;
 };
 
-export const logout = async (router: any): Promise<void> => {
-  try {
-    await axios.post("/api/auth/logout", {}, { withCredentials: true });
-    router.push("/login");
-  } catch (error) {
-    console.error("Logout failed:", error);
-  }
+export const logout = async (): Promise<void> => {
+  const router = useRouter();
+  await apiLogout();
+  router.push("/login");
 };

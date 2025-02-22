@@ -2,13 +2,13 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
-import { CommunityCardProps } from "@/types/community";
+import { Community } from "@/utils/types";
 import CommunityCard from "./CommunityCard";
 
 const CommunityCardContainer = ({
   communities,
 }: {
-  communities: CommunityCardProps[];
+  communities: Community[];
 }) => {
   // สร้างชุดข้อมูลที่ยาวขึ้นเพื่อให้การเลื่อนต่อเนื่อง
   const duplicatedCommunities = [
