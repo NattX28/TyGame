@@ -1,6 +1,6 @@
 // Import API และ Type
 import api from "../api";
-import { Community } from "@/utils/types";
+import { Community } from "@/types/types";
 
 //// GET
 // get all community

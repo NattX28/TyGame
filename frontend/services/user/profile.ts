@@ -1,21 +1,19 @@
 // CRUD for user
-import { AuthResponse } from "@/utils/types";
+import { UpdateUserRequest } from "@/types/user";
 import api from "../api";
+import { AuthResponse } from "./../../types/auth";
 
 export const getProfile = async () => {
   try {
     const { data } = await api.get("/protected/profile");
     return data;
   } catch (error) {
-    console.error(
-      "Error fetching profile:",
-      error.response?.data || error.message
-    );
+    console.error("Profile update failed:", error);
     throw new Error("getProfile failed");
   }
 };
 
-export const updateProfile = async (imageFile) => {
+export const updateProfilePic = async (imageFile) => {
   try {
     const formData = new FormData();
     formData.append("image", imageFile);
@@ -30,5 +28,22 @@ export const updateProfile = async (imageFile) => {
   } catch (error) {
     console.error("Profile update failed:", error);
     throw new Error("Profile update failed");
+  }
+};
+
+//Update User
+export const updateUser = async (updateData: UpdateUserRequest) => {
+  try {
+    // Make a PUT or PATCH request to update the user profile
+    const { data } = await api.put("/protected/profile", updateData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    return data;
+  } catch (error) {
+    console.error("Error updating user:", error);
+    throw new Error("Failed to update user profile");
   }
 };

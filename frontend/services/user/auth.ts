@@ -1,5 +1,10 @@
-import { AuthResponse } from "@/utils/types";
 import api from "../api";
+import { UpdateUserRequest } from "@/types/user";
+import type {
+  AuthResponse,
+  LoginResponse,
+  RegisterResponse,
+} from "@/types/auth";
 
 //// Check
 export const checkAuth = async (): Promise<AuthResponse> => {
@@ -14,7 +19,10 @@ export const checkAuth = async (): Promise<AuthResponse> => {
 
 //// POST
 //login
-export const login = async (username: string, password: string) => {
+export const login = async (
+  username: string,
+  password: string
+): Promise<LoginResponse> => {
   try {
     const { data } = await api.post("/users/login", { username, password });
     return data;
@@ -28,17 +36,16 @@ export const register = async (
   username: string,
   password: string,
   email: string
-) => {
+): Promise<RegisterResponse> => {
   try {
     const { data } = await api.post("/users/register", {
       username,
       email,
       password,
     });
-
     return data;
   } catch (error) {
-    throw new Error("register failed");
+    throw new Error("Register failed");
   }
 };
 
