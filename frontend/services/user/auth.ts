@@ -6,6 +6,8 @@ import type {
   RegisterResponse,
 } from "@/types/auth";
 
+const BASE_URL_AUTH: string = "/user";
+
 //// POST
 //login
 export const login = async (
@@ -13,7 +15,10 @@ export const login = async (
   password: string
 ): Promise<LoginResponse> => {
   try {
-    const { data } = await api.post("/user/login", { username, password });
+    const { data } = await api.post(`${BASE_URL_AUTH}/login`, {
+      username,
+      password,
+    });
     return data;
   } catch (error) {
     throw new Error("Login failed");
@@ -27,7 +32,7 @@ export const register = async (
   email: string
 ): Promise<RegisterResponse> => {
   try {
-    const { data } = await api.post("/users/register", {
+    const { data } = await api.post(`${BASE_URL_AUTH}/register`, {
       username,
       email,
       password,
@@ -40,7 +45,7 @@ export const register = async (
 
 export const logout = async () => {
   try {
-    await api.post("/user/logout");
+    await api.post(`${BASE_URL_AUTH}/login`);
   } catch (error) {
     console.error("Logout failed:", error);
   }
