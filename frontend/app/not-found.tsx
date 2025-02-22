@@ -5,7 +5,7 @@ import { Button } from "../components/ui/button";
 
 const NotFound = () => {
   return (
-    <div className="flex flex-col justify-center items-center h-screen p-4 container">
+    <div className="flex flex-col justify-center items-center h-screen p-4 m-auto">
       <div className="relative h-72 w-72 sm:h-[30rem] sm:w-[30rem]">
         <div className="absolute inset-0 flex justify-center items-center">
           <Joygame />
