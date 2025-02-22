@@ -6,17 +6,6 @@ import type {
   RegisterResponse,
 } from "@/types/auth";
 
-//// Check
-export const checkAuth = async (): Promise<AuthResponse> => {
-  try {
-    const { data } = await api.get("/auth/check");
-    return data;
-  } catch (error) {
-    console.error("Auth check failed:", error);
-    return { authenticated: false };
-  }
-};
-
 //// POST
 //login
 export const login = async (
@@ -24,7 +13,7 @@ export const login = async (
   password: string
 ): Promise<LoginResponse> => {
   try {
-    const { data } = await api.post("/users/login", { username, password });
+    const { data } = await api.post("/user/login", { username, password });
     return data;
   } catch (error) {
     throw new Error("Login failed");

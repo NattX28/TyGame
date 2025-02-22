@@ -1,6 +1,5 @@
 "use client";
 import CommunityCard from "@/components/card/CommunityCard";
-import { useRedirectAuth } from "@/hooks/useAuth";
 import { Community } from "@/types/types";
 import { useState } from "react";
 
@@ -120,8 +119,6 @@ const communityCards: Community[] = [
 
 const CommunitiesList = () => {
   const [communities, setCommunities] = useState<Community[]>(communityCards);
-
-  useRedirectAuth();
 
   return (
     <div className="max-w-screen-2xl mx-auto p-12">

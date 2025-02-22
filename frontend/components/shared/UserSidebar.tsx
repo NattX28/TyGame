@@ -21,8 +21,8 @@ import {
 import { Community } from "@/types/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { logout } from "@/lib/auth";
-import { useLogout } from "@/hooks/useAuth";
+
+import { useAuth } from "@/hooks/useAuth";
 
 const items = [
   {
@@ -178,7 +178,8 @@ const UserSidebar = () => {
     setSelectedCommunity(id);
     router.push(`feed/${id}`);
   };
-  const logout = useLogout();
+
+  const { logout } = useAuth();
 
   return (
     <div className="px-4 py-8 h-full flex flex-col">

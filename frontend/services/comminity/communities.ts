@@ -37,6 +37,18 @@ export const createCommunity = async (community: Community) => {
   }
 };
 
+// join community
+export const joinCommunity = async (commuID: number) => {
+  try {
+    console.log(commuID);
+    const { data } = await api.post(`/communities/join/${commuID}`);
+    return data;
+  } catch (error) {
+    console.error("createCommunity error: ", error);
+    throw new Error("create community failed");
+  }
+};
+
 //// PUT
 export const editCommunity = async (id: number) => {
   try {

@@ -1,50 +1,52 @@
+"use client";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { checkAuth, logout as apiLogout } from "@/services/user/auth";
-import { useEffect, useState, useCallback } from "react";
 
-// Hook สำหรับหน้าที่ต้องการ auth
-export const useRequireAuth = () => {
+interface User {
+  id: string;
+  username: string;
+  email: string;
+}
+
+export const useAuth = () => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    checkAuth().then(({ authenticated }) => {
-      if (!authenticated) {
-        router.push("/login");
-      }
-    });
-  }, [router]);
-};
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("Authorization="))
+      ?.split("=")[1];
 
-// Hook สำหรับหน้าที่ต้อง redirect ถ้า auth แล้ว (เช่น หน้า login)
-export const useRedirectAuth = (path: string = "/feed") => {
-  const router = useRouter();
+    if (!token) {
+      setUser(null);
+      setLoading(false);
+      return;
+    }
 
-  useEffect(() => {
-    const verifyAuth = async () => {
-      const { authenticated } = await checkAuth();
-      if (authenticated) {
-        router.push(path);
-      }
-    };
+    // ดึงข้อมูล User จาก Cookie หรือ API ถ้าจำเป็น
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
 
-    verifyAuth();
-  }, [router, path]);
-};
+    setLoading(false);
+  }, []);
 
-// Hook สำหรับ logout
-export const useLogout = () => {
-  const router = useRouter();
+  const login = (userData: User, token: string) => {
+    document.cookie = `Authorization=${token}; path=/; Secure; HttpOnly`;
+    localStorage.setItem("user", JSON.stringify(userData));
+    setUser(userData);
+    router.push("/feed"); // Redirect หลังจาก Login
+  };
 
-  const logout = useCallback(async () => {
-    await apiLogout();
+  const logout = () => {
+    document.cookie = `Authorization=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
+    localStorage.removeItem("user");
+    setUser(null);
     router.push("/login");
-  }, [router]);
+  };
 
-  return logout;
-};
-
-// Utility function สำหรับเช็ค auth (ไม่มี routing)
-export const checkAuthentication = async (): Promise<boolean> => {
-  const { authenticated } = await checkAuth();
-  return authenticated;
+  return { user, loading, login, logout };
 };

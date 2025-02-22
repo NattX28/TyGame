@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { checkAuth } from "@/services/user/auth";
+import { checkAuth } from "@/lib/auth";
 
 export function withAuth<P extends object>(
   WrappedComponent: React.ComponentType<P>

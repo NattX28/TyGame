@@ -15,14 +15,24 @@ import { useForm } from "react-hook-form";
 import { loginSchema } from "@/utils/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useRouter } from "next/navigation";
+import { login } from "@/services/user/auth";
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-const onSubmit = (values: LoginFormValues) => {
-  console.log(values);
-};
-
 const LoginForm = () => {
+  const router = useRouter();
+  const onSubmit = async (values: LoginFormValues) => {
+    try {
+      const response = await login(values.username, values.password);
+      // ตรวจสอบ response หรือ token ที่ได้มา แล้ว redirect
+      console.log(response);
+      router.push("/feed");
+    } catch (error) {
+      console.error("Login failed:", error);
+      // setErrorMessage("Login failed. Please check your credentials.");
+    }
+  };
   const form = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -32,8 +42,10 @@ const LoginForm = () => {
   });
 
   return (
-    <Form {...form} >
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 text-xl">
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-3 text-xl">
         {/* user name field */}
         <FormField
           control={form.control}
@@ -42,7 +54,11 @@ const LoginForm = () => {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder="Enter your username" className="text-gray-600"{...field} />
+                <Input
+                  placeholder="Enter your username"
+                  className="text-gray-600"
+                  {...field}
+                />
               </FormControl>
               <FormDescription>
                 This is your public display name.
