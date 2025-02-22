@@ -59,6 +59,7 @@ func main() {
 	protectedRoutes.Use(middleware.JWTMiddleware)
 	protectedRoutes.Put("/update", usersmanagement.UpdateUserHandler)
 	protectedRoutes.Delete("/delete", usersmanagement.DeleteUserHandler)
+
 	protectedRoutes.Post("/upload-profile", usersmanagement.UploadProfileHandler)
 	protectedRoutes.Get("/profile", usersmanagement.GetUserProfileHandler)
 

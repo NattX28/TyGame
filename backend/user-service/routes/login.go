@@ -50,13 +50,14 @@ func LoginHandler(c *fiber.Ctx) error {
 	// Generate JWT token
 	secret := os.Getenv("JWT_SECRET")
 	claims := jwt.MapClaims{
-		"user_id":   user.ID,
-		"username":  user.Username,
-		"email":     user.Email,
-		"role":      user.Role,
-		"name":      user.Name,
-		"imagename": user.ImageName,
-		"exp":       time.Now().Add(24 * time.Hour).Unix(),
+		"user_id":        user.ID,
+		"username":       user.Username,
+		"email":          user.Email,
+		"role":           user.Role,
+		"name":           user.Name,
+		"imagename":      user.ImageName,
+		"cookie_version": user.CookieVersion, // Include cookie_version in claims
+		"exp":            time.Now().Add(24 * time.Hour).Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString([]byte(secret))
