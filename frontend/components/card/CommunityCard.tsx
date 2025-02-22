@@ -1,11 +1,23 @@
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Badge } from "../ui/badge";
-import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
+import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { CommunityCardProps } from "@/types/community";
+import Router, { useRouter } from "next/navigation";
+import { checkAuth } from "@/lib/auth";
 
 const CommunityCard = ({ community }: { community: CommunityCardProps }) => {
+  const router = useRouter();
+  const handleJoin = async (id: number) => {
+    const { authenticated } = await checkAuth();
+    if (authenticated) {
+      router.push(`/feed/${id}`);
+    } else {
+      router.push("/login");
+    }
+  };
+
   return (
     <Card className="w-full max-w-sm md:max-w-md lg:max-w-lg bg-second border-third hover:shadow-lg transition-shadow duration-200 cursor-pointer relative">
       {/* category on top-left */}
@@ -40,7 +52,11 @@ const CommunityCard = ({ community }: { community: CommunityCardProps }) => {
           </div>
 
           {/* Join Button */}
-          <Button className="w-24">Join</Button>
+          <Button
+            className="w-24"
+            onClick={() => handleJoin(community.commuID)}>
+            Join
+          </Button>
         </div>
       </CardContent>
     </Card>
