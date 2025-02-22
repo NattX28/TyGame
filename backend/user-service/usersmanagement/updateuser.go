@@ -63,8 +63,9 @@ func UpdateUserHandler(c *fiber.Ctx) error {
 
 	// Parse request body
 	type UpdateRequest struct {
-		Name     string `json:"name"`
-		Password string `json:"password"`
+		Name        string `json:"name"`
+		Password    string `json:"password"`
+		Description string `json:"description"` // Added description field
 	}
 
 	var req UpdateRequest
@@ -103,6 +104,10 @@ func UpdateUserHandler(c *fiber.Ctx) error {
 		user.Password = string(hashedPassword)
 	}
 
+	if req.Description != "" { // Update description if provided
+		user.Description = req.Description
+	}
+
 	// Save the updated user
 	if err := db.DB.Save(&user).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -113,8 +118,9 @@ func UpdateUserHandler(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message": "User updated successfully",
 		"user": fiber.Map{
-			"id":   user.ID,
-			"name": user.Name,
+			"id":          user.ID,
+			"name":        user.Name,
+			"description": user.Description, // Return updated description
 		},
 	})
 }
