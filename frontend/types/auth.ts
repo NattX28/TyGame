@@ -19,7 +19,6 @@ export interface AuthResponse {
 
 export interface LoginResponse {
   message?: string;
-  token: string;
 }
 
 export interface RegisterResponse {
