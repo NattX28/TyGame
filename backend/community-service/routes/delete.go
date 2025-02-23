@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"os"
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
@@ -24,7 +25,8 @@ func DeleteCommunityHandler(c *fiber.Ctx) error {
 	}
 
 	// Delete Data
-	err := os.Remove(fmt.Sprintf(imagePath, community.Image));
+	os.Remove(fmt.Sprintf(imagePath, community.Image))
+
 	if err := db.DB.Delete(&community).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to delete community"})
 	}

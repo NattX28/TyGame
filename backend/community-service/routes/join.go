@@ -25,11 +25,9 @@ func JoinCommunityHandler(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid UserID"})
 	}
 
-	
-
-	joinReq = models.CommunityMember{
+	joinReq := models.CommunityMember{
 		UserID: 		userID,
-		CommentID: 	&commentID,
+		CommunityID: 	commuID,
 	}
 
 	if err := db.DB.Create(&joinReq).Error; err != nil {
