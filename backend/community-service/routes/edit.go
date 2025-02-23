@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"os"
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
@@ -69,7 +70,7 @@ func EditCommunityHandler(c *fiber.Ctx) error {
 	community.Name = safeName
 	community.Description = safeDes
 	if filename != "" {
-		err := os.Remove(fmt.Sprintf(imagePath, community.Image));
+		os.Remove(fmt.Sprintf(imagePath, community.Image))
 		community.Image = filename
 	}
 
