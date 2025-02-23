@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/joho/godotenv"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/joho/godotenv"
 
 	"user-service/db"
 	"user-service/friendmanagement"
@@ -36,7 +36,7 @@ func main() {
 	})
 
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "https://tygame.up.railway.app,https://user-service-tygame.up.railway.app,https://post-service.up.railway.app,https://community-service.up.railway.app,https://party-service.up.railway.app",
+		AllowOrigins: "http://localhost:3000,https://tygame.up.railway.app,https://user-service-tygame.up.railway.app,https://post-service.up.railway.app,https://community-service.up.railway.app,https://party-service.up.railway.app",
 		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
 		AllowMethods: "GET,POST,PUT,DELETE",
 		AllowCredentials: true,
