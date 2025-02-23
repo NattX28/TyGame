@@ -6,7 +6,7 @@ import type {
   RegisterResponse,
 } from "@/types/auth";
 
-const BASE_URL_AUTH: string = "/user";
+const BASE_URL_AUTH: string = "/users";
 
 //// POST
 //login
