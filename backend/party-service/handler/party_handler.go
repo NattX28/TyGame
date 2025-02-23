@@ -25,6 +25,17 @@ func IsUserInAnyParty(userID uuid.UUID) (bool) {
 
 func FindPartyHandler(c *fiber.Ctx) error {
     maxSlots,err := strconv.Atoi(c.Query("max_slots"))
+    if err != nil {
+        return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+            "error": "Invalid max slot. Should be number. ",
+        })
+    }
+
+    if maxSlots < 2 || maxSlots > 10 {
+        return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+            "error": "There must be more than 2 and a maximum of 10 users. ",
+        })
+    } 
     userID, err := uuid.Parse(c.Locals("UserID").(string))
     if err != nil {
         return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
