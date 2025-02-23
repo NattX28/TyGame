@@ -50,6 +50,8 @@ func main() {
 		return nil
 	})
 
+	// เหลือ chat service ไว้วางตรงนี้
+
 	// Proxy ไปยัง Community Service
 	app.All("/communities/*", func(c *fiber.Ctx) error {
 		url := communityServiceURL + c.OriginalURL()
