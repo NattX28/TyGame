@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Joygame } from "../components/icon/joygame";
 import { Button } from "../components/ui/button";
 
-const NotFound = () => {
+const NotFoundPage = () => {
   return (
     <div className="flex flex-col justify-center items-center h-screen p-4 m-auto">
       <div className="relative h-72 w-72 sm:h-[30rem] sm:w-[30rem]">
@@ -22,4 +22,4 @@ const NotFound = () => {
   );
 };
 
-export default NotFound;
+export default NotFoundPage;

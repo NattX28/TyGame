@@ -1,8 +1,8 @@
-import { CommunityCardProps } from "@/types/community";
+import { Community } from "@/utils/types";
 import AdminCommunityList from "./components/AdminCommunityList";
 
 // Mock Data
-const communityCards: CommunityCardProps[] = [
+const communityCards: Community[] = [
   {
     commuID: 1,
     name: "Minecraft",

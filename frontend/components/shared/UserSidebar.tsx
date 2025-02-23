@@ -18,10 +18,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
-import { CommunityCardProps } from "@/types/community";
+import { Community } from "@/types/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { logout } from "@/lib/auth";
+
+import { useAuth } from "@/hooks/useAuth";
 
 const items = [
   {
@@ -52,7 +53,7 @@ const items = [
 ];
 
 // Mock Data
-const communityCard: CommunityCardProps[] = [
+const communityCard: Community[] = [
   {
     commuID: 1,
     name: "Minecraft",
@@ -166,8 +167,7 @@ const communityCard: CommunityCardProps[] = [
 ];
 
 const UserSidebar = () => {
-  const [communities, setCommunities] =
-    useState<CommunityCardProps[]>(communityCard);
+  const [communities, setCommunities] = useState<Community[]>(communityCard);
   const [selectedCommunity, setSelectedCommunity] = useState<number | null>(
     null
   );
@@ -179,9 +179,8 @@ const UserSidebar = () => {
     router.push(`feed/${id}`);
   };
 
-  const handleLogout = async () => {
-    await logout(router);
-  };
+  const { logout } = useAuth();
+
   return (
     <div className="px-4 py-8 h-full flex flex-col">
       {/* Top section */}
@@ -248,7 +247,7 @@ const UserSidebar = () => {
         <Button
           className="w-full h-12 justify-start gap-2 rounded-sm px-4"
           variant={"ghost"}
-          onClick={handleLogout}>
+          onClick={logout}>
           <LogOut className="h-4 w-4" />
           <span>{"Logout"}</span>
         </Button>

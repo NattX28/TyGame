@@ -3,15 +3,24 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Badge } from "../ui/badge";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
-import { CommunityCardProps } from "@/types/community";
-import Router, { useRouter } from "next/navigation";
-import { checkAuth } from "@/lib/auth";
+import { Community } from "@/types/types";
+import { useRouter } from "next/navigation";
+import { joinCommunity } from "@/services/comminity/communities";
+import { useAuth } from "@/hooks/useAuth";
 
-const CommunityCard = ({ community }: { community: CommunityCardProps }) => {
+const CommunityCard = ({ community }: { community: Community }) => {
+  const { user } = useAuth(); // ใช้ user จาก useAuth
   const router = useRouter();
+
   const handleJoin = async (id: number) => {
-    const { authenticated } = await checkAuth();
-    if (authenticated) {
+    if (!user) {
+      // ถ้า user เป็น null แสดงว่ายังไม่ได้ล็อกอิน
+      router.push("/login"); // redirect ไปหน้า login
+      return;
+    }
+
+    const { join } = await joinCommunity(community.commuID);
+    if (join) {
       router.push(`/feed/${id}`);
     } else {
       router.push("/login");
