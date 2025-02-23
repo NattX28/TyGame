@@ -15,9 +15,10 @@ func main() {
 
 	// กำหนดค่า URL ของ Services จาก ENV หรือใช้ค่า Default (บน Railway)
 	userServiceURL := os.Getenv("USER_SERVICE_URL")
-	
-
 	postServiceURL := os.Getenv("POST_SERVICE_URL")
+	// chatServiceURL := os.Getenv("CHAT_SERVICE_URL")
+	communityServiceURL := os.Getenv("POST_SERVICE_URL")
+	partyServiceURL := os.Getenv("POST_SERVICE_URL")
 	
 
 	log.Printf("🔗 User Service URL: %s", userServiceURL)
@@ -49,17 +50,31 @@ func main() {
 		return nil
 	})
 
-	// test forward
-	app.All("/pokemon/", func(c *fiber.Ctx) error {
-        log.Printf("➡️ Forwarding to Pokemon Service: %s","pokemon")
-        if err := proxy.Do(c, "https://pokeapi.co/api/v2/pokemon/ditto"); err != nil {
-            log.Printf("❌ Pokemon Service unavailable: %v", err)
-            return c.Status(fiber.StatusServiceUnavailable).JSON(fiber.Map{
-                "error": "Pokemon Service unavailable",
-            })
-        }
-        return nil
-    })
+	// Proxy ไปยัง Community Service
+	app.All("/communities/*", func(c *fiber.Ctx) error {
+		url := communityServiceURL + c.OriginalURL()
+		log.Printf("➡️ Forwarding to Post Service: %s", url)
+		if err := proxy.Do(c, url); err != nil {
+			log.Printf("❌ Post Service unavailable: %v", err)
+			return c.Status(fiber.StatusServiceUnavailable).JSON(fiber.Map{
+				"error": "Post Service unavailable",
+			})
+		}
+		return nil
+	})
+
+	// Proxy ไปยัง Party Service
+	app.All("/party/*", func(c *fiber.Ctx) error {
+		url := partyServiceURL + c.OriginalURL()
+		log.Printf("➡️ Forwarding to Post Service: %s", url)
+		if err := proxy.Do(c, url); err != nil {
+			log.Printf("❌ Post Service unavailable: %v", err)
+			return c.Status(fiber.StatusServiceUnavailable).JSON(fiber.Map{
+				"error": "Post Service unavailable",
+			})
+		}
+		return nil
+	})
 
 	// Route Default (404)
 	app.Use(func(c *fiber.Ctx) error {
