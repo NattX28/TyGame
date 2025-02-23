@@ -30,19 +30,9 @@ func main() {
 	})
 	
 	app.Use(cors.New(cors.Config{
-		AllowOriginFunc: func(origin string) bool {
-			allowedOrigins := map[string]struct{}{
-				"https://tygame.up.railway.app":         {},
-				"https://user-service-tygame.up.railway.app": {},
-				"https://post-service.up.railway.app":   {},
-				"https://community-service.up.railway.app": {},
-				"https://party-service.up.railway.app":  {},
-			}
-			_, allowed := allowedOrigins[origin]
-			return allowed
-		},
-		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
-		AllowMethods:     "GET,POST,PUT,DELETE",
+		AllowOrigins: "https://tygame.up.railway.app,https://user-service-tygame.up.railway.app,https://post-service.up.railway.app,https://community-service.up.railway.app,https://party-service.up.railway.app",
+		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
+		AllowMethods: "GET,POST,PUT,DELETE",
 		AllowCredentials: true,
 	}))
 
