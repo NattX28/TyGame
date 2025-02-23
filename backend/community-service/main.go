@@ -27,10 +27,25 @@ func main() {
 		ReadTimeout:   10 * time.Second,
 		WriteTimeout:  10 * time.Second,
 	})
+	
+	app.Use(cors.New(cors.Config{
+		AllowOriginFunc: func(origin string) bool {
+			allowedOrigins := map[string]struct{}{
+				"https://tygame.up.railway.app":         {},
+				"https://user-service-tygame.up.railway.app": {},
+				"https://post-service.up.railway.app":   {},
+				"https://community-service.up.railway.app": {},
+				"https://party-service.up.railway.app":  {},
+			}
+			_, allowed := allowedOrigins[origin]
+			return allowed
+		},
+		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
+		AllowMethods:     "GET,POST,PUT,DELETE",
+		AllowCredentials: true,
+	}))
 
-	v1 := app.Group("/v1")
-
-	communities := v1.Group("/communities")
+	communities := app.Group("/communities")
 	communities.Use(middleware.JWTMiddleware)
 	communities.Get("/", middleware.CanAccess, routes.GetAllCommunities)
 	communities.Post("/", middleware.CanManagement, routes.CreateCommunityHandler)

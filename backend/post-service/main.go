@@ -29,15 +29,30 @@ func main() {
 		WriteTimeout: 10 * time.Second,
 	})
 
-	v1 := app.Group("/v1")
+	app.Use(cors.New(cors.Config{
+		AllowOriginFunc: func(origin string) bool {
+			allowedOrigins := map[string]struct{}{
+				"https://tygame.up.railway.app":         {},
+				"https://user-service-tygame.up.railway.app": {},
+				"https://post-service.up.railway.app":   {},
+				"https://community-service.up.railway.app": {},
+				"https://party-service.up.railway.app":  {},
+			}
+			_, allowed := allowedOrigins[origin]
+			return allowed
+		},
+		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
+		AllowMethods:     "GET,POST,PUT,DELETE",
+		AllowCredentials: true,
+	}))
 
-	feeds := v1.Group("/feeds")
+	feeds := app.Group("/feeds")
 	// feeds.Get("/", middleware.JWTMiddleware, post.LikePostHandler)
 	feeds.Get("community/:CommunityID", feed.GetFeedCommunity)
 	// feeds.Get("friend/", middleware.JWTMiddleware, post.LikePostHandler)
 	// feeds.Get("friend/:CommunityID", middleware.JWTMiddleware, post.LikePostHandler)
 
-	posts := v1.Group("/posts")
+	posts := app.Group("/posts")
 	posts.Use(middleware.JWTMiddleware)
   posts.Post("/", post.CreatePostHandler)
 

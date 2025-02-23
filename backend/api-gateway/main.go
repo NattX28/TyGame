@@ -14,11 +14,12 @@ func main() {
 	})
 
 	// CORS middleware
-    app.Use(cors.New(cors.Config{
-        AllowOrigins: "*", 
-        AllowHeaders: "Origin, Content-Type, Accept, Authorization",
-        AllowMethods: "GET,POST,PUT,DELETE",
-    }))
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "*",
+		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
+		AllowMethods: "GET,POST,PUT,DELETE",
+		AllowCredentials: true,
+	}))
 
 	// กำหนดค่า URL ของ Services จาก ENV หรือใช้ค่า Default (บน Railway)
 	userServiceURL := os.Getenv("USER_SERVICE_URL")
