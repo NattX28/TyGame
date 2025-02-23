@@ -1,12 +1,10 @@
 "use client";
-
-import { useParams } from "next/navigation";
 import { Pencil } from "lucide-react";
 import Link from "next/link";
 
-import React, { useState,useEffect } from "react";
- 
-import { Button } from "@/components/ui/button"
+import React, { useState } from "react";
+
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,8 +13,8 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import AdminModal from "../components/AdminCommunityModal"
+} from "@/components/ui/dropdown-menu";
+import AdminModal from "../components/AdminCommunityModal";
 
 // Mock data
 //Types
@@ -30,7 +28,6 @@ interface User {
 }
 const users: User[] = [
   {
-    
     name: "Alice Johnson",
     username: "alice.johnson@email.com",
     role: "admin",
@@ -202,18 +199,17 @@ const formatDate = (date: Date) => {
 
 // UUID
 const page = () => {
-  
   const [isOpen, setIsOpen] = useState(false);
   const [selectedAction, setSelectedAction] = useState("");
   const [selectedUser, setSelectedUser] = useState("");
-  
-const openModal = (username: string, action: string) => {
-  if (action !== "pending") {
-    setSelectedUser(username);
-    setSelectedAction(action);
-    setIsOpen(true);
-  }
-};
+
+  const openModal = (username: string, action: string) => {
+    if (action !== "pending") {
+      setSelectedUser(username);
+      setSelectedAction(action);
+      setIsOpen(true);
+    }
+  };
 
   // Create Object to store status (PK -> username)
   const [positions, setPositions] = useState(() =>
@@ -221,7 +217,6 @@ const openModal = (username: string, action: string) => {
       acc[user.username] = "pending";
       return acc;
     }, {} as Record<string, string>)
-    ,
   );
 
   // Function to update a specific user's status
@@ -249,14 +244,20 @@ const openModal = (username: string, action: string) => {
         <div className="mb-4 flex justify-end">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant={"ghost"} className="border border-zinc-200">Set All Status</Button>
+              <Button variant={"ghost"} className="border border-zinc-200">
+                Set All Status
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
               <DropdownMenuLabel>Change All Users' Status</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuRadioGroup onValueChange={updateAllStatuses}>
-                <DropdownMenuRadioItem value="pending">Pending</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="banned">Banned</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="pending">
+                  Pending
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="banned">
+                  Banned
+                </DropdownMenuRadioItem>
                 <DropdownMenuRadioItem value="kick">Kick</DropdownMenuRadioItem>
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>
@@ -275,34 +276,54 @@ const openModal = (username: string, action: string) => {
         {/* Table Body */}
         <div className="divide-y divide-gray-700">
           {users.map((user, index) => (
-            <div key={user.username} className="py-4 space-y-3 md:space-y-0 md:grid md:grid-cols-5 md:gap-3 md:items-center">
+            <div
+              key={user.username}
+              className="py-4 space-y-3 md:space-y-0 md:grid md:grid-cols-5 md:gap-3 md:items-center">
               {/* Number */}
               <div className="text-sm text-white">{index + 1}</div>
 
               {/* User Info */}
               <div className="flex items-center">
-                <img src={user.image} alt={user.name} className="h-8 w-8 rounded-full" />
+                <img
+                  src={user.image}
+                  alt={user.name}
+                  className="h-8 w-8 rounded-full"
+                />
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-main-color">{user.name}</p>
+                  <p className="text-sm font-medium text-main-color">
+                    {user.name}
+                  </p>
                   <p className="text-sm text-gray-400">{user.username}</p>
                 </div>
               </div>
 
               {/* Date */}
-              <div className="text-sm text-gray-500 dark:text-gray-400">{formatDate(user.date)}</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">
+                {formatDate(user.date)}
+              </div>
 
               {/* Status Dropdown */}
               <div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant={"ghost"} className="border border-red-600">{positions[user.username]}</Button>
+                    <Button variant={"ghost"} className="border border-red-600">
+                      {positions[user.username]}
+                    </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56">
                     <DropdownMenuLabel>Permission :</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuRadioGroup value={positions[user.username]} onValueChange={(value) => updatePosition(user.username, value)}>
-                      <DropdownMenuRadioItem value="banned">Banned</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="kick">Kick</DropdownMenuRadioItem>
+                    <DropdownMenuRadioGroup
+                      value={positions[user.username]}
+                      onValueChange={(value) =>
+                        updatePosition(user.username, value)
+                      }>
+                      <DropdownMenuRadioItem value="banned">
+                        Banned
+                      </DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="kick">
+                        Kick
+                      </DropdownMenuRadioItem>
                     </DropdownMenuRadioGroup>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -310,7 +331,11 @@ const openModal = (username: string, action: string) => {
 
               {/* Edit */}
               <div className="flex items-center justify-between">
-                <Link href="#" onClick={()=>openModal(user.username, positions[user.username])}>
+                <Link
+                  href="#"
+                  onClick={() =>
+                    openModal(user.username, positions[user.username])
+                  }>
                   <Pencil className="w-4 h-4" />
                 </Link>
               </div>
@@ -318,13 +343,13 @@ const openModal = (username: string, action: string) => {
           ))}
         </div>
         {selectedUser && selectedAction && (
-        <AdminModal 
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          username={selectedUser}
-          action={selectedAction}
-        />
-      )}
+          <AdminModal
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            username={selectedUser}
+            action={selectedAction}
+          />
+        )}
       </div>
     </div>
   );

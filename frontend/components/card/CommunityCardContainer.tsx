@@ -2,7 +2,7 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
-import { Community } from "@/utils/types";
+import { Community } from "@/types/types";
 import CommunityCard from "./CommunityCard";
 
 const CommunityCardContainer = ({

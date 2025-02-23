@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { Bar, BarChart, XAxis } from "recharts"
+import { Bar, BarChart, XAxis } from "recharts";
 import {
   Chart,
   CategoryScale,
@@ -13,8 +13,8 @@ import {
 } from "chart.js";
 import { UsersRound, Flame, Activity, Handshake } from "lucide-react";
 
-import { TrendingUp } from "lucide-react"
-import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts"
+import { TrendingUp } from "lucide-react";
+import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
 import {
   Card,
   CardContent,
@@ -22,14 +22,13 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
-import { string } from "zod";
+} from "@/components/ui/chart";
 
 Chart.register(
   CategoryScale,
@@ -90,21 +89,46 @@ const Dashboard = () => {
   const activeUsers = 6800;
   const totalCommunities = 120;
   const topCommunities = [
-    { name: "League of legends", shortname:"LOL", members: 2300, color:"hsl(var(--chart-5))"},
-    { name: "Valorant", shortname:"Valorant", members: 1800, color:"hsl(var(--chart-5))"},
-    { name: "ROV", shortname:"ROV", members: 1500, color:"hsl(var(--chart-5))"},
-    { name: "Call of duty", shortname:"COD", members: 1200, color:"hsl(var(--chart-5))"},
-    { name: "Dead by daylight", shortname:"DBD", members: 900, color:"hsl(var(--chart-5))"},
+    {
+      name: "League of legends",
+      shortname: "LOL",
+      members: 2300,
+      color: "hsl(var(--chart-5))",
+    },
+    {
+      name: "Valorant",
+      shortname: "Valorant",
+      members: 1800,
+      color: "hsl(var(--chart-5))",
+    },
+    {
+      name: "ROV",
+      shortname: "ROV",
+      members: 1500,
+      color: "hsl(var(--chart-5))",
+    },
+    {
+      name: "Call of duty",
+      shortname: "COD",
+      members: 1200,
+      color: "hsl(var(--chart-5))",
+    },
+    {
+      name: "Dead by daylight",
+      shortname: "DBD",
+      members: 900,
+      color: "hsl(var(--chart-5))",
+    },
   ];
 
   // Config Bar Chart
-  const BarConfig ={
+  const BarConfig = {
     commu: {
       color: "hsl(var(--dark-chart-1))",
     },
-  } satisfies ChartConfig
+  } satisfies ChartConfig;
 
- // Config Radial Chart & Chartdata
+  // Config Radial Chart & Chartdata
   const RadialConfig = {
     Active: {
       label: "Active",
@@ -114,9 +138,11 @@ const Dashboard = () => {
       label: "Inactive",
       color: "hsl(var(--dark-chart-4))",
     },
-  } satisfies ChartConfig
-  const RadialData = [{ month: "abc", Active: activeUsers, Inactive: totalUsers - activeUsers }]
-  
+  } satisfies ChartConfig;
+  const RadialData = [
+    { month: "abc", Active: activeUsers, Inactive: totalUsers - activeUsers },
+  ];
+
   return (
     <div className="container mx-auto px-4 py-6 w-full">
       {/* Stats Cards */}
@@ -152,7 +178,7 @@ const Dashboard = () => {
               Top 5 Communities
             </h2>
           </div>
-          
+
           {/* Bar Chart */}
           <Card className="bg-second border-none shadow-none z-0">
             <CardHeader className="text-white">
@@ -162,14 +188,16 @@ const Dashboard = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={BarConfig} >
+              <ChartContainer config={BarConfig}>
                 <BarChart accessibilityLayer data={topCommunities}>
                   <XAxis
                     dataKey="name"
                     tickLine={false}
                     tickMargin={10}
                     axisLine={false}
-                    tickFormatter={(_,index) => topCommunities[index].shortname}
+                    tickFormatter={(_, index) =>
+                      topCommunities[index].shortname
+                    }
                   />
                   <Bar
                     dataKey="members"
@@ -186,7 +214,6 @@ const Dashboard = () => {
               </ChartContainer>
             </CardContent>
           </Card>
-
         </div>
         <div className="bg-second p-6 rounded-lg">
           <div className="flex gap-2">
@@ -204,40 +231,42 @@ const Dashboard = () => {
             <CardContent className="flex flex-1 items-center pb-0">
               <ChartContainer
                 config={RadialConfig}
-                className="mx-auto aspect-square w-full max-w-[250px]"
-              >
+                className="mx-auto aspect-square w-full max-w-[250px]">
                 <RadialBarChart
                   data={RadialData}
                   endAngle={180}
                   innerRadius={80}
-                  outerRadius={130}
-                >
+                  outerRadius={130}>
                   <ChartTooltip
                     cursor={false}
                     content={<ChartTooltipContent hideLabel />}
                   />
-                  <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
+                  <PolarRadiusAxis
+                    tick={false}
+                    tickLine={false}
+                    axisLine={false}>
                     <Label
                       content={({ viewBox }) => {
                         if (viewBox && "cx" in viewBox && "cy" in viewBox) {
                           return (
-                            <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle">
+                            <text
+                              x={viewBox.cx}
+                              y={viewBox.cy}
+                              textAnchor="middle">
                               <tspan
                                 x={viewBox.cx}
                                 y={(viewBox.cy || 0) - 16}
-                                className="fill-white text-2xl font-bold"
-                              >
+                                className="fill-white text-2xl font-bold">
                                 {totalUsers.toLocaleString()}
                               </tspan>
                               <tspan
                                 x={viewBox.cx}
                                 y={(viewBox.cy || 0) + 4}
-                                className="fill-muted-foreground"
-                              >
+                                className="fill-muted-foreground">
                                 Total Users
                               </tspan>
                             </text>
-                          )
+                          );
                         }
                       }}
                     />
@@ -261,14 +290,14 @@ const Dashboard = () => {
             </CardContent>
             <CardFooter className="flex-col gap-2 text-sm">
               <div className=" text-white flex items-center gap-2 font-medium leading-none">
-                Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+                Trending up by 5.2% this month{" "}
+                <TrendingUp className="h-4 w-4" />
               </div>
               <div className="leading-none text-muted-foreground">
                 Showing total users for the last 6 months
               </div>
             </CardFooter>
-        </Card>
-
+          </Card>
         </div>
       </div>
     </div>

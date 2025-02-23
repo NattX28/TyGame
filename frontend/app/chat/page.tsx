@@ -4,52 +4,52 @@ import Profile from "./components/Profile";
 import Search from "./components/Search";
 import { MsgMe, MsgYou } from "./components/Message";
 import InputMessage from "./components/InputMessage";
-import { User } from "./../../utils/types";
+import { User } from "@/types/types";
 
 const FriendList = () => {
   return (
     <>
       <Profile
-        person={{ name: "John Doe", avatar: "/media/images/first.jpg" }}
+        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
       />
       <Profile
-        person={{ name: "John Doe", avatar: "/media/images/first.jpg" }}
+        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
       />
       <Profile
-        person={{ name: "John Doe", avatar: "/media/images/first.jpg" }}
+        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
       />
       <Profile
-        person={{ name: "John Doe", avatar: "/media/images/first.jpg" }}
+        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
       />
       <Profile
-        person={{ name: "John Doe", avatar: "/media/images/first.jpg" }}
+        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
       />
       <Profile
-        person={{ name: "John Doe", avatar: "/media/images/first.jpg" }}
+        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
       />
       <Profile
-        person={{ name: "John Doe", avatar: "/media/images/first.jpg" }}
+        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
       />
       <Profile
-        person={{ name: "John Doe", avatar: "/media/images/first.jpg" }}
+        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
       />
       <Profile
-        person={{ name: "John Doe", avatar: "/media/images/first.jpg" }}
+        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
       />
       <Profile
-        person={{ name: "John Doe", avatar: "/media/images/first.jpg" }}
+        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
       />
       <Profile
-        person={{ name: "John Doe", avatar: "/media/images/first.jpg" }}
+        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
       />
       <Profile
-        person={{ name: "John Doe", avatar: "/media/images/first.jpg" }}
+        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
       />
       <Profile
-        person={{ name: "John Doe", avatar: "/media/images/first.jpg" }}
+        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
       />
       <Profile
-        person={{ name: "John Doe", avatar: "/media/images/first.jpg" }}
+        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
       />
     </>
   );
@@ -66,7 +66,7 @@ const ChatList = () => {
         msg={
           "Hi thereaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!"
         }
-        person={{ name: "Jane Doe", avatar: "/media/images/first.jpg" }}
+        person={{ username: "Jane Doe", avatar: "/media/images/first.jpg" }}
       />
     </>
   );
