@@ -15,7 +15,7 @@ export const login = async (
   password: string
 ): Promise<LoginResponse> => {
   try {
-    const { data } = await api.post(`${BASE_URL_AUTH}/login`, {
+    const { data } = await api.post(BASE_URL_AUTH + "/login", {
       username,
       password,
     });
