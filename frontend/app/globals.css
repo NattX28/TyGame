@@ -28,6 +28,9 @@
   .bg-sub-frame {
     background-color: #1f1f1f;
   }
+  .btn-contrast{
+    background-color: #900000;
+  }
 
   /* Text */
   .text-main-color {

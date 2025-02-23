@@ -19,7 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
 import { Community } from "@/types/types";
-import { useRouter } from "next/navigation";
+import { useRouter,usePathname } from "next/navigation";
 import { useState } from "react";
 
 import { useAuth } from "@/hooks/useAuth";
@@ -167,6 +167,7 @@ const communityCard: Community[] = [
 ];
 
 const UserSidebar = () => {
+  const pathname = usePathname();
   const [communities, setCommunities] = useState<Community[]>(communityCard);
   const [selectedCommunity, setSelectedCommunity] = useState<number | null>(
     null
@@ -226,18 +227,22 @@ const UserSidebar = () => {
 
         {/* Navigation links */}
         <div className="flex flex-col gap-1">
-          {items.map((item, index) => (
+          {items.map((item, index) => {
+            const isActive = pathname === item.url;
+            return(
             <Button
               key={index}
               asChild
-              className="w-full h-12 justify-start gap-2 rounded-sm px-4"
+              className={`w-full h-12 justify-start gap-2 rounded-sm px-4 ${
+                isActive ? "bg-white text-black" : "bg-transparent text-white"
+              }`}
               variant="ghost">
               <Link href={item.url}>
                 <item.icon className="h-4 w-4" />
                 {item.title}
               </Link>
             </Button>
-          ))}
+          )})}
         </div>
       </div>
 
