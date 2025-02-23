@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 	"os"
-
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/proxy"
 )
 
@@ -12,6 +12,13 @@ func main() {
 	app := fiber.New(fiber.Config{
 		DisableStartupMessage: false,
 	})
+
+	// CORS middleware
+    app.Use(cors.New(cors.Config{
+        AllowOrigins: "http://localhost:3000", 
+        AllowHeaders: "Origin, Content-Type, Accept, Authorization",
+        AllowMethods: "GET,POST,PUT,DELETE",
+    }))
 
 	// กำหนดค่า URL ของ Services จาก ENV หรือใช้ค่า Default (บน Railway)
 	userServiceURL := os.Getenv("USER_SERVICE_URL")
