@@ -1,5 +1,6 @@
 "use client";
 
+import LoadingScreen from "@/components/loading/LoadingScreen";
 import { useAuth } from "@/hooks/useAuth";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -21,7 +22,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     }
   }, [user, loading, pathname, router]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <LoadingScreen />;
   if (!user && !PUBLIC_PATHS.includes(pathname)) return null;
 
   return <>{children}</>;

@@ -32,12 +32,12 @@ export async function middleware(request: NextRequest) {
     path.startsWith(adminPath)
   );
 
-  // ถ้ายังไม่ได้ login และเข้าหน้า Protected Path → Redirect ไป Login
+  // ถ้ายังไม่ได้ login และเข้าหน้า Protected Path ให้ Redirect ไป Login
   if (!token && isProtectedPath) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // ป้องกันหน้า admin สำหรับคนที่ไม่ใช่ admin
+  // ไม่ใช่ admin เข้าไม่ได้
   if (isAdminPath && userRole !== "admin") {
     return NextResponse.redirect(new URL("/login", request.url));
   }
@@ -46,5 +46,13 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: [
+    "/admin/:path*",
+    "/feed/:path*",
+    "/profile/:path*",
+    "/chat/:path*",
+    "/login",
+    "/register",
+    "/communities",
+  ],
 };
