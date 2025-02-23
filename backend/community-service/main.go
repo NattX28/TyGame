@@ -37,6 +37,7 @@ func main() {
 
 	community_focus := communities.Group("/:CommuID")
 	community_focus.Get("/", middleware.CanAccess, routes.GetCommunityHandler)
+	community_focus.Post("/", middleware.CanManagement, routes.JoinCommunityHandler)
 	community_focus.Put("/", middleware.CanManagement, routes.EditCommunityHandler)
 	community_focus.Delete("/", middleware.CanManagement, routes.DeleteCommunityHandler)
 
