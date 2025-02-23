@@ -1,27 +1,11 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import UserSidebar from "@/components/shared/UserSidebar";
-import { useAuth } from "@/hooks/useAuth";
-import { useRouter } from "next/navigation";
 
 const UserLayout = ({ children }: { children: React.ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, loading } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    // ถ้าไม่มี user ให้ทำการ redirect ไปยังหน้า login
-    if (!user) {
-      router.push("/login");
-    }
-  }, [user, router]);
-
-  if (loading) return <div>Loading...</div>;
-
-  // ถ้า user ยังไม่มี จะไม่ render อะไรจนกว่า redirect เสร็จ
-  if (!user) return null;
 
   return (
     <div className="flex h-screen justify-around sm:justify-normal">
