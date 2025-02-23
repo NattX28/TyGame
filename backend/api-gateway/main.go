@@ -15,14 +15,10 @@ func main() {
 
 	// กำหนดค่า URL ของ Services จาก ENV หรือใช้ค่า Default (บน Railway)
 	userServiceURL := os.Getenv("USER_SERVICE_URL")
-	if userServiceURL == "" {
-		userServiceURL = "https://user-service.up.railway.app" // แก้ให้ตรงกับ Railway ของคุณ
-	}
+	
 
 	postServiceURL := os.Getenv("POST_SERVICE_URL")
-	if postServiceURL == "" {
-		postServiceURL = "https://post-service.up.railway.app" // แก้ให้ตรงกับ Railway ของคุณ
-	}
+	
 
 	log.Printf("🔗 User Service URL: %s", userServiceURL)
 	log.Printf("🔗 Post Service URL: %s", postServiceURL)
