@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${kanit.className} antialiased min-h-screen bg-main`}>
-        <main className="text-main-color max-w-[1920px] mx-auto">
+        <main className="text-main-color max-w-full mx-auto">
           <Providers>
             <Suspense fallback={<LoadingScreen />}>{children}</Suspense>
           </Providers>
