@@ -5,8 +5,22 @@ import { useAuth } from "@/hooks/useAuth";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-const PUBLIC_PATHS = ["/", "/communities", "/login", "/register"];
-const PROTECTED_PATHS = ["/feed", "/profile", "/chat"];
+// real
+// const PUBLIC_PATHS = ["/", "/communities", "/login", "/register"];
+// test
+const PUBLIC_PATHS = [
+  "/",
+  "/communities",
+  "/login",
+  "/register",
+  "/feed",
+  "/profile",
+  "/chat",
+];
+// real
+// const PROTECTED_PATHS = ["/feed", "/profile", "/chat"];
+// test
+const PROTECTED_PATHS = ["/void"];
 const ADMIN_PATHS = ["/admin"];
 
 const ALL_VALID_PATHS = [...PUBLIC_PATHS, ...PROTECTED_PATHS, ...ADMIN_PATHS];
@@ -30,8 +44,10 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     if (isValidPath) {
       const isPublicPath = PUBLIC_PATHS.includes(pathname);
       if (!user && !isPublicPath) {
+        console.log("!user && !isPublicPath");
         router.push("/login");
       }
+      console.log("อยู่นอก ");
     }
   }, [user, loading, pathname, router]);
 
