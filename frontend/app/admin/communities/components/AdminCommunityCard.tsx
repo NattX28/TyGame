@@ -5,19 +5,28 @@ import Link from "next/link";
 
 const AdminCommunityCard = ({ community }: { community: Community }) => {
   return (
-    <Link href={`communities/${community.commuID}`}>
-      <div className="flex justify-between items-center bg-second p-3 m-2 rounded-md sm:w-36 md:w-auto">
+    <Link href={`communities/${community.uuid}`}>
+      <div
+        className="flex justify-between items-center bg-second p-3 m-2 rounded-md sm:w-36 md:w-auto 
+                    transition-all duration-300 hover:shadow-md hover:shadow-red-900/30
+                    hover:bg-black hover:bg-opacity-80 hover:scale-102
+                    hover:border-red-600 hover:border hover:cursor-pointer">
         <Avatar className="w-4 h-4 md:w-8 md:h-8">
           <AvatarImage src={community.image} alt="Community Avatar" />
           <AvatarFallback>GC</AvatarFallback>
         </Avatar>
         <div className="flex flex-col text-main-color">
-          <h4 className="">{community.name}</h4>
-          <p className="">{community.members?.toLocaleString()} members</p>
+          <h4 className="transition-colors duration-300 group-hover:text-red-500">
+            {community.name}
+          </h4>
+          <p className="transition-colors duration-300 group-hover:text-gray-400">
+            {community.members?.toLocaleString()} members
+          </p>
         </div>
-        <Pencil className="w-4 h-4" />
+        <Pencil className="w-4 h-4 transition-all duration-300 hover:text-red-500 hover:scale-110" />
       </div>
     </Link>
   );
 };
+
 export default AdminCommunityCard;

@@ -20,12 +20,11 @@ export interface Friend {
 //// Community-services Category
 // Community
 export interface Community {
-  id: string;
+  uuid: string;
   name: string;
   description: string;
-  image: string;
-  CreatorID: string;
-  created_at: Date;
+  image?: string;
+  members?: number;
 }
 // CommunityMember
 export interface CommunityMember {

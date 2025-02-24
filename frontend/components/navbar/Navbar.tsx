@@ -1,5 +1,6 @@
 import { Button } from "../ui/button";
 import Search from "./Search";
+import Link from "next/link";
 
 const Navbar = () => {
   return (
@@ -11,10 +12,14 @@ const Navbar = () => {
         </div>
         <div className="flex gap-2 sm:gap-4">
           <div>
-            <Button>Signup</Button>
+            <Button>
+              <Link href={"/signin"}>Signup</Link>
+            </Button>
           </div>
           <div>
-            <Button variant="outline">Login</Button>
+            <Button variant="outline" asChild>
+              <Link href={"/login"}>Login</Link>
+            </Button>
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Button } from "../ui/button";
+import Link from "next/link";
 
 const HeroHompage = () => {
   return (
@@ -12,7 +13,9 @@ const HeroHompage = () => {
           Gaming isn’t just about playing—it’s about belonging.
         </h2>
         <div className="flex flex-col md:flex-row gap-2 mt-2">
-          <Button className="w-48">Join us</Button>
+          <Button className="w-48">
+            <Link href={"/explore"}>Join us</Link>
+          </Button>
           <Button variant="secondary" className="w-48">
             Learn more
           </Button>

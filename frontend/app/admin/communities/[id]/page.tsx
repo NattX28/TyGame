@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import AdminModal from "../components/AdminCommunityModal";
+import DeleteCommu from "../components/AdminDeleteCommunity";
 
 // Mock data
 //Types
@@ -199,9 +200,7 @@ const formatDate = (date: Date) => {
 console.log("อยู่หน้ารายชื่อ commu");
 
 // UUID
-const DetailCommunityPage = ({ params }: { params: { id: string } }) => {
-  const router = useRouter();
-
+const DetailCommunityPage = ({ param }: { param: { id: string } }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedAction, setSelectedAction] = useState("");
   const [selectedUser, setSelectedUser] = useState("");
@@ -241,123 +240,121 @@ const DetailCommunityPage = ({ params }: { params: { id: string } }) => {
   };
 
   return (
-    <h1>{router.query.id}</h1>
+    <div className="bg-second rounded-lg overflow-hidden">
+      <div className="p-6">
+        {/* Bulk Status Dropdown */}
+        <div className="mb-4 flex justify-end">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant={"ghost"} className="border border-zinc-200">
+                Set All Status
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuLabel>Change All Users' Status</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuRadioGroup onValueChange={updateAllStatuses}>
+                <DropdownMenuRadioItem value="pending">
+                  Pending
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="banned">
+                  Banned
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="kick">Kick</DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
 
-    // <div className="bg-second rounded-lg overflow-hidden">
-    //   <div className="p-6">
-    //     {/* Bulk Status Dropdown */}
-    //     <div className="mb-4 flex justify-end">
-    //       <DropdownMenu>
-    //         <DropdownMenuTrigger asChild>
-    //           <Button variant={"ghost"} className="border border-zinc-200">
-    //             Set All Status
-    //           </Button>
-    //         </DropdownMenuTrigger>
-    //         <DropdownMenuContent className="w-56">
-    //           <DropdownMenuLabel>Change All Users' Status</DropdownMenuLabel>
-    //           <DropdownMenuSeparator />
-    //           <DropdownMenuRadioGroup onValueChange={updateAllStatuses}>
-    //             <DropdownMenuRadioItem value="pending">
-    //               Pending
-    //             </DropdownMenuRadioItem>
-    //             <DropdownMenuRadioItem value="banned">
-    //               Banned
-    //             </DropdownMenuRadioItem>
-    //             <DropdownMenuRadioItem value="kick">Kick</DropdownMenuRadioItem>
-    //           </DropdownMenuRadioGroup>
-    //         </DropdownMenuContent>
-    //       </DropdownMenu>
-    //     </div>
+        {/* Table Header */}
+        <div className="md:grid md:grid-cols-5 gap-4 mb-4 text-xs font-semibold uppercase tracking-wide text-gray-400">
+          <div>No.</div>
+          <div>Members</div>
+          <div>Date</div>
+          <div>Status</div>
+          <div>Edit</div>
+        </div>
 
-    //     {/* Table Header */}
-    //     <div className="md:grid md:grid-cols-5 gap-4 mb-4 text-xs font-semibold uppercase tracking-wide text-gray-400">
-    //       <div>No.</div>
-    //       <div>Members</div>
-    //       <div>Date</div>
-    //       <div>Status</div>
-    //       <div>Edit</div>
-    //     </div>
+        {/* Table Body */}
+        <div className="divide-y divide-gray-700">
+          {users.map((user, index) => (
+            <div
+              key={user.username}
+              className="py-4 space-y-3 md:space-y-0 md:grid md:grid-cols-5 md:gap-3 md:items-center">
+              {/* Number */}
+              <div className="text-sm text-white">{index + 1}</div>
 
-    //     {/* Table Body */}
-    //     <div className="divide-y divide-gray-700">
-    //       {users.map((user, index) => (
-    //         <div
-    //           key={user.username}
-    //           className="py-4 space-y-3 md:space-y-0 md:grid md:grid-cols-5 md:gap-3 md:items-center">
-    //           {/* Number */}
-    //           <div className="text-sm text-white">{index + 1}</div>
+              {/* User Info */}
+              <div className="flex items-center">
+                <img
+                  src={user.image}
+                  alt={user.name}
+                  className="h-8 w-8 rounded-full"
+                />
+                <div className="ml-3">
+                  <p className="text-sm font-medium text-main-color">
+                    {user.name}
+                  </p>
+                  <p className="text-sm text-gray-400">{user.username}</p>
+                </div>
+              </div>
 
-    //           {/* User Info */}
-    //           <div className="flex items-center">
-    //             <img
-    //               src={user.image}
-    //               alt={user.name}
-    //               className="h-8 w-8 rounded-full"
-    //             />
-    //             <div className="ml-3">
-    //               <p className="text-sm font-medium text-main-color">
-    //                 {user.name}
-    //               </p>
-    //               <p className="text-sm text-gray-400">{user.username}</p>
-    //             </div>
-    //           </div>
+              {/* Date */}
+              <div className="text-sm text-gray-500 dark:text-gray-400">
+                {formatDate(user.date)}
+              </div>
 
-    //           {/* Date */}
-    //           <div className="text-sm text-gray-500 dark:text-gray-400">
-    //             {formatDate(user.date)}
-    //           </div>
+              {/* Status Dropdown */}
+              <div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant={"ghost"} className="border border-red-600">
+                      {positions[user.username]}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56">
+                    <DropdownMenuLabel>Permission :</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuRadioGroup
+                      value={positions[user.username]}
+                      onValueChange={(value) =>
+                        updatePosition(user.username, value)
+                      }>
+                      <DropdownMenuRadioItem value="banned">
+                        Banned
+                      </DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="kick">
+                        Kick
+                      </DropdownMenuRadioItem>
+                    </DropdownMenuRadioGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
 
-    //           {/* Status Dropdown */}
-    //           <div>
-    //             <DropdownMenu>
-    //               <DropdownMenuTrigger asChild>
-    //                 <Button variant={"ghost"} className="border border-red-600">
-    //                   {positions[user.username]}
-    //                 </Button>
-    //               </DropdownMenuTrigger>
-    //               <DropdownMenuContent className="w-56">
-    //                 <DropdownMenuLabel>Permission :</DropdownMenuLabel>
-    //                 <DropdownMenuSeparator />
-    //                 <DropdownMenuRadioGroup
-    //                   value={positions[user.username]}
-    //                   onValueChange={(value) =>
-    //                     updatePosition(user.username, value)
-    //                   }>
-    //                   <DropdownMenuRadioItem value="banned">
-    //                     Banned
-    //                   </DropdownMenuRadioItem>
-    //                   <DropdownMenuRadioItem value="kick">
-    //                     Kick
-    //                   </DropdownMenuRadioItem>
-    //                 </DropdownMenuRadioGroup>
-    //               </DropdownMenuContent>
-    //             </DropdownMenu>
-    //           </div>
-
-    //           {/* Edit */}
-    //           <div className="flex items-center justify-between">
-    //             <Link
-    //               href="#"
-    //               onClick={() =>
-    //                 openModal(user.username, positions[user.username])
-    //               }>
-    //               <Pencil className="w-4 h-4" />
-    //             </Link>
-    //           </div>
-    //         </div>
-    //       ))}
-    //     </div>
-    //     {selectedUser && selectedAction && (
-    //       <AdminModal
-    //         isOpen={isOpen}
-    //         onClose={() => setIsOpen(false)}
-    //         username={selectedUser}
-    //         action={selectedAction}
-    //       />
-    //     )}
-    //   </div>
-    //   <h1>slhngkljdsjfghnkjdfhngjkddddddddddddddddddd</h1>
-    // </div>
+              {/* Edit */}
+              <div className="flex items-center justify-between">
+                <Link
+                  href="#"
+                  onClick={() =>
+                    openModal(user.username, positions[user.username])
+                  }>
+                  <Pencil className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+        <DeleteCommu params={param} />
+        {selectedUser && selectedAction && (
+          <AdminModal
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            username={selectedUser}
+            action={selectedAction}
+          />
+        )}
+      </div>
+    </div>
   );
 };
 export default DetailCommunityPage;

@@ -40,19 +40,23 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // const isPublicPath = PUBLIC_PATHS.includes(path); // เดี๋ยวแก้กลับ
+  // ตรวจสอบว่าเป็น public path หรือเริ่มต้นด้วย public path
   const isPublicPath = PUBLIC_PATHS.some(
-    (PublicPath) => path.startsWith(`${PublicPath}/`) || path === PublicPath
-  ); // เดี๋ยวมาลบ
-  const isProtectedPath = PROTECTED_PATHS.some(
-    (protectedPath) =>
-      path.startsWith(`${protectedPath}/`) || path === protectedPath
-  );
-  const isAdminPath = ADMIN_PATHS.some((adminPath) =>
-    path.startsWith(adminPath)
+    (publicPath) => path === publicPath || path.startsWith(`${publicPath}/`)
   );
 
-  // Check if the path is valid (either exactly matches or is a sub-path of valid paths)
+  // ตรวจสอบว่าเป็น protected path หรือเริ่มต้นด้วย protected path
+  const isProtectedPath = PROTECTED_PATHS.some(
+    (protectedPath) =>
+      path === protectedPath || path.startsWith(`${protectedPath}/`)
+  );
+
+  // ตรวจสอบว่าเป็น admin path หรือเริ่มต้นด้วย admin path
+  const isAdminPath = ADMIN_PATHS.some(
+    (adminPath) => path === adminPath || path.startsWith(`${adminPath}/`)
+  );
+
+  // ตรวจสอบว่า path ถูกต้อง (ตรงกับ valid path หรือเป็น sub-path ของ valid path)
   const isValidPath = ALL_VALID_PATHS.some(
     (validPath) => path === validPath || path.startsWith(`${validPath}/`)
   );
@@ -65,11 +69,19 @@ export async function middleware(request: NextRequest) {
   console.log(`   - isAdminPath: ${isAdminPath}`);
   console.log(`   - isValidPath: ${isValidPath}`);
 
-  // Handle invalid paths by letting Next.js handle the 404
+  // ในโหมดทดสอบเพื่อให้เข้าถึงทุก path ได้ เราจะข้ามการตรวจสอบการเข้าถึง
+  // และปล่อยให้ทุกคนเข้าถึงทุก path ได้
+
+  // ถ้าไม่ใช่ valid path ให้ Next.js จัดการ 404
   if (!isValidPath) {
     return NextResponse.next();
   }
 
+  // อนุญาตให้เข้าถึงทุก path ในโหมดทดสอบ
+  return NextResponse.next();
+
+  // คอมเมนต์โค้ดด้านล่างไว้ชั่วคราวสำหรับการทดสอบ
+  /*
   // Handle authentication and authorization for valid paths
   if (!token && isProtectedPath) {
     return NextResponse.redirect(new URL("/login", request.url));
@@ -78,8 +90,7 @@ export async function middleware(request: NextRequest) {
   if (isAdminPath && userRole !== "admin") {
     return NextResponse.redirect(new URL("/login", request.url));
   }
-
-  return NextResponse.next();
+  */
 }
 
 export const config = {
