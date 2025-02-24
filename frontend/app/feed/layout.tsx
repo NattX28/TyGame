@@ -11,20 +11,20 @@ export default function FeedLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user, loading } = useAuth();
-  const router = useRouter();
+  // const { user, loading } = useAuth();
+  // const router = useRouter();
 
-  useEffect(() => {
-    // ถ้าไม่มี user ให้ทำการ redirect ไปยังหน้า login
-    if (!user) {
-      router.push("/login");
-    }
-  }, [user, router]);
+  // useEffect(() => {
+  //   // ถ้าไม่มี user ให้ทำการ redirect ไปยังหน้า login
+  //   if (!user) {
+  //     router.push("/login");
+  //   }
+  // }, [user, router]);
 
-  if (loading) return <div>Loading...</div>;
+  // if (loading) return <div>Loading...</div>;
 
-  // ถ้า user ยังไม่มี จะไม่ render อะไรจนกว่า redirect เสร็จ
-  if (!user) return null;
+  // // ถ้า user ยังไม่มี จะไม่ render อะไรจนกว่า redirect เสร็จ
+  // if (!user) return null;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[280px,1fr,240px] w-full">
