@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const ADMIN_PATHS = ["/admin"];
+const ADMIN_PATHS = ["/void"]; // เดี๋ยวมาแก้
 // real
 // const PUBLIC_PATHS = ["/", "/communities", "/login", "/register"];
 // test
@@ -13,6 +13,9 @@ const PUBLIC_PATHS = [
   "/feed",
   "/profile",
   "/chat",
+  "/admin",
+  "/admin/dashboard",
+  "/admin/communities",
 ];
 // real
 // const PROTECTED_PATHS = ["/feed", "/profile", "/chat"];
@@ -37,7 +40,10 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  const isPublicPath = PUBLIC_PATHS.includes(path);
+  // const isPublicPath = PUBLIC_PATHS.includes(path); // เดี๋ยวแก้กลับ
+  const isPublicPath = PUBLIC_PATHS.some(
+    (PublicPath) => path.startsWith(`${PublicPath}/`) || path === PublicPath
+  ); // เดี๋ยวมาลบ
   const isProtectedPath = PROTECTED_PATHS.some(
     (protectedPath) =>
       path.startsWith(`${protectedPath}/`) || path === protectedPath

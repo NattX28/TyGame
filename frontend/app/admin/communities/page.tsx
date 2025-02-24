@@ -1,4 +1,4 @@
-import { Community } from "@/utils/types";
+import { Community } from "@/types/types";
 import AdminCommunityList from "./components/AdminCommunityList";
 
 // Mock Data

@@ -1,15 +1,6 @@
 "use client";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import {
-  CircleUserRound,
-  Home,
-  MessageCircleMore,
-  Joystick,
-  LogOut,
-  Settings,
-  ChevronDownIcon,
-} from "lucide-react";
+import { LogOut, ChevronDownIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import {
@@ -19,38 +10,10 @@ import {
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
 import { Community } from "@/types/types";
-import { useRouter,usePathname } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useState } from "react";
-
 import { useAuth } from "@/hooks/useAuth";
-
-const items = [
-  {
-    title: "Home",
-    url: "/feed",
-    icon: Home,
-  },
-  {
-    title: "My Profile",
-    url: "/profile",
-    icon: CircleUserRound,
-  },
-  {
-    title: "Message",
-    url: "/chat",
-    icon: MessageCircleMore,
-  },
-  {
-    title: "Communities",
-    url: "#",
-    icon: Joystick,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-  },
-];
+import { userSidebarItems } from "@/utils/utils";
 
 // Mock Data
 const communityCard: Community[] = [
@@ -227,22 +190,23 @@ const UserSidebar = () => {
 
         {/* Navigation links */}
         <div className="flex flex-col gap-1">
-          {items.map((item, index) => {
+          {userSidebarItems.map((item, index) => {
             const isActive = pathname === item.url;
-            return(
-            <Button
-              key={index}
-              asChild
-              className={`w-full h-12 justify-start gap-2 rounded-sm px-4 ${
-                isActive ? "bg-white text-black" : "bg-transparent text-white"
-              }`}
-              variant="ghost">
-              <Link href={item.url}>
-                <item.icon className="h-4 w-4" />
-                {item.title}
-              </Link>
-            </Button>
-          )})}
+            return (
+              <Button
+                key={index}
+                asChild
+                className={`w-full h-12 justify-start gap-2 rounded-sm px-4 ${
+                  isActive ? "bg-white text-black" : "bg-transparent text-white"
+                }`}
+                variant="ghost">
+                <Link href={item.url}>
+                  <item.icon className="h-4 w-4" />
+                  {item.title}
+                </Link>
+              </Button>
+            );
+          })}
         </div>
       </div>
 

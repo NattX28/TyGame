@@ -1,10 +1,10 @@
 import CommunityList from "@/components/card/CommunityList";
 
-const CommunitiesPage = () => {
+const ExplorePage = () => {
   return (
-    <div>
+    <>
       <CommunityList />
-    </div>
+    </>
   );
 };
-export default CommunitiesPage;
+export default ExplorePage;

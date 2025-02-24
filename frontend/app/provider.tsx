@@ -16,12 +16,15 @@ const PUBLIC_PATHS = [
   "/feed",
   "/profile",
   "/chat",
+  "/admin",
+  "/admin/dashboard",
+  "/admin/communities",
 ];
 // real
 // const PROTECTED_PATHS = ["/feed", "/profile", "/chat"];
 // test
 const PROTECTED_PATHS = ["/void"];
-const ADMIN_PATHS = ["/admin"];
+const ADMIN_PATHS = ["/void"];
 
 const ALL_VALID_PATHS = [...PUBLIC_PATHS, ...PROTECTED_PATHS, ...ADMIN_PATHS];
 
@@ -42,7 +45,11 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
     // Only handle redirects for valid paths
     if (isValidPath) {
-      const isPublicPath = PUBLIC_PATHS.includes(pathname);
+      // const isPublicPath = PUBLIC_PATHS.includes(pathname); // เดี๋ยวแก้กลับ
+      const isPublicPath = PUBLIC_PATHS.some(
+        (PublicPath) =>
+          pathname.startsWith(`${PublicPath}/`) || pathname === PublicPath
+      ); // เดี๋ยวมาลบ
       if (!user && !isPublicPath) {
         console.log("!user && !isPublicPath");
         router.push("/login");

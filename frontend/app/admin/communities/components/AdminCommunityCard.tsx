@@ -1,13 +1,9 @@
-import { CommunityCardProps } from "@/types/community";
+import { Community } from "@/types/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Pencil } from "lucide-react";
 import Link from "next/link";
 
-const AdminCommunityCard = ({
-  community,
-}: {
-  community: CommunityCardProps;
-}) => {
+const AdminCommunityCard = ({ community }: { community: Community }) => {
   return (
     <Link href={`communities/${community.commuID}`}>
       <div className="flex justify-between items-center bg-second p-3 m-2 rounded-md sm:w-36 md:w-auto">

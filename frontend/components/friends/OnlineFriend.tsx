@@ -9,7 +9,7 @@ const OnlineFriend = ({
   return (
     <>
       <Link href={"/"}>
-        <div className="flex items-center min-w-44 h-12 border-white border-2 rounded-3xl px-2 relative cursor:pointer hover:bg-second transition">
+        <div className="flex items-center min-w-44 h-12 border-white/10 border-b px-2 relative cursor:pointer hover:bg-second transition">
           {/* user image */}
           <div className="h-8 w-8 relative">
             <Avatar className="h-8 w-8 ">

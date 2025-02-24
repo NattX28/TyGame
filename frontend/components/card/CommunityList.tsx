@@ -117,7 +117,7 @@ const communityCards: Community[] = [
   },
 ];
 
-const CommunitiesList = () => {
+const CommunityList = () => {
   const [communities, setCommunities] = useState<Community[]>(communityCards);
 
   return (
@@ -131,4 +131,4 @@ const CommunitiesList = () => {
     </div>
   );
 };
-export default CommunitiesList;
+export default CommunityList;
