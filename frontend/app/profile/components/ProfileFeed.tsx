@@ -1,20 +1,7 @@
 import PostCard from "@/components/post/PostCard";
-import CreatePostTrigger from "./CreatePostTrigger";
+import { User } from "@/types/types";
 
-interface ProfileData {
-  username: string;
-  fullName: string;
-  avatar: string;
-  posts: number;
-  friends: number;
-  bio: string;
-}
-
-interface ProfileFeedProps {
-  profile: ProfileData;
-}
-
-const ProfileFeed = ({ profile }: ProfileFeedProps) => {
+const ProfileFeed = ({ profile }: { profile: User }) => {
   return (
     <div className="space-y-6">
       {/* <CreatePostTrigger profile={profile} /> */}

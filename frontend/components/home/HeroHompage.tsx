@@ -1,17 +1,17 @@
 import Image from "next/image";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { AuroraText } from "../magicui/aurora-text";
 
 const HeroHompage = () => {
   return (
     <div className="flex flex-col justify-between items-center md:flex-row rounded-md mb-6">
       <div className="flex flex-col gap-4">
         <h1 className="text-4xl md:text-6xl xl:text-8xl 2xl:text-10xl font-semibold lg:font-bold ">
-          Connect <span className="block">With Gamers</span>
+          Connect
+          <span className="block">With Gamers</span>
         </h1>
-        <h2 className="md:text-2xl">
-          Gaming isn’t just about playing—it’s about belonging.
-        </h2>
+        <h2 className="md:text-2xl">Gaming isn’t just about playing—it’s.</h2>
         <div className="flex flex-col md:flex-row gap-2 mt-2">
           <Button className="w-48">
             <Link href={"/explore"}>Join us</Link>

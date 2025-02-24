@@ -33,8 +33,10 @@ const SigninForm = () => {
   });
 
   return (
-    <Form {...form} >
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 text-xl">
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-3 text-xl w-full">
         {/* email field */}
         <FormField
           control={form.control}
@@ -43,7 +45,11 @@ const SigninForm = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="Enter your username" className="text-gray-600"{...field} />
+                <Input
+                  placeholder="Enter your username"
+                  className="text-gray-600"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -58,7 +64,11 @@ const SigninForm = () => {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder="Enter your username" className="text-gray-600"{...field} />
+                <Input
+                  placeholder="Enter your username"
+                  className="text-gray-600"
+                  {...field}
+                />
               </FormControl>
               <FormDescription>
                 This is your public display name.
@@ -86,7 +96,9 @@ const SigninForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit" className="w-full">
+          Submit
+        </Button>
       </form>
     </Form>
   );

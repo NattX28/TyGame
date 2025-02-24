@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Handshake, Home, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const items = [
   {
@@ -19,6 +20,7 @@ const items = [
 ];
 
 const AdminSidebar = () => {
+  const pathname = usePathname();
   return (
     <div className="px-4 py-8 h-full flex flex-col">
       {/* Top section */}
@@ -41,18 +43,26 @@ const AdminSidebar = () => {
 
         {/* Navigation links */}
         <div className="flex flex-col gap-1">
-          {items.map((item, index) => (
-            <Button
-              key={index}
-              asChild
-              className="w-full h-12 justify-start gap-2 rounded-sm px-4"
-              variant="ghost">
-              <Link href={item.url}>
-                <item.icon className="h-4 w-4" />
-                {item.title}
-              </Link>
-            </Button>
-          ))}
+          {items.map((item, index) => {
+            const isActive = pathname === item.url;
+            return (
+              <Button
+                key={index}
+                asChild
+                className={`w-full h-12 justify-start gap-2 rounded-sm px-4
+                  ${
+                    isActive
+                      ? "bg-white text-black"
+                      : "bg-transparent text-white"
+                  } `}
+                variant="ghost">
+                <Link href={item.url}>
+                  <item.icon className="h-4 w-4" />
+                  {item.title}
+                </Link>
+              </Button>
+            );
+          })}
         </div>
       </div>
 

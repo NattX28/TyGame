@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -45,7 +44,7 @@ const LoginForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-3 text-xl">
+        className="space-y-3 text-xl w-full">
         {/* user name field */}
         <FormField
           control={form.control}
@@ -56,14 +55,10 @@ const LoginForm = () => {
               <FormControl>
                 <Input
                   placeholder="Enter your username"
-                  className="text-gray-600"
+                  className="text-gray-600 "
                   {...field}
                 />
               </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
-              <FormMessage />
             </FormItem>
           )}
         />
@@ -86,7 +81,9 @@ const LoginForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit" className="w-full">
+          Submit
+        </Button>
       </form>
     </Form>
   );

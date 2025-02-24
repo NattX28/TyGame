@@ -6,6 +6,10 @@ export interface User {
   email: string;
   name: string;
   role: string;
+  posts: number;
+  friends: number;
+  fullName?: string;
+  bio?: string;
   imageName?: string;
   cookieVersion: number;
   description?: string;
@@ -23,6 +27,7 @@ export interface Community {
   uuid: string;
   name: string;
   description: string;
+  category: string;
   image?: string;
   members?: number;
 }

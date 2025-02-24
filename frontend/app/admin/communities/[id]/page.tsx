@@ -1,5 +1,4 @@
 "use client";
-import { useRouter } from "next/router";
 import { Pencil } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -14,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import AdminModal from "../components/AdminCommunityModal";
-import DeleteCommu from "../components/AdminDeleteCommunity";
+import DeleteButton from "@/components/shared/DeleteButton";
 
 // Mock data
 //Types
@@ -200,7 +199,7 @@ const formatDate = (date: Date) => {
 console.log("อยู่หน้ารายชื่อ commu");
 
 // UUID
-const DetailCommunityPage = ({ param }: { param: { id: string } }) => {
+const DetailCommunityPage = ({ param }: { param: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedAction, setSelectedAction] = useState("");
   const [selectedUser, setSelectedUser] = useState("");
@@ -239,11 +238,16 @@ const DetailCommunityPage = ({ param }: { param: { id: string } }) => {
     );
   };
 
+  const handleDeleteCommunity = (communityId: string) => {
+    // ลบ commu ใส่ทีหลัง
+    console.log(`Deleting community with ID: ${communityId}`);
+  };
+
   return (
     <div className="bg-second rounded-lg overflow-hidden">
-      <div className="p-6">
+      <div className="p-6 mx-auto">
         {/* Bulk Status Dropdown */}
-        <div className="mb-4 flex justify-end">
+        <div className="mb-6 flex justify-end gap-4">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant={"ghost"} className="border border-zinc-200">
@@ -264,6 +268,11 @@ const DetailCommunityPage = ({ param }: { param: { id: string } }) => {
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>
           </DropdownMenu>
+          <DeleteButton
+            itemId={param}
+            itemType="community"
+            onDelete={handleDeleteCommunity}
+          />
         </div>
 
         {/* Table Header */}
@@ -344,7 +353,7 @@ const DetailCommunityPage = ({ param }: { param: { id: string } }) => {
             </div>
           ))}
         </div>
-        <DeleteCommu params={param} />
+
         {selectedUser && selectedAction && (
           <AdminModal
             isOpen={isOpen}

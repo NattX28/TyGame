@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import DeleteButton from "@/components/shared/DeleteButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import Link from "next/link";
 
@@ -13,6 +13,11 @@ interface FriendCardProps {
   friend: Friend;
   onUnfriend: (id: string) => void; // รับฟังก์ชันจาก FriendList
 }
+
+const handleDeleteFriend = (id: string) => {
+  // ลบเพื่อน ใส่ทีหลัง
+  console.log(`Removing friend with ID: ${id}`);
+};
 
 const FriendCard = ({ friend, onUnfriend }: FriendCardProps) => {
   return (
@@ -41,7 +46,14 @@ const FriendCard = ({ friend, onUnfriend }: FriendCardProps) => {
           </p>
         </div>
       </Link>
-      <Button onClick={() => onUnfriend(friend.id)}>Unfriend</Button>
+      <DeleteButton
+        itemId={friend.id}
+        itemType="friend"
+        onDelete={handleDeleteFriend}
+        buttonText="unfollow"
+        modalTitle="unlofollow this friend?"
+        modalDescription="Are you sure you want to unfollow this person from your friends list?"
+      />
     </div>
   );
 };

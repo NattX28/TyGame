@@ -5,21 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ImageIcon } from "lucide-react";
 import FeedPostModal from "@/app/feed/components/FeedPostModal";
+import { User } from "@/types/types";
 
-interface ProfileData {
-  username: string;
-  fullName: string;
-  avatar: string;
-  posts: number;
-  friends: number;
-  bio: string;
-}
-
-interface ProfileFeedProps {
-  profile: ProfileData;
-}
-
-const CreatePostTrigger = ({ profile }: ProfileFeedProps) => {
+const CreatePostTrigger = ({ profile }: { profile: User }) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   return (
@@ -28,7 +16,7 @@ const CreatePostTrigger = ({ profile }: ProfileFeedProps) => {
         <CardContent className="p-4">
           <div className="flex items-center gap-3">
             <Avatar className="w-10 h-10">
-              <AvatarImage src={profile?.avatar} alt={profile?.username} />
+              <AvatarImage src={profile?.imageName} alt={profile?.username} />
               <AvatarFallback>{profile?.username?.[0]}</AvatarFallback>
             </Avatar>
 

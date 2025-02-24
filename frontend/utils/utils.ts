@@ -3,6 +3,7 @@ import {
   Home,
   MessageCircleMore,
   Joystick,
+  Contact,
 } from "lucide-react";
 
 export const userSidebarItems = [
@@ -20,6 +21,11 @@ export const userSidebarItems = [
     title: "Message",
     url: "/chat",
     icon: MessageCircleMore,
+  },
+  {
+    title: "Friends",
+    url: "/friends",
+    icon: Contact,
   },
   {
     title: "Communities",

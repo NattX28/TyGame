@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect } from "react";
 import { Bar, BarChart, XAxis } from "recharts";
 import {
@@ -12,7 +11,6 @@ import {
   Legend,
 } from "chart.js";
 import { UsersRound, Flame, Activity, Handshake } from "lucide-react";
-
 import { TrendingUp } from "lucide-react";
 import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
 import {

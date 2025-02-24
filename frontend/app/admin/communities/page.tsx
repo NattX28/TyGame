@@ -9,6 +9,7 @@ const communityCards: Community[] = [
     description:
       "A community for builders, miners, and adventurers in the Minecraft universe.",
     image: "https://example.com/images/minecraft.jpg",
+    category: "Sandbox",
     members: 45000,
   },
   {
@@ -17,6 +18,7 @@ const communityCards: Community[] = [
     description:
       "Join summoners around the world to discuss strategies, champions, and esports.",
     image: "https://example.com/images/league_of_legends.jpg",
+    category: "MOBA",
     members: 72000,
   },
   {
@@ -25,6 +27,7 @@ const communityCards: Community[] = [
     description:
       "A tactical shooter fan base for discussing agents, maps, and competitive play.",
     image: "https://example.com/images/valorant.jpg",
+    category: "Shooter",
     members: 38000,
   },
   {
@@ -33,6 +36,7 @@ const communityCards: Community[] = [
     description:
       "Explore Teyvat with other adventurers. Share builds, quests, and lore.",
     image: "https://example.com/images/genshin_impact.jpg",
+    category: "RPG",
     members: 60000,
   },
   {
@@ -41,6 +45,7 @@ const communityCards: Community[] = [
     description:
       "A community for Tarnished sharing tips, builds, and lore in the Lands Between.",
     image: "https://example.com/images/elden_ring.jpg",
+    category: "Action RPG",
     members: 25000,
   },
   {
@@ -49,6 +54,7 @@ const communityCards: Community[] = [
     description:
       "Discuss strategies, stories, and memes about space crew and impostors.",
     image: "https://example.com/images/among_us.jpg",
+    category: "Party",
     members: 54000,
   },
   {
@@ -57,6 +63,7 @@ const communityCards: Community[] = [
     description:
       "A hub for all Call of Duty fans discussing campaigns, multiplayer, and Warzone.",
     image: "https://example.com/images/call_of_duty.jpg",
+    category: "Shooter",
     members: 82000,
   },
   {
@@ -65,6 +72,7 @@ const communityCards: Community[] = [
     description:
       "Join the community for Battle Royale enthusiasts and creative builders.",
     image: "https://example.com/images/fortnite.jpg",
+    category: "Battle Royale",
     members: 91000,
   },
   {
@@ -73,6 +81,7 @@ const communityCards: Community[] = [
     description:
       "A community for life simulation lovers sharing builds, stories, and mods.",
     image: "https://example.com/images/the_sims.jpg",
+    category: "Simulation",
     members: 34000,
   },
   {
@@ -81,6 +90,7 @@ const communityCards: Community[] = [
     description:
       "Connect with fellow adventurers to share secrets, puzzles, and epic tales.",
     image: "https://example.com/images/zelda_botw.jpg",
+    category: "Adventure",
     members: 27000,
   },
 ];

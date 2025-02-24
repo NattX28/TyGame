@@ -1,6 +1,6 @@
 interface ProfileBioProps {
-  fullName: string;
-  bio: string;
+  fullName?: string;
+  bio?: string;
 }
 
 const ProfileBio = ({ fullName, bio }: ProfileBioProps) => {
