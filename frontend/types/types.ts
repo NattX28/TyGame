@@ -131,3 +131,9 @@ export interface PartyMember {
   userId: string;
   joinedAt: Date;
 }
+
+//Can't use yet
+export interface BannedUser {
+  userid: string;
+  time: Date;
+}
