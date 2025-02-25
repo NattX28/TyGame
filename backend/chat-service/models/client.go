@@ -9,7 +9,7 @@ type Client struct {
 	Conn      []*websocket.Conn
 	UserID    uuid.UUID
 	FriendID  []uuid.UUID
-	Send      chan []byte
+	Send      chan Form
 }
 
 type Form struct {
