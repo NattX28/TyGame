@@ -15,7 +15,7 @@ import { loginSchema } from "@/utils/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
-import { login } from "@/services/user/auth";
+import { login } from "@/services/user/user";
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
