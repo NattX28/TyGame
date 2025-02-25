@@ -54,8 +54,12 @@ func GetUserProfileHandler(c *fiber.Ctx) error {
 
 	// Return user profile data
 	return c.JSON(fiber.Map{
-		"username":   user.Username,
-		"email":      user.Email,
-		"image_name": user.ImageName,
-	})
+        "id":          user.ID,
+        "username":    user.Username,
+        "email":       user.Email,
+        "role":        user.Role,
+        "image_name":  user.ImageName,
+        "name":        user.Name,
+        "description": user.Description,
+    })
 }
