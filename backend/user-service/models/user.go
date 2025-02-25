@@ -26,9 +26,7 @@ func (u *User) BeforeCreate(tx *gorm.DB) error {
 	return nil
 }
 
-// BeforeUpdate hook to increment the cookie_version on update
 func (u *User) BeforeUpdate(tx *gorm.DB) error {
-	// Increment the cookie_version each time the user record is updated
 	u.CookieVersion++
 	return nil
 }
