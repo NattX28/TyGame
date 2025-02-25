@@ -17,13 +17,19 @@ export const login = async (
       password,
     });
     return data;
-  } catch (error) {
+  } catch (error: any) {
     console.log("login failed: ", error);
-    throw new Error("Login failed");
+
+    if (error.response) {
+      throw error.response.data;
+    } else {
+      throw new Error("Register failed. Please try again.");
+    }
   }
 };
 
 //register
+// register
 export const register = async (
   username: string,
   password: string,
@@ -36,9 +42,15 @@ export const register = async (
       password,
     });
     return data;
-  } catch (error) {
-    console.log("register failed: ", error);
-    throw new Error("Register failed");
+  } catch (error: any) {
+    console.error("Register failed:", error);
+
+    // ตรวจสอบว่ามี response จาก API หรือไม่
+    if (error.response) {
+      throw error.response.data; // โยน error ที่ได้จาก API ออกไป
+    } else {
+      throw new Error("Register failed. Please try again.");
+    }
   }
 };
 

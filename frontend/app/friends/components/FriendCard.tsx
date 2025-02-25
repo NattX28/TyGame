@@ -50,8 +50,8 @@ const FriendCard = ({ friend, onUnfriend }: FriendCardProps) => {
         itemId={friend.id}
         itemType="friend"
         onDelete={handleDeleteFriend}
-        buttonText="unfollow"
-        modalTitle="unlofollow this friend?"
+        buttonText="Unfollow"
+        modalTitle="Unfollow this friend?"
         modalDescription="Are you sure you want to unfollow this person from your friends list?"
       />
     </div>

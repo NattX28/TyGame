@@ -15,7 +15,8 @@ import { loginSchema } from "@/utils/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
-import { login } from "@/services/user/auth";
+import { login } from "@/services/user/user";
+import Swal from "sweetalert2";
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
@@ -27,8 +28,13 @@ const LoginForm = () => {
       // ตรวจสอบ response หรือ token ที่ได้มา แล้ว redirect
       console.log(response);
       router.push("/feed");
-    } catch (error) {
-      console.error("Login failed:", error);
+    } catch (error: any) {
+      console.error("Signup failed:", error);
+      Swal.fire({
+        title: "ERROR!!",
+        text: error.error,
+        icon: "error",
+      });
       // setErrorMessage("Login failed. Please check your credentials.");
     }
   };

@@ -1,12 +1,11 @@
 "use client";
 import PostCard from "@/components/post/PostCard";
-import { User } from "@/types/types";
 import { useState, useEffect } from "react";
 import { getAllPost } from "@/types/response";
 import { getPost } from "@/services/post/feed";
 
 const commuID = "1";
-const ProfileFeed = ({ profile }: { profile: User }) => {
+const Feed = () => {
   const [PostFeed, setPostFeed] = useState<getAllPost>();
   useEffect(() => {
     const fetchFeed = async () => {
@@ -20,16 +19,18 @@ const ProfileFeed = ({ profile }: { profile: User }) => {
     fetchFeed();
   }, []);
   console.log(PostFeed);
+
   return (
-    <div className="space-y-6">
-      {/* <CreatePostTrigger profile={profile} /> */}
-      <PostCard />
-      <PostCard />
-      <PostCard />
-      <PostCard />
-      <PostCard />
-      <PostCard />
+    <div className="flex flex-col h-full md:p-6 max-w-3xl mx-auto w-full">
+      <div className="space-y-4">
+        <PostCard />
+        <PostCard />
+        <PostCard />
+        <PostCard />
+        <PostCard />
+        <PostCard />
+      </div>
     </div>
   );
 };
-export default ProfileFeed;
+export default Feed;

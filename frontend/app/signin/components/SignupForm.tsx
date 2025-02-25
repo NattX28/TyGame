@@ -15,14 +15,35 @@ import { useForm } from "react-hook-form";
 import { registerSchema } from "@/utils/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useRouter } from "next/navigation";
+import { register } from "@/services/user/user";
+import Swal from "sweetalert2";
 
-type SigninFormValues = z.infer<typeof registerSchema>;
+type SignupFormValues = z.infer<typeof registerSchema>;
 
-const onSubmit = (values: SigninFormValues) => {
-  console.log(values);
-};
+const SignupForm = () => {
+  const router = useRouter();
+  const onSubmit = async (values: SignupFormValues) => {
+    try {
+      const response = await register(
+        values.username,
+        values.password,
+        values.email
+      );
+      // ตรวจสอบ response หรือ token ที่ได้มา แล้ว redirect
+      console.log(response);
+      router.push("/feed");
+    } catch (error: any) {
+      console.error("Signup failed:", error);
+      Swal.fire({
+        title: "ERROR!!",
+        text: error.error,
+        icon: "error",
+      });
+      // setErrorMessage("Login failed. Please check your credentials.");
+    }
+  };
 
-const SigninForm = () => {
   const form = useForm({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -31,7 +52,6 @@ const SigninForm = () => {
       password: "",
     },
   });
-
   return (
     <Form {...form}>
       <form
@@ -104,4 +124,4 @@ const SigninForm = () => {
   );
 };
 
-export default SigninForm;
+export default SignupForm;
