@@ -5,7 +5,7 @@ import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { Community } from "@/types/types";
 import { useRouter } from "next/navigation";
-import { joinCommunity } from "@/services/comminity/communities";
+import { joinCommunity } from "@/services/community/communities";
 import { useAuth } from "@/hooks/useAuth";
 
 const CommunityCard = ({ community }: { community: Community }) => {
