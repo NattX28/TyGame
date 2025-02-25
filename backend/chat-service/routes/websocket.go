@@ -2,10 +2,8 @@ package routes
 
 import (
 	"log"
-	"os"
-	"strconv"
 
-	"chat-service/db"
+	"chat-service/models"
 	"chat-service/handler"
 	
 	"github.com/google/uuid"
@@ -15,11 +13,11 @@ import (
 var clients []models.Client
 
 func writeMessages(client *models.Client) {
-	for msg := range client.Send {
+	for form := range client.Send {
 		for _, conn := range client.Conn { // Loop through all connections
-			err := conn.WriteJSON(msg)
+			err := conn.WriteJSON(form)
 			if err != nil {
-				fmt.Println("Write error:", err)
+				log.Println("Write error:", err)
 				conn.Close() // Close the faulty connection
 			}
 		}
@@ -31,14 +29,12 @@ func writeMessages(client *models.Client) {
 func WebSocket(c *websocket.Conn) {
 	userID, err := uuid.Parse(c.Locals("UserID").(string))
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Failed to get userID",
-		})
+		return 
 	}
 
 	client, exists := clients[userID]
 	if !exists {
-		client = &Client{
+		client = &models.Client{
 			UserID: userID,
 			Conn:   make([]*websocket.Conn, 0),
 			Send:   make(chan []byte),
@@ -47,30 +43,27 @@ func WebSocket(c *websocket.Conn) {
 	}
 
 	client.Conn = append(client.Conn, c)
-	fmt.Println("New connection for user:", userID)
+	log.Println("New connection for user:", userID)
 
 	go writeMessages(client)
 
 	for {
-		var msg Message
-		err := c.ReadJSON(&msg)
+		var form models.Form
+		err := c.ReadJSON(&form)
 		if err != nil {
-			fmt.Println("Read error:", err)
+			log.Println("Read error:", err)
 			break
 		}
 
-		msg.Sender = client.UserID
+		form.Sender = client.UserID
 
-		switch msg.Cmd {
-			case "send msg":
+		switch form.Type {
+			case "message":
 				handler.SendMessage()
-
-			case "update friend online":
-				fmt.Println("Updating friend list for:", client.UserID)
-				broadcast(msg)
-
+			case "event":
+				log.Println("Updating friend list for:", client.UserID)
 			default:
-				fmt.Println("Unknown command:", msg.Cmd)
+				log.Println("Unknown command:", form.Cmd)
 		}
 	}
 }

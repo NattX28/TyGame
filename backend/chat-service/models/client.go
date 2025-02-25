@@ -11,3 +11,9 @@ type Client struct {
 	FriendID  []uuid.UUID
 	Send      chan []byte
 }
+
+type Form struct {
+	Type 	string
+	Content string
+	Sender 	*uuid.UUID
+}

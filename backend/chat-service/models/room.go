@@ -1,7 +1,6 @@
 package models
 
 import (
-	"gorm.io/gorm"
 	"github.com/google/uuid"
 )
 

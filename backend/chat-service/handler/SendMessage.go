@@ -1,11 +1,11 @@
 package handler
 
 import (
-	"chat-service/db"
+	"chat-service/models"
 )
 
 
-func SendMessage(c *websocket.Conn) {
+func SendMessage(client *models.Client) {
 	fmt.Println("Message received:", msg.Content)
 	client.Send <- msg
 }

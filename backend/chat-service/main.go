@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"os"
-	"strconv"
 
 	"chat-service/db"
 	"chat-service/routes"
@@ -23,9 +22,6 @@ func main() {
 
     db.Connect()
     defer db.Close()
-
-    hub := wsServer.NewHub()
-    go hub.Run()
 
     app := fiber.New()
     app.Use(middleware.JWTMiddleware)

@@ -1,12 +1,15 @@
-package handler
+package routes
 
 import (
 	"github.com/google/uuid"
+	"github.com/gofiber/fiber/v2"
 	
 	"chat-service/models"
+	"chat-service/db"
 )
 
 func CreateRoom(c *fiber.Ctx) error {
+	var req models.ReqCreateRoom
 	if err := c.BodyParser(&req); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request"})
 	}
@@ -18,7 +21,7 @@ func CreateRoom(c *fiber.Ctx) error {
 	isGroup := nMember > 2
 
 	var existingRoom models.Room
-	err = database.DB.
+	err := db.DB.
 		Joins("JOIN room_members ON rooms.room_id = room_members.room_id").
 		Where("rooms.is_group = ? AND room_members.user_id IN (?)", isGroup, req.UserIDs).
 		Group("rooms.room_id").
@@ -34,27 +37,27 @@ func CreateRoom(c *fiber.Ctx) error {
 
 	room := models.Room{
 		RoomID:   uuid.New(),
-		IsGroup:  IsGroup,
+		IsGroup:  isGroup,
 	}
 
-	if err := database.DB.Create(&room).Error; err != nil {
+	if err := db.DB.Create(&room).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to create room"})
 	}
 
 	var members []models.RoomMember
 	for _, userID := range req.UserIDs {
 		members = append(members, models.RoomMember{
-			RoomID: roomID,
+			RoomID: room.RoomID,
 			UserID: userID,
 		})
 	}
 
-	if err := database.DB.Create(&members).Error; err != nil {
+	if err := db.DB.Create(&members).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to add members"})
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
-		"room_id": roomID,
+		"room_id": room.RoomID,
 		"message": "Room created successfully",
 	})
 }
