@@ -3,6 +3,7 @@ import { UpdateUserRequest } from "@/types/user";
 import api from "../api";
 import { AuthResponse } from "./../../types/auth";
 import { MessageBackend } from "@/types/samePattern";
+import { User } from "@/types/types";
 
 const BASE_URL_PROTECTED: string = "/protected";
 
@@ -61,13 +62,9 @@ export const deleteAccount = async (): Promise<MessageBackend> => {
 };
 
 //getuserprofile
-export const getUserProfile = async (): Promise<{
-  username: string;
-  email: string;
-  image_name: string;
-}> => {
+export const getUserProfile = async (): Promise<User> => {
   try {
-    const { data } = await api.get(`${BASE_URL_PROTECTED}/profile`, {});
+    const { data } = await api.get(`${BASE_URL_PROTECTED}/profile`);
     return data;
   } catch (error) {
     console.error("Error fetching user profile:", error);

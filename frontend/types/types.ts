@@ -109,7 +109,7 @@ export interface FeedPost {
   Content: string;
   Visibility: string;
   Image: string;
-  Score: number;
+  Score?: number;
   CreatedAt: string;
 }
 
@@ -143,4 +143,11 @@ export interface PartyResponse {
   party_id: string;
   current_members: number;
   max_slots: number;
+}
+
+// chatMessage
+
+export interface ChatMessage {
+  username: string;
+  content: string;
 }

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 
 export const useParty = (partyId: string, userId: string) => {
-  const [message, setMessage] = useState<String[]>([]);
+  const [messages, setMessages] = useState<string[]>([]);
+  const [users, setUsers] = useState<string[]>([]);
   const [ws, setWs] = useState<WebSocket | null>(null);
 
   useEffect(() => {
@@ -17,7 +18,15 @@ export const useParty = (partyId: string, userId: string) => {
     };
 
     socket.onmessage = (event) => {
-      setMessage((prev) => [...prev, event.data]); // update message
+      const data = JSON.parse(event.data);
+
+      if (data.type === "message") {
+        // ข้อความใหม่
+        setMessages((prev) => [...prev, data.content]);
+      } else if (data.type === "user-joined") {
+        // ผู้ใช้ที่เข้ามาใหม่
+        setUsers((prev) => [...prev, data.username]);
+      }
     };
 
     socket.onerror = (error) => {
@@ -36,11 +45,12 @@ export const useParty = (partyId: string, userId: string) => {
 
   const sendMessage = (message: string) => {
     if (ws && ws.readyState === WebSocket.OPEN) {
-      ws.send(message);
+      const messageData = { type: "message", content: message };
+      ws.send(JSON.stringify(messageData));
     } else {
       console.log("Websocket not connected");
     }
   };
 
-  return { message, sendMessage };
+  return { messages, sendMessage, users }; // คืนค่า users เพื่อแสดงผู้ใช้ในห้อง
 };
