@@ -1,4 +1,4 @@
-package handler
+package routes
 
 import (
 	"log"
@@ -7,29 +7,40 @@ import (
 
 	"chat-service/db"
 	"chat-service/handler"
-
+	
+	"github.com/google/uuid"
 	"github.com/gofiber/contrib/websocket"
 )
 
-func writeMessages(client *Client) {
+var clients []models.Client
+
+func writeMessages(client *models.Client) {
 	for msg := range client.Send {
-		err := client.Conn.WriteJSON(msg)
-		if err != nil {
-			fmt.Println("Write error:", err)
-			break
+		for _, conn := range client.Conn { // Loop through all connections
+			err := conn.WriteJSON(msg)
+			if err != nil {
+				fmt.Println("Write error:", err)
+				conn.Close() // Close the faulty connection
+			}
 		}
 	}
 }
 
 
+
 func WebSocket(c *websocket.Conn) {
-	userID := uuid.New()
+	userID, err := uuid.Parse(c.Locals("UserID").(string))
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to get userID",
+		})
+	}
 
 	client, exists := clients[userID]
 	if !exists {
 		client = &Client{
 			UserID: userID,
-			Conn:   []*websocket.Conn{},
+			Conn:   make([]*websocket.Conn, 0),
 			Send:   make(chan []byte),
 		}
 		clients[userID] = client
@@ -62,8 +73,4 @@ func WebSocket(c *websocket.Conn) {
 				fmt.Println("Unknown command:", msg.Cmd)
 		}
 	}
-
-	delete(clients, userID)
-	close(client.Send)
-	c.Close()
 }
