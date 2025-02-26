@@ -25,8 +25,8 @@ func main() {
 	userServiceURL := os.Getenv("USER_SERVICE_URL")
 	postServiceURL := os.Getenv("POST_SERVICE_URL")
 	// chatServiceURL := os.Getenv("CHAT_SERVICE_URL")
-	communityServiceURL := os.Getenv("POST_SERVICE_URL")
-	partyServiceURL := os.Getenv("POST_SERVICE_URL")
+	communityServiceURL := os.Getenv("COMMUNITY_SERVICE_URL")
+	partyServiceURL := os.Getenv("PARTY_SERVICE_URL")
 	
 
 	log.Printf("🔗 User Service URL: %s", userServiceURL)
