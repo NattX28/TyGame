@@ -60,7 +60,6 @@ const AdminEditCommunity = () => {
       setLoading(false);
     }
   };
-
   return (
     <div className="mx-6 mt-8">
       <Button onClick={() => setIsOpen(true)}>Edit Community</Button>
@@ -86,7 +85,7 @@ const AdminEditCommunity = () => {
                 <DropdownMenuContent className="w-full">
                   {communities.map((community) => (
                     <div
-                      key={community.id}
+                      key={community.uuid}
                       className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-black"
                       onClick={() => setSelectedCommunity(community)}>
                       {community.name}
