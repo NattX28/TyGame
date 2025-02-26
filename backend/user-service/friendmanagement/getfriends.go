@@ -63,7 +63,7 @@ func GetFriendsHandler(c *fiber.Ctx) error {
 
 	// Retrieve the friends list from the database
 	var friends []models.Friend
-	if err := db.DB.Where("user_id = ?", userID).Find(&friends).Error; err != nil {
+	if err := db.DB.Where("user_id = ? OR friend_id = ?", userID, userID).Find(&friends).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Could not retrieve friends"})
 	}
 
