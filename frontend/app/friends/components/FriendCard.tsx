@@ -1,4 +1,6 @@
 import DeleteButton from "@/components/shared/DeleteButton";
+import { unfollowFriend } from "@/services/user/friends";
+import { getUserImage } from "@/services/user/user";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import Link from "next/link";
 
@@ -14,12 +16,18 @@ interface FriendCardProps {
   onUnfriend: (id: string) => void; // รับฟังก์ชันจาก FriendList
 }
 
-const handleDeleteFriend = (id: string) => {
-  // ลบเพื่อน ใส่ทีหลัง
-  console.log(`Removing friend with ID: ${id}`);
-};
-
 const FriendCard = ({ friend, onUnfriend }: FriendCardProps) => {
+  const handleDeleteFriend = async (id: string) => {
+    // ลบเพื่อน
+    try {
+      const response = await unfollowFriend(id);
+      onUnfriend(id);
+      console.log(response);
+      console.log(`Removing friend with ID: ${id}`);
+    } catch (error) {
+      console.log("delete friend error");
+    }
+  };
   return (
     <div
       key={friend.id}
@@ -30,7 +38,7 @@ const FriendCard = ({ friend, onUnfriend }: FriendCardProps) => {
         className="flex items-center flex-1 space-x-4 cursor-pointer">
         <Avatar className="h-16 w-16">
           <AvatarImage
-            src="https://github.com/shadcn.png"
+            src={getUserImage(friend.id)}
             alt="@shadcn"
             className="rounded-full"
           />
@@ -38,12 +46,6 @@ const FriendCard = ({ friend, onUnfriend }: FriendCardProps) => {
         </Avatar>
         <div className="flex-1">
           <p className="text-lg font-semibold">{friend.name}</p>
-          <p
-            className={`text-sm ${
-              friend.isOnline ? "text-green-400" : "text-gray-400"
-            }`}>
-            {friend.isOnline ? "Online" : "Offline"}
-          </p>
         </div>
       </Link>
       <DeleteButton

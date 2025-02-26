@@ -14,6 +14,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import AdminModal from "../components/AdminCommunityModal";
 import DeleteButton from "@/components/shared/DeleteButton";
+import { deleteCommunity } from "@/services/community/communities";
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 // Mock data
 //Types
@@ -203,6 +206,7 @@ const DetailCommunityPage = ({ param }: { param: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedAction, setSelectedAction] = useState("");
   const [selectedUser, setSelectedUser] = useState("");
+  const router = useRouter();
 
   const openModal = (username: string, action: string) => {
     if (action !== "pending") {
@@ -238,9 +242,25 @@ const DetailCommunityPage = ({ param }: { param: string }) => {
     );
   };
 
-  const handleDeleteCommunity = (communityId: string) => {
+  const handleDeleteCommunity = async (communityId: string) => {
     // ลบ commu ใส่ทีหลัง
-    console.log(`Deleting community with ID: ${communityId}`);
+    try {
+      const response = await deleteCommunity(communityId);
+      Swal.fire(
+        "Correct",
+        `Delete Community: ${communityId} Success`,
+        "success"
+      );
+      console.log("delete community : ", communityId);
+      console.log(response);
+      router.push("/admin/communities");
+    } catch (error: any) {
+      Swal.fire({
+        title: "ERROR!!",
+        text: error?.message,
+        icon: "error",
+      });
+    }
   };
 
   return (

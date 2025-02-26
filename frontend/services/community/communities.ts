@@ -1,6 +1,6 @@
 // Import API และ Type
 import api from "../api";
-import { Community } from "@/types/types";
+import { Community, CreateCommunityForm } from "@/types/types";
 
 const BASE_URL_COMMU: string = "/communities";
 
@@ -8,7 +8,7 @@ const BASE_URL_COMMU: string = "/communities";
 // get all community
 export const listAllCommunities = async (): Promise<Community[]> => {
   try {
-    const { data } = await api.get(`${BASE_URL_COMMU}/get`);
+    const { data } = await api.get(`${BASE_URL_COMMU}/`);
     return data; // คืนค่า array ของ Community
   } catch (error) {
     console.error("listAllCommunities error: ", error);
@@ -29,13 +29,13 @@ export const getCommunity = async (id: number): Promise<Community> => {
 
 //// POST
 // create community
-export const createCommunity = async (community: Community) => {
+export const createCommunity = async (community: CreateCommunityForm) => {
   try {
     const { data } = await api.post(`${BASE_URL_COMMU}/create`, community);
     return data;
   } catch (error) {
-    console.error("createCommunity error: ", error);
-    throw new Error("create community failed");
+    console.error("Create Community error: ", error);
+    throw new Error("Create community failed");
   }
 };
 
@@ -46,8 +46,8 @@ export const joinCommunity = async (commuID: number) => {
     const { data } = await api.post(`${BASE_URL_COMMU}/join/${commuID}`);
     return data;
   } catch (error) {
-    console.error("createCommunity error: ", error);
-    throw new Error("create community failed");
+    console.error("Join Community error: ", error);
+    throw new Error("Join community failed");
   }
 };
 
@@ -57,19 +57,19 @@ export const editCommunity = async (id: number) => {
     const { data } = await api.put(`${BASE_URL_COMMU}/edit/${id}`);
     return data;
   } catch (error) {
-    console.error("deleteCommunity error: ", error);
-    throw new Error("delete community failed");
+    console.error("Edit Community error: ", error);
+    throw new Error("Edit community failed");
   }
 };
 
 //// DELETE
 // delete community
-export const deleteCommunity = async (id: number) => {
+export const deleteCommunity = async (id: string) => {
   try {
     const { data } = await api.delete(`${BASE_URL_COMMU}/delete/${id}`);
     return data;
   } catch (error) {
-    console.error("deleteCommunity error: ", error);
-    throw new Error("delete community failed");
+    console.error("Delete Community error: ", error);
+    throw new Error("Delete community failed");
   }
 };

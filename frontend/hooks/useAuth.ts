@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { logOut } from "./../services/user/user";
 
 interface User {
   id: string;
@@ -42,11 +43,16 @@ export const useAuth = () => {
     router.push("/feed"); // Redirect หลังจาก Login
   };
 
-  const logout = () => {
-    document.cookie = `Authorization=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
-    localStorage.removeItem("user");
-    setUser(null);
-    router.push("/login");
+  const logout = async () => {
+    try {
+      const response = await logOut();
+      document.cookie = `Authorization=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
+      localStorage.removeItem("user");
+      setUser(null);
+      router.push("/login");
+    } catch (error) {
+      console.log();
+    }
   };
 
   return { user, loading, login, logout };

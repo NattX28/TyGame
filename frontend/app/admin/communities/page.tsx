@@ -1,6 +1,7 @@
 import { Community } from "@/types/types";
 import AdminCommunityList from "./components/AdminCommunityList";
-
+import AdminAddCommunity from "./components/AdminAddCommunity";
+import AdminEditCommunity from "./components/AdminEditCommunity";
 // Mock Data
 const communityCards: Community[] = [
   {
@@ -98,6 +99,10 @@ const communityCards: Community[] = [
 const CommunitiesPage = () => {
   return (
     <>
+      <div className="flex flex-col flex-wrap">
+        <AdminAddCommunity />
+        <AdminEditCommunity />
+      </div>
       <AdminCommunityList communities={communityCards} />
     </>
   );
