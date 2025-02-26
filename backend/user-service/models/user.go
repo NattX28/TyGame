@@ -12,7 +12,7 @@ type User struct {
 	Email         string    `gorm:"size:255;unique;not null"`
 	Password      string    `gorm:"not null"`
 	Role          string    `gorm:"size:50;not null;default:'User'"`
-	ImageName     string    `gorm:"size:255"`
+	ImageName     string    `gorm:"size:255;default:'Default.jpg'"`
 	Name          string    `gorm:"size:255;not null"`
 	CookieVersion int       `gorm:"default:0;not null"` // Auto-incrementing version field
 	Description   string    `gorm:"size:255"`           // A new field to describe the user
