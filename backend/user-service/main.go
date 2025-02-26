@@ -14,6 +14,7 @@ import (
 	"user-service/middleware"
 	"user-service/models"
 	"user-service/routes"
+	"user-service/public"
 	"user-service/usersmanagement"
 )
 
@@ -36,7 +37,7 @@ func main() {
 	})
 
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "http://localhost:3000,https://tygame.up.railway.app,https://user-service-tygame.up.railway.app,https://post-service.up.railway.app,https://community-service.up.railway.app,https://party-service.up.railway.app",
+		AllowOrigins: "http://localhost:3000,https://tygame.up.railway.app,https://user-service-tygame.up.railway.app,https://post-service-tygame.up.railway.app,https://community-service-tygame.up.railway.app,https://party-service-tygame.up.railway.app",
 		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
 		AllowMethods: "GET,POST,PUT,DELETE",
 		AllowCredentials: true,
@@ -70,6 +71,9 @@ func main() {
 
 	protectedRoutes.Post("/upload-profile", usersmanagement.UploadProfileHandler)
 	protectedRoutes.Get("/profile", usersmanagement.GetUserProfileHandler)
+
+	userFocus := app.Group("/:userID")
+	userFocus.Get("/avatar", public.GetAvatarHandler)
 
 	// Handle 404 - catch-all route
 	app.Use(func(c *fiber.Ctx) error {

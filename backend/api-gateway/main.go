@@ -59,6 +59,17 @@ func main() {
 	})
 
 	// เหลือ chat service ไว้วางตรงนี้ได้เลย
+	// app.All("/chat/*", func(c *fiber.Ctx) error {
+	// 	url := postServiceURL + c.OriginalURL()
+	// 	log.Printf("➡️ Forwarding to Post Service: %s", url)
+	// 	if err := proxy.Do(c, url); err != nil {
+	// 		log.Printf("❌ Post Service unavailable: %v", err)
+	// 		return c.Status(fiber.StatusServiceUnavailable).JSON(fiber.Map{
+	// 			"error": "Post Service unavailable",
+	// 		})
+	// 	}
+	// 	return nil
+	// })
 
 	// Proxy ไปยัง Community Service
 	app.All("/communities/*", func(c *fiber.Ctx) error {
