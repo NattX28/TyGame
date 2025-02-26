@@ -72,7 +72,7 @@ func main() {
 	protectedRoutes.Post("/upload-profile", usersmanagement.UploadProfileHandler)
 	protectedRoutes.Get("/profile", usersmanagement.GetUserProfileHandler)
 
-	userFocus := app.Group("/:userID")
+	userFocus := userRoutes.Group("/:userID")
 	userFocus.Get("/avatar", public.GetAvatarHandler)
 
 	// Handle 404 - catch-all route
