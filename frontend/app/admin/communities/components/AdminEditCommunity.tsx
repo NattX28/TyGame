@@ -60,6 +60,8 @@ const AdminEditCommunity = () => {
       setLoading(false);
     }
   };
+  if (!communities) return <div>error</div>;
+
   return (
     <div className="mx-6 mt-8">
       <Button onClick={() => setIsOpen(true)}>Edit Community</Button>
