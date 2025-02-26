@@ -16,7 +16,7 @@ type RoomMember struct {
 	UserID               uuid.UUID 		`gorm:"primaryKey;index"`
 	Verify               bool   		`gorm:"default:false"`
 	Block                bool   		`gorm:"default:false"`
-	LastSeenMessageID    *uint  		`gorm:"index"`
+	LastSeenMessageID    *uuid.UUID  		`gorm:"index"`
 }
 
 type ReqCreateRoom struct {

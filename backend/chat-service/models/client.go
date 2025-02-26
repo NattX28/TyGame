@@ -9,11 +9,19 @@ type Client struct {
 	Conn      []*websocket.Conn
 	UserID    uuid.UUID
 	FriendID  []uuid.UUID
-	Send      chan Form
+	Send      chan FormResponse
 }
 
 type Form struct {
-	Type 	string
+	Event 	string
 	Content string
-	Sender 	*uuid.UUID
+	RoomID	string
+}
+
+type FormResponse struct {
+	Event 	string
+	Content string
+	RoomID	uuid.UUID
+	SenderID uuid.UUID
+	Timestamp		int64
 }

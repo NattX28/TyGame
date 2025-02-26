@@ -1,4 +1,4 @@
-package handler
+package routes
 
 import (
 	"github.com/google/uuid"
@@ -11,7 +11,7 @@ import (
 
 func GetRecentRoom(c *fiber.Ctx) error {
 	limit := 10
-	
+
 	var rooms []models.RecentRoom
 
 	userID, err := uuid.Parse(c.Locals("UserID").(string))
@@ -21,7 +21,7 @@ func GetRecentRoom(c *fiber.Ctx) error {
 		})
 	}
 
-	err := db.Raw(`
+	err = db.DB.Raw(`
 		SELECT r.room_id, r.is_group, m.content AS last_msg, m.timestamp
 		FROM rooms r
 		JOIN room_members rm ON r.room_id = rm.room_id
@@ -39,8 +39,14 @@ func GetRecentRoom(c *fiber.Ctx) error {
 		LIMIT ?;
 	`, userID, limit).Scan(&rooms).Error
 
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Get rooms data fail",
+		})
+	}
+
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
 		"rooms": rooms,
-		"message": Get rooms data success",
+		"message": "Get rooms data success",
 	})
 }
