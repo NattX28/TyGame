@@ -1,10 +1,7 @@
 "use client";
-import { useAuth } from "@/hooks/useAuth";
 import UserSidebar from "../../components/shared/UserSidebar";
 import Button from "./components/ModalBtn";
 import OnlineFriendList from "@/components/friends/OnlineFriendList";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import FindPartyButton from "@/components/party/FindPartyButton";
 
 export default function FeedLayout({

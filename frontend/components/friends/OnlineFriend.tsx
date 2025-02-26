@@ -20,8 +20,6 @@ const OnlineFriend = ({
               />
               <AvatarFallback className="rounded-lg">CN</AvatarFallback>
             </Avatar>
-            {/* status online */}
-            <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-third rounded-full"></div>
           </div>
           <p className="mx-2">{friend.name}</p>
         </div>

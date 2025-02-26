@@ -11,7 +11,7 @@ export interface User {
   fullName?: string;
   bio?: string;
   imageName?: string;
-  cookieVersion: number;
+  cookieVersion?: number;
   description?: string;
 }
 //Friends
@@ -36,13 +36,14 @@ export interface CommunityMember {
   UserID: string;
   CommunityID: string;
   CreatedAt: Date;
-
   Community: Community;
 }
 // CreateCommunityForm
 export interface CreateCommunityForm {
   name: string;
   description: string;
+  category: string;
+  image: string;
 }
 
 //// Post-services Category
@@ -55,7 +56,6 @@ export interface Post {
   Visibility: string;
   Image: string;
   CreatedAt: string;
-
   Comments: string;
   Likes: string;
 }
@@ -73,7 +73,6 @@ export interface Comment {
   UserID: string;
   Content: string;
   CreatedAt: Date;
-
   post: Post;
   Likes: Like[];
 }
