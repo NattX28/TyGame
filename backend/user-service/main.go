@@ -14,6 +14,7 @@ import (
 	"user-service/middleware"
 	"user-service/models"
 	"user-service/routes"
+	"user-service/public"
 	"user-service/usersmanagement"
 )
 
@@ -70,6 +71,9 @@ func main() {
 
 	protectedRoutes.Post("/upload-profile", usersmanagement.UploadProfileHandler)
 	protectedRoutes.Get("/profile", usersmanagement.GetUserProfileHandler)
+
+	userFocus := app.Group("/:userID")
+	userFocus.Get("/avatar", public.GetAvatarHandler)
 
 	// Handle 404 - catch-all route
 	app.Use(func(c *fiber.Ctx) error {
