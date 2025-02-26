@@ -2,7 +2,7 @@ package models
 
 import (
 	"github.com/google/uuid"
-	"github.com/gorilla/websocket"
+	"github.com/gofiber/contrib/websocket"
 )
 
 type Client struct {

@@ -22,3 +22,10 @@ type RoomMember struct {
 type ReqCreateRoom struct {
 	UserIDs  		[]uuid.UUID 		`json:"user_ids"`
 }
+
+type RecentRoom struct {
+	RoomID    uuid.UUID `json:"room_id"`
+	IsGroup   bool      `json:"is_group"`
+	LastMsg   *string   `json:"last_message"`
+	Timestamp *int64    `json:"timestamp"`
+}

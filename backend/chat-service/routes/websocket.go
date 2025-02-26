@@ -14,7 +14,7 @@ import (
 // Store clients in a thread-safe map with a read/write mutex
 var (
 	clients = make(map[uuid.UUID]*models.Client)
-	mu      sync.RWMutex // Read/Write mutex for better performance
+	mu      sync.RWMutex
 )
 
 // Function to send messages to all WebSocket connections
@@ -59,7 +59,7 @@ func WebSocket(c *websocket.Conn) {
 		mu.Lock()
 		client = &models.Client{
 			UserID: userID,
-			Conn:   make([]*websocket.Conn, 0),
+			Conn:   []*websocket.Conn{},
 			Send:   make(chan models.Form),
 		}
 		clients[userID] = client

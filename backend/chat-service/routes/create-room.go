@@ -14,14 +14,33 @@ func CreateRoom(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request"})
 	}
 
+	userID, err := uuid.Parse(c.Locals("UserID").(string))
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to get userID",
+		})
+	}
+
+	// Ensure userID is in req.UserIDs
+	isUserIncluded := false
+	for _, id := range req.UserIDs {
+		if id == userID {
+			isUserIncluded = true
+			break
+		}
+	}
+	if !isUserIncluded {
+		req.UserIDs = append(req.UserIDs, userID)
+	}
+
 	nMember := len(req.UserIDs)
-	if nMember <= 1 {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "At least one user is required"})
+	if nMember <= 1 || nMember > 20 {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Member UserID Invalid"})
 	}
 	isGroup := nMember > 2
 
 	var existingRoom models.Room
-	err := db.DB.
+	err = db.DB.
 		Joins("JOIN room_members ON rooms.room_id = room_members.room_id").
 		Where("rooms.is_group = ? AND room_members.user_id IN (?)", isGroup, req.UserIDs).
 		Group("rooms.room_id").
@@ -45,10 +64,10 @@ func CreateRoom(c *fiber.Ctx) error {
 	}
 
 	var members []models.RoomMember
-	for _, userID := range req.UserIDs {
+	for _, uid := range req.UserIDs {
 		members = append(members, models.RoomMember{
 			RoomID: room.RoomID,
-			UserID: userID,
+			UserID: uid,
 		})
 	}
 

@@ -28,8 +28,9 @@ func main() {
 
     app.Get("/ws", websocket.New(routes.WebSocket))
 
-    app.Post("/create-room", routes.CreateRoom)
-    app.Post("/block-user", routes.BlockUser)
+    app.Post("/rooms/create", routes.CreateRoom)
+    app.Post("/rooms/recent", routes.GetRecentRoom)
+    app.Post("/users/block", routes.BlockUser)
 
     port := os.Getenv("PORT_CHAT_SERVICE")
     if port == "" {
