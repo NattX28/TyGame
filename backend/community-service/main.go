@@ -38,8 +38,8 @@ func main() {
 
 	communities := app.Group("/communities")
 	communities.Use(middleware.JWTMiddleware)
-	communities.Get("/", middleware.CanAccess, routes.GetAllCommunities)
-	communities.Post("/", middleware.CanManagement, routes.CreateCommunityHandler)
+	communities.Get("/getall", middleware.CanAccess, routes.GetAllCommunities)
+	communities.Post("/create", middleware.CanManagement, routes.CreateCommunityHandler)
 
 	community_focus := communities.Group("/:CommuID")
 	community_focus.Get("/", middleware.CanAccess, routes.GetCommunityHandler)
