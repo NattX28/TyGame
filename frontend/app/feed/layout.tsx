@@ -1,8 +1,8 @@
 "use client";
-import UserSidebar from "../../components/shared/UserSidebar";
+import UserSidebar from "@/components/shared/UserSidebar";
 import Button from "./components/ModalBtn";
-import OnlineFriendList from "@/components/friends/OnlineFriendList";
 import FindPartyButton from "@/components/party/FindPartyButton";
+import PeopleInCommunity from "@/components/people/PeopleInCommunity";
 
 export default function FeedLayout({
   children,
@@ -28,8 +28,8 @@ export default function FeedLayout({
 
       <aside className="hidden lg:block h-screen sticky top-0">
         <div className="h-full bg-main p-4 overflow-y-auto border-second border-l-2">
-          <h2 className="text-xl font-semibold mb-6">Online</h2>
-          <OnlineFriendList />
+          <h2 className="text-xl font-semibold mb-6">Who is in Commu ..</h2>
+          <PeopleInCommunity />
         </div>
       </aside>
     </div>

@@ -19,7 +19,7 @@ const CommunityCard = ({ community }: { community: Community }) => {
       return;
     }
 
-    const { join } = await joinCommunity(community.id);
+    const { join } = await joinCommunity(community.uuid);
     if (join) {
       router.push(`/feed/${id}`);
     } else {
@@ -73,7 +73,7 @@ const CommunityCard = ({ community }: { community: Community }) => {
           {/* Join Button */}
           <Button
             className="w-24 transition-all duration-300 group-hover:bg-third group-hover:text-main-color hover:scale-105"
-            onClick={() => handleJoin(community.id)}>
+            onClick={() => handleJoin(community.uuid)}>
             Join
           </Button>
         </div>

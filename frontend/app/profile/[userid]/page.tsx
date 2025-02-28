@@ -1,26 +1,41 @@
+"use client";
 import { User } from "@/types/types";
 import ProfileFeed from "../components/ProfileFeed";
 import ProfileHeader from "../components/ProfileHeader";
-
-const profileData: User = {
-  id: "67890",
-  username: "deaththekid",
-  email: "deaththekid@example.com",
-  name: "Death the kid",
-  role: "user",
-  posts: 10,
-  friends: 5,
-  cookieVersion: 1,
-  fullName: "Death the kid",
-  bio: "บุคลิกลึกลับและมีเสน่ห์ในแบบของตัวเอง",
-  imageName: "deaththekid.jpg",
-  description: "เป็นตัวละครที่มีความลึกลับและเสน่ห์เฉพาะตัว.",
-};
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 
 // wait to call api
-const isFollowing = false;
 
 const OtherUserProfile = () => {
+  const { userid } = useParams();
+  const [profileData, setProfileData] = useState<User | null>(null);
+  const [isFollowing, setIsFollowing] = useState(false);
+
+  useEffect(() => {
+    if (!userid) return;
+
+    // เรียก API เพื่อดึงข้อมูลโปรไฟล์
+    const fetchProfile = async () => {
+      try {
+        const res = await fetch(`/api/users/${userid}`);
+        if (!res.ok) throw new Error("Failed to fetch user data");
+        const data = await res.json();
+        setProfileData(data);
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      }
+    };
+
+    fetchProfile();
+  }, [userid]);
+
+  if (!profileData) return <p>Loading...</p>;
+
+  if (!profileData) {
+    return <p className="text-center text-red-400">User not found.</p>;
+  }
+
   return (
     <div className="max-w-4xl mx-auto pt-16 pb-4 px-12 space-y-16">
       <ProfileHeader

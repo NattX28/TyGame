@@ -1,37 +1,72 @@
 // src/app/profile/edit/page.tsx
 "use client";
 
-import { useState, useRef, FormEvent } from "react";
+import { useState, useRef, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Save, X, Upload } from "lucide-react";
-
-interface UserProfile {
-  id: string;
-  name: string;
-  bio: string;
-  avatar?: string;
-}
+import {
+  updateProfilePic,
+  updateUser,
+  getUserProfile,
+} from "@/services/user/protectedRoute";
+import { UserProfile } from "@/types/types";
 
 export default function EditProfile() {
   const router = useRouter();
   const [user, setUser] = useState<UserProfile>({
-    id: "1", // จะถูกแทนที่ด้วยข้อมูลจริงเมื่อดึงข้อมูลจาก API
-    name: "John Doe",
-    bio: "Game enthusiast and developer",
-    avatar: "/api/placeholder/150/150",
+    id: "",
+    name: "",
+    bio: "",
+    image_name: "",
   });
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  // ดึงข้อมูลโปรไฟล์ผู้ใช้เมื่อโหลดคอมโพเนนต์
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const userData = await getUserProfile();
+        setUser({
+          id: userData.id,
+          name: userData.name,
+          bio: userData.bio || "",
+          image_name: userData.image_name || "",
+        });
+      } catch (err) {
+        setError("Failed to load profile data");
+        console.error(err);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setUser((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setSelectedFile(file);
+
+      // สร้าง URL สำหรับแสดงตัวอย่างรูปภาพที่เลือก
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -41,38 +76,36 @@ export default function EditProfile() {
     setSuccess("");
 
     try {
-      // ตัวอย่างการเรียก API
-      const response = await fetch("/api/user/profile", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: user.name,
-          bio: user.bio,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update profile");
+      // ขั้นตอนที่ 1: อัปโหลดรูปภาพถ้ามีการเลือกรูปใหม่
+      if (selectedFile) {
+        const uploadResult = await updateProfilePic(selectedFile);
+        if (uploadResult && uploadResult.image) {
+          setUser((prev) => ({ ...prev, image_name: uploadResult.image }));
+        }
       }
 
-      const result = await response.json();
+      // ขั้นตอนที่ 2: อัปเดตข้อมูลโปรไฟล์
+      const updateData = {
+        name: user.name,
+        description: user.bio, // ใช้ description แทน bio
+      };
+
+      const result = await updateUser(updateData);
       setSuccess("Profile updated successfully!");
 
-      // อัพเดตข้อมูลผู้ใช้หลังจาก API ตอบกลับ
+      // อัปเดต state ด้วยข้อมูลที่ได้รับกลับมา
       setUser((prev) => ({
         ...prev,
-        name: result.user.name,
-        bio: result.user.bio,
+        name: result.user.name || prev.name,
+        bio: result.user.bio || prev.bio,
       }));
 
-      // รอสักครู่แล้วพาผู้ใช้กลับไปยังหน้าโปรไฟล์
       setTimeout(() => {
         router.push("/profile");
       }, 1500);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
+      console.error(err);
     } finally {
       setIsLoading(false);
     }
@@ -80,6 +113,13 @@ export default function EditProfile() {
 
   const triggerFileInput = () => {
     fileInputRef.current?.click();
+  };
+
+  // กำหนด URL ของรูปภาพโปรไฟล์
+  const getProfileImageUrl = () => {
+    if (previewUrl) return previewUrl;
+    if (user.image_name) return `/uploads/users/${user.image_name}`;
+    return "/api/placeholder/150/150";
   };
 
   return (
@@ -95,15 +135,13 @@ export default function EditProfile() {
               <div
                 className="relative w-32 h-32 rounded-full border-4 border-main bg-second overflow-hidden cursor-pointer group"
                 onClick={triggerFileInput}>
-                {user.avatar && (
-                  <Image
-                    src={user.avatar}
-                    alt="Profile avatar"
-                    fill
-                    className="object-cover"
-                    priority
-                  />
-                )}
+                <Image
+                  src={getProfileImageUrl()}
+                  alt="Profile avatar"
+                  fill
+                  className="object-cover"
+                  priority
+                />
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                   <span className="text-main-color text-sm font-medium flex items-center">
                     <Upload className="w-4 h-4 mr-1" />
@@ -114,12 +152,9 @@ export default function EditProfile() {
               <input
                 type="file"
                 className="hidden"
-                accept="image/*"
+                accept="image/jpeg,image/png,image/gif"
                 ref={fileInputRef}
-                onChange={(e) => {
-                  // ตรงนี้จะจัดการกับการอัปโหลดรูปภาพ
-                  console.log(e.target.files);
-                }}
+                onChange={handleFileChange}
               />
               <button
                 type="button"
