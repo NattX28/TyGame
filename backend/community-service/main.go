@@ -40,12 +40,16 @@ func main() {
 	communities.Use(middleware.JWTMiddleware)
 	communities.Get("/getall", middleware.CanAccess, routes.GetAllCommunities)
 	communities.Post("/create", middleware.CanManagement, routes.CreateCommunityHandler)
+	communities.Get("/gettop", middleware.CanAccess, routes.GetTopCommunitiesHandler)
 
 	community_focus := communities.Group("/:CommuID")
 	community_focus.Get("/", middleware.CanAccess, routes.GetCommunityHandler)
 	community_focus.Post("/", middleware.CanManagement, routes.JoinCommunityHandler)
 	community_focus.Put("/", middleware.CanManagement, routes.EditCommunityHandler)
 	community_focus.Delete("/", middleware.CanManagement, routes.DeleteCommunityHandler)
+
+	
+	community_focus.Get("/member", middleware.CanAccess, routes.GetMemberCommunityHandler)
 
 	log.Fatal(app.Listen(":3000"))
 }
