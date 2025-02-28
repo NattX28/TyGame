@@ -13,8 +13,8 @@ import (
 	"user-service/friendmanagement"
 	"user-service/middleware"
 	"user-service/models"
-	"user-service/routes"
 	"user-service/public"
+	"user-service/routes"
 	"user-service/usersmanagement"
 )
 
@@ -37,9 +37,9 @@ func main() {
 	})
 
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "http://localhost:3000,https://tygame.up.railway.app,https://user-service-tygame.up.railway.app,https://post-service-tygame.up.railway.app,https://community-service-tygame.up.railway.app,https://party-service-tygame.up.railway.app",
-		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
-		AllowMethods: "GET,POST,PUT,DELETE",
+		AllowOrigins:     "http://localhost:3000,https://tygame.up.railway.app,https://user-service-tygame.up.railway.app,https://post-service-tygame.up.railway.app,https://community-service-tygame.up.railway.app,https://party-service-tygame.up.railway.app",
+		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
+		AllowMethods:     "GET,POST,PUT,DELETE",
 		AllowCredentials: true,
 	}))
 
@@ -51,6 +51,7 @@ func main() {
 		})
 	})
 
+	userRoutes.Get("/count", routes.GetUserCount)
 	userRoutes.Post("/register", routes.RegisterHandler)
 	userRoutes.Post("/login", routes.LoginHandler)
 	userRoutes.Post("/logout", routes.LogoutHandler)
@@ -68,7 +69,6 @@ func main() {
 	protectedRoutes.Use(middleware.JWTMiddleware)
 	protectedRoutes.Put("/update", usersmanagement.UpdateUserHandler)
 	protectedRoutes.Delete("/delete", usersmanagement.DeleteUserHandler)
-
 	protectedRoutes.Post("/upload-profile", usersmanagement.UploadProfileHandler)
 	protectedRoutes.Get("/profile", usersmanagement.GetUserProfileHandler)
 
