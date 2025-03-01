@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
