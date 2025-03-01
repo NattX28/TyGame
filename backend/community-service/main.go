@@ -54,9 +54,9 @@ func main() {
 	community_focus.Get("/member", middleware.CanAccess, routes.GetMemberCommunityHandler)
 
 
-	port := os.Getenv("PORT_PARTY_SERVICE")
+	port := os.Getenv("PORT_COMMUNITY_SERVICE")
 	if port == "" {
-		port = "5005"
+		port = "5004"
 	}
 
 	log.Printf("Server starting on port %s", port)
