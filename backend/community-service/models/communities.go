@@ -8,8 +8,9 @@ import (
 
 type Community struct {
 	ID        			uuid.UUID 		`gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
-  Name    				string 				`gorm:"not null;unique"`
-  Description 		string 				`gorm:"not null"`
+  	Name    				string 				`gorm:"not null;unique"`
+  	Description 		string 				`gorm:"not null"`
+	category			string				`gorm:"not null"`
 	Image 					string 				`gorm:"not null"`
 	CreatorID       uuid.UUID			`gorm:"not null"`
 	CreatedAt 			time.Time 		`gorm:"default:current_timestamp"`
@@ -29,9 +30,9 @@ type CreateCommunityForm struct {
 }
 
 type CommunityResponse struct {
-	ID          uuid.UUID `json:"id"`
-	Name        string    `json:"name"`
-	Description string    `json:"description"`
-	Image       string    `json:"image"`
-	MemberCount int64     `json:"member_count"`
+	ID          	uuid.UUID 	`json:"uuid"`
+	Name        	string    	`json:"name"`
+	Description 	string    	`json:"description"`
+	Category    	string    	`json:"category"`
+	MemberCount 	int64     	`json:"member_count"`
 }
