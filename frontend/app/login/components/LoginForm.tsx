@@ -27,7 +27,7 @@ const LoginForm = () => {
       const response = await login(values.username, values.password);
       // ตรวจสอบ response หรือ token ที่ได้มา แล้ว redirect
       console.log(response);
-      router.push("/feed");
+      router.push("/explore");
     } catch (error: any) {
       console.error("Signup failed:", error);
       Swal.fire({
