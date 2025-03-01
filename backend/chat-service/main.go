@@ -23,14 +23,28 @@ func main() {
     db.Connect()
     defer db.Close()
 
-    app := fiber.New()
+    app := fiber.New(fiber.Config{
+		StrictRouting: false,
+		ReadTimeout: 10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	})
+
+    app.Use(cors.New(cors.Config{
+		AllowOrigins: "http://localhost:3000,https://tygame.up.railway.app,https://user-service-tygame.up.railway.app,https://post-service-tygame.up.railway.app,https://community-service-tygame.up.railway.app,https://party-service-tygame.up.railway.app,https://chat-service-tygame.up.railway.app",
+		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
+		AllowMethods: "GET,POST,PUT,DELETE",
+		AllowCredentials: true,
+	}))
+
     app.Use(middleware.JWTMiddleware)
 
-    app.Get("/ws", websocket.New(routes.WebSocket))
+	chatService := app.Group("/chat")
 
-    app.Post("/rooms/create", routes.CreateRoom)
-    app.Post("/rooms/recent", routes.GetRecentRoom)
-    app.Post("/users/block", routes.BlockUser)
+    chatService.Get("/ws", websocket.New(routes.WebSocket))
+
+    chatService.Post("/rooms/create", routes.CreateRoom)
+    chatService.Post("/rooms/contact", routes.GetRecentRoom)
+    chatService.Post("/users/block", routes.BlockUser)
 
     port := os.Getenv("PORT_CHAT_SERVICE")
     if port == "" {
