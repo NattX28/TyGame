@@ -87,7 +87,7 @@ const FeedPostModal = ({
       });
       console.log(res.data);
       onClose();
-    } catch (error) {
+    } catch (error:any) {
       setError(error);
     }
     setPostContent("");
@@ -96,7 +96,7 @@ const FeedPostModal = ({
     setError(null);
     onClose();
   };
-  const removeImage = (e) => {
+  const removeImage = (e:any) => {
     e.preventDefault();
     setSelectedImage(null);
     setImagePreview(null);
