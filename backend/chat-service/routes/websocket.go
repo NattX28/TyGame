@@ -126,7 +126,7 @@ func SendMessage(client *models.Client, form models.Form) {
 		RoomID:    roomID,
 		SenderID:  client.UserID,
 		Content:   form.Content,
-		Timestamp: time.Now().Unix(),
+		Timestamp: time.Now().Unix(),,
 	}
 	
 	if err := db.DB.First(&models.Room{}, roomID).Error; err != nil {

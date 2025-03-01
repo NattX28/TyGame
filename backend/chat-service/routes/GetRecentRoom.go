@@ -22,7 +22,9 @@ func GetRecentRoom(c *fiber.Ctx) error {
 	}
 
 	err = db.DB.Raw(`
-		SELECT r.room_id, r.is_group, m.content AS last_msg, m.timestamp
+		SELECT r.room_id, r.is_group, 
+			CASE WHEN r.is_group THEN r.name ELSE u.name END AS room_name,
+			m.content AS last_msg, m.timestamp
 		FROM rooms r
 		JOIN room_members rm ON r.room_id = rm.room_id
 		LEFT JOIN (
@@ -34,6 +36,8 @@ func GetRecentRoom(c *fiber.Ctx) error {
 				GROUP BY room_id
 			)
 		) m ON r.room_id = m.room_id
+		LEFT JOIN room_members other_rm ON r.room_id = other_rm.room_id AND other_rm.user_id != ?
+		LEFT JOIN users u ON u.user_id = other_rm.user_id
 		WHERE rm.user_id = ?
 		ORDER BY m.timestamp DESC
 		LIMIT ?;
