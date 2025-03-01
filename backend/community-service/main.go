@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
