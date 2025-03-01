@@ -8,7 +8,7 @@ const BASE_URL_COMMU: string = "/communities";
 // get all community
 export const listAllCommunities = async (): Promise<Community[]> => {
   try {
-    const { data } = await api.get(`${BASE_URL_COMMU}/`);
+    const { data } = await api.get(`${BASE_URL_COMMU}/getall`);
     return data; // คืนค่า array ของ Community
   } catch (error) {
     console.error("listAllCommunities error: ", error);
@@ -17,7 +17,7 @@ export const listAllCommunities = async (): Promise<Community[]> => {
 };
 
 // ดึง Community ตาม ID
-export const getCommunity = async (id: number): Promise<Community> => {
+export const getCommunity = async (id: string): Promise<Community> => {
   try {
     const { data } = await api.get(`${BASE_URL_COMMU}/get/${id}`);
     return data; // คืนค่า Community ตาม ID ที่ส่งมา
@@ -26,6 +26,11 @@ export const getCommunity = async (id: number): Promise<Community> => {
     throw new Error(`Failed to fetch community with id ${id}`);
   }
 };
+
+export const getCommunityImage = (id: string): string => {
+  return `https://tygame.up.railway.app/${BASE_URL_COMMU}/${id}/avatar`;
+};
+
 
 //// POST
 // create community
@@ -40,7 +45,7 @@ export const createCommunity = async (community: CreateCommunityForm) => {
 };
 
 // join community
-export const joinCommunity = async (commuID: number) => {
+export const joinCommunity = async (commuID: string) => {
   try {
     console.log(commuID);
     const { data } = await api.post(`${BASE_URL_COMMU}/join/${commuID}`);
@@ -52,7 +57,7 @@ export const joinCommunity = async (commuID: number) => {
 };
 
 //// PUT
-export const editCommunity = async (id: number) => {
+export const editCommunity = async (id: string) => {
   try {
     const { data } = await api.put(`${BASE_URL_COMMU}/edit/${id}`);
     return data;

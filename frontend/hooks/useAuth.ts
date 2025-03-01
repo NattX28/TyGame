@@ -36,13 +36,6 @@ export const useAuth = () => {
     setLoading(false);
   }, []);
 
-  const login = (userData: User, token: string) => {
-    document.cookie = `Authorization=${token}; path=/; Secure; HttpOnly`;
-    localStorage.setItem("user", JSON.stringify(userData));
-    setUser(userData);
-    router.push("/feed"); // Redirect หลังจาก Login
-  };
-
   const logout = async () => {
     try {
       const response = await logOut();
@@ -55,5 +48,5 @@ export const useAuth = () => {
     }
   };
 
-  return { user, loading, login, logout };
+  return { user, loading, logout };
 };
