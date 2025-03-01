@@ -31,6 +31,7 @@ export interface Community {
   image?: string;
   members?: number;
 }
+
 // CommunityMember
 export interface CommunityMember {
   UserID: string;

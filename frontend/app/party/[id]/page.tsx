@@ -3,7 +3,7 @@ import { useParty } from "@/hooks/useParty";
 import { useParams } from "next/navigation";
 
 import Chat from "../components/Chat";
-import Banner from "./../components/Banner";
+import Banner from "../components/Banner";
 
 function PartyRoom() {
   const partyID = useParams().partyId as string;
@@ -23,3 +23,4 @@ function PartyRoom() {
 }
 
 export default PartyRoom;
+// 

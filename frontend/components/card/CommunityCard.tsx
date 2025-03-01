@@ -5,7 +5,7 @@ import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { Community } from "@/types/types";
 import { useRouter } from "next/navigation";
-import { joinCommunity } from "@/services/community/communities";
+import { joinCommunity, getCommunityImage } from "@/services/community/communities";
 import { useAuth } from "@/hooks/useAuth";
 
 const CommunityCard = ({ community }: { community: Community }) => {
@@ -48,7 +48,7 @@ const CommunityCard = ({ community }: { community: Community }) => {
         <div className="flex flex-col items-center justify-around space-y-4">
           {/* Community Avatar */}
           <Avatar className="w-16 h-16 md:w-20 md:h-20 transition-transform duration-300 group-hover:scale-110 group-hover:ring-2 group-hover:ring-third">
-            <AvatarImage src={community.image} alt="Community Avatar" />
+            <AvatarImage src={getCommunityImage(community.uuid)} alt="Community Avatar" />
             <AvatarFallback>GC</AvatarFallback>
           </Avatar>
 
@@ -66,7 +66,7 @@ const CommunityCard = ({ community }: { community: Community }) => {
           <div className="flex items-center space-x-2 mb-4">
             <div className="w-4 h-4 bg-green-300 transition-transform duration-300 group-hover:bg-green-500 group-hover:scale-110"></div>
             <span className="text-xs text-main-color transition-colors duration-300 group-hover:text-main-color/90">
-              2.5k members
+            {community.member_count}
             </span>
           </div>
 
