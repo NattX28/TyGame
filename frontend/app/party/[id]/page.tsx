@@ -2,8 +2,8 @@
 import { useParty } from "@/hooks/useParty";
 import { useParams } from "next/navigation";
 
-import Chat from "../components/Chat";
-import Banner from "../components/Banner";
+import Chat from "../components/Message";
+import Banner from "../components/Profile";
 
 function PartyRoom() {
   const partyID = useParams().partyId as string;
