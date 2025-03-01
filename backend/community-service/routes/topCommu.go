@@ -4,17 +4,10 @@ import (
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
+
 	"community-service/db"
 	"community-service/models"
 )
-
-type CommunityWithMemberCount struct {
-	ID          uuid.UUID `json:"id"`
-	Name        string    `json:"name"`
-	Description string    `json:"description"`
-	Image       string    `json:"image"`
-	MemberCount int64     `json:"member_count"`
-}
 
 func GetTopCommunitiesHandler(c *fiber.Ctx) error {
 	limit := 10
@@ -25,7 +18,7 @@ func GetTopCommunitiesHandler(c *fiber.Ctx) error {
 		}
 	}
 
-	var topCommunities []CommunityWithMemberCount
+	var topCommunities []models.CommunityResponse
 
 	if err := db.DB.Raw(`
 		SELECT 

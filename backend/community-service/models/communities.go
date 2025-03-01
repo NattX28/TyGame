@@ -27,3 +27,11 @@ type CreateCommunityForm struct {
 	Name        			string 			`json:"name" 					gorm:"not null;unique"`
 	Description 			string 			`json:"description" 	gorm:"not null"`
 }
+
+type CommunityResponse struct {
+	ID          uuid.UUID `json:"id"`
+	Name        string    `json:"name"`
+	Description string    `json:"description"`
+	Image       string    `json:"image"`
+	MemberCount int64     `json:"member_count"`
+}
