@@ -25,8 +25,6 @@ func main() {
 
 	app := fiber.New(fiber.Config{
 		StrictRouting: false,
-		ReadTimeout:   10 * time.Second,
-		WriteTimeout:  10 * time.Second,
 	})
 	
 	app.Use(cors.New(cors.Config{
