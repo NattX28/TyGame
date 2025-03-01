@@ -42,9 +42,12 @@ func main() {
 
     chatService.Get("/ws", websocket.New(routes.WebSocket))
 
+    chatService.Post("/users/block", routes.BlockUser)
+    
     chatService.Post("/rooms/create", routes.CreateRoom)
     chatService.Post("/rooms/contact", routes.GetRecentRoom)
-    chatService.Post("/users/block", routes.BlockUser)
+
+    chatService.Get("/rooms/:room_id/", routes.GetMessages)
 
     port := os.Getenv("PORT_CHAT_SERVICE")
     if port == "" {

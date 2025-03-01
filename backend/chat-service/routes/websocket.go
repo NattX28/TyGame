@@ -77,6 +77,16 @@ func WebSocket(c *websocket.Conn) {
 	// Start message writer
 	go writeMessages(client)
 
+	roomID := c.Query("room_id")
+	pageStr := c.Query("page", "1")
+	page, err := strconv.Atoi(pageStr)
+	if err != nil || page <= 0 {
+		page = 1
+	}
+
+	// Send the message history when WebSocket is connected
+	sendMessageHistory(c, roomID, page)
+
 	for {
 		var form models.Form
 		err := c.ReadJSON(&form)
@@ -182,4 +192,40 @@ func SendMessage(client *models.Client, form models.Form) {
 			}
 		}
 	}
+}
+
+func SendMessageHistory(c *websocket.Conn, roomID string, page int) {
+    limit := 20 // Number of messages per page
+    offset := (page - 1) * limit
+
+    // Fetch message history for the room (pagination)
+    var messages []models.Message
+    err := db.DB.
+        Where("room_id = ?", roomID).
+        Order("timestamp DESC").
+        Limit(limit).
+        Offset(offset).
+        Find(&messages).Error
+
+    if err != nil {
+        log.Println("Error fetching messages:", err)
+        return
+    }
+
+    // Format the messages into a response
+    var responseMessages []models.MessageResponse
+    for _, msg := range messages {
+        responseMessages = append(responseMessages, models.MessageResponse{
+            ID:        msg.ID,
+            SenderID:  msg.SenderID,
+            Content:   msg.Content,
+            Timestamp: msg.Timestamp,
+        })
+    }
+
+    // Send the message history to the client
+    err = c.WriteJSON(responseMessages)
+    if err != nil {
+        log.Println("Error sending message history:", err)
+    }
 }
