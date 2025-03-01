@@ -41,7 +41,7 @@ func GetUserProfileHandler(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid token claims"})
 	}
 
-	userID, ok := claims["user_id"].(string)
+	userID, ok := claims["userid"].(string)
 	if !ok {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid user ID format"})
 	}

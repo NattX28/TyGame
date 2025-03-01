@@ -46,7 +46,7 @@ func UpdateUserHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	userIDStr, ok := claims["user_id"].(string)
+	userIDStr, ok := claims["userid"].(string)
 	if !ok {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Invalid user ID format",

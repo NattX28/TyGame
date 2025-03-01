@@ -50,7 +50,7 @@ func LoginHandler(c *fiber.Ctx) error {
 	// Generate JWT token
 	secret := os.Getenv("JWT_SECRET")
 	claims := jwt.MapClaims{
-		"user_id":        user.ID,
+		"userid":        user.ID,
 		"username":       user.Username,
 		"email":          user.Email,
 		"role":           user.Role,

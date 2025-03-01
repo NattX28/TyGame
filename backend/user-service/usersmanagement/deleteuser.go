@@ -44,7 +44,7 @@ func DeleteUserHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	userID, ok := claims["user_id"].(string)
+	userID, ok := claims["userid"].(string)
 	if !ok || userID == "" {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Invalid user ID format",
