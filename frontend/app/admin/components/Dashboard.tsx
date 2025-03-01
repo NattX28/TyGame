@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Bar, BarChart, XAxis } from "recharts";
 import {
   Chart,
@@ -27,6 +27,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { getAllUserAllCommunity } from "@/services/user/user";
 
 Chart.register(
   CategoryScale,
@@ -40,15 +41,10 @@ Chart.register(
 interface statCardProps {
   title: string;
   value: string | number;
-  change: {
-    type: "increase" | "decrease";
-    value: string;
-    text: string;
-  };
   icon: React.ReactNode;
 }
 
-function StatCard({ title, value, change, icon }: statCardProps) {
+function StatCard({ title, value, icon }: statCardProps) {
   return (
     <div className="bg-second rounded-lg p-6">
       <div className="flex justify-between">
@@ -57,18 +53,6 @@ function StatCard({ title, value, change, icon }: statCardProps) {
           <h3 className="text-2xl font-semibold text-main-color mt-1">
             {value}
           </h3>
-          <div className="flex items-center mt-2">
-            <span
-              className={`text-sm font-medium px-2 py-0.5 rounded-full ${
-                change.type === "increase"
-                  ? "text-green-100 bg-green-800"
-                  : "text-red-100 bg-red-800"
-              }`}>
-              {change.type === "increase" ? "+" : "-"}
-              {change.value}
-            </span>
-            <span className="text-sm text-gray-300 ml-2">{change.text}</span>
-          </div>
         </div>
 
         <div className="text-gray-300">{icon}</div>
@@ -78,14 +62,35 @@ function StatCard({ title, value, change, icon }: statCardProps) {
 }
 
 const Dashboard = () => {
+  const [totalUsers, setTotalUsers] = useState<number | null>(null);
+  const [totalCommunities, setTotalCommunities] = useState<number | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
   useEffect(() => {
     document.title = "Dashboard | Community Stats";
+
+    const fetchStats = async () => {
+      try {
+        const [userRes, communitiesRes] = await Promise.all([
+          getAllUserAllCommunity(),
+          getAllUserAllCommunity(),
+        ]);
+
+        setTotalUsers(userRes.data);
+        setTotalCommunities(communitiesRes.data);
+      } catch (error) {
+        console.error("Error fetching stats:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStats();
   }, []);
 
   // Mock data
-  const totalUsers = 10500;
+  // const totalUsers = 10500;
   const activeUsers = 6800;
-  const totalCommunities = 120;
+  // const totalCommunities = 120;
   const topCommunities = [
     {
       name: "League of legends",
@@ -147,22 +152,12 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
           title={"Total User"}
-          value={totalUsers.toLocaleString()}
-          change={{
-            type: "increase",
-            value: "11%",
-            text: "11s previous",
-          }}
+          value={totalUsers?.toLocaleString() ?? "N/A"}
           icon={<UsersRound className="w-8 h-8" />}
         />
         <StatCard
           title={"Total Communities"}
-          value={totalCommunities.toLocaleString()}
-          change={{
-            type: "increase",
-            value: "40%",
-            text: "in last week",
-          }}
+          value={totalCommunities?.toLocaleString() ?? "N/A"}
           icon={<Handshake className="w-8 h-8" />}
         />
       </div>
@@ -255,7 +250,7 @@ const Dashboard = () => {
                                 x={viewBox.cx}
                                 y={(viewBox.cy || 0) - 16}
                                 className="fill-white text-2xl font-bold">
-                                {totalUsers.toLocaleString()}
+                                {totalUsers?.toLocaleString()}
                               </tspan>
                               <tspan
                                 x={viewBox.cx}

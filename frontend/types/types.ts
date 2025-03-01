@@ -10,7 +10,7 @@ export interface User {
   friends: number;
   fullName?: string;
   bio?: string;
-  imageName?: string;
+  image_name?: string;
   cookieVersion?: number;
   description?: string;
 }
@@ -149,4 +149,11 @@ export interface PartyResponse {
 export interface ChatMessage {
   username: string;
   content: string;
+}
+
+export interface UserProfile {
+  id: string;
+  name: string;
+  bio: string; // เปลี่ยนจาก bio เป็น description ตาม Backend
+  image_name?: string; // เพิ่มฟิลด์สำหรับชื่อไฟล์รูปภาพ
 }
