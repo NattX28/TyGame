@@ -55,7 +55,7 @@ export const register = async (
 };
 
 // logout
-export const logout = async (): Promise<MessageBackend> => {
+export const logOut = async (): Promise<MessageBackend> => {
   try {
     const { data } = await api.post(`${BASE_URL_USER}/logout`);
     return data;
@@ -77,3 +77,8 @@ export const refreshToken = async (): Promise<MessageBackend> => {
 };
 
 // Report
+
+//get user image
+export const getUserImage = (id: string): string => {
+  return `https://tygame.up.railway.app/users/${id}/avatar`;
+};

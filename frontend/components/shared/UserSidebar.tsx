@@ -1,15 +1,28 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import { LogOut, ChevronDownIcon } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { userSidebarItems } from "@/utils/utils";
+import { useEffect, useState } from "react";
 
 const UserSidebar = () => {
   const pathname = usePathname();
   const { logout } = useAuth();
+  const [lastCommunity, setLastCommunity] = useState<string | null>(null);
+
+  useEffect(() => {
+    // ดึง idCommunity ล่าสุดจาก local storage
+    const storedCommunity = localStorage.getItem("lastCommunity");
+    if (storedCommunity) {
+      setLastCommunity(storedCommunity);
+    }
+  }, []);
+
+  // update url ของ ปุ่มhome
+  const homeUrl = lastCommunity ? `/feed/${lastCommunity}` : "/explore";
 
   return (
     <div className="px-4 py-8 h-full flex flex-col">
@@ -34,7 +47,8 @@ const UserSidebar = () => {
         {/* Navigation links */}
         <div className="flex flex-col gap-1">
           {userSidebarItems.map((item, index) => {
-            const isActive = pathname === item.url;
+            const isHome = item.url === "/feed";
+            const isActive = pathname === (isHome ? homeUrl : item.url);
             return (
               <Button
                 key={index}
