@@ -76,7 +76,7 @@ func LoginHandler(c *fiber.Ctx) error {
 		Value:    "Bearer " + tokenString,
 		Expires:  time.Now().Add(24 * time.Hour),
 		HTTPOnly: true,
-		Secure:   false,
+		Secure:   true,
 		SameSite: "None",
 	})
 
