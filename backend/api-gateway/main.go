@@ -73,10 +73,6 @@ func main() {
 
 	// Proxy ไปยัง Community Service
 	app.All("/communities/*", func(c *fiber.Ctx) error {
-		
-		authHeader := c.Get("Authorization")
-		log.Println(authHeader)
-
 		url := communityServiceURL + c.OriginalURL()
 		log.Printf("➡️ Forwarding to Post Service: %s", url)
 		if err := proxy.Do(c, url); err != nil {
