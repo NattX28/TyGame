@@ -1,85 +1,57 @@
 "use client";
 import { useEffect, useState } from "react";
-import Profile from "./components/Profile";
 import Search from "./components/Search";
-import { MsgMe, MsgYou } from "./components/Message";
+import RoomList from "./components/Roomlist";
+import MessageList from "./components/Messagelist";
 import InputMessage from "./components/InputMessage";
-import { User } from "@/types/types";
+import { ChatMessage, RecentRoom, ChatRoomFocus } from "@/types/types";
 
-const FriendList = () => {
-  return (
-    <>
-      <Profile
-        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
-      />
-      <Profile
-        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
-      />
-      <Profile
-        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
-      />
-      <Profile
-        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
-      />
-      <Profile
-        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
-      />
-      <Profile
-        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
-      />
-      <Profile
-        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
-      />
-      <Profile
-        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
-      />
-      <Profile
-        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
-      />
-      <Profile
-        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
-      />
-      <Profile
-        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
-      />
-      <Profile
-        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
-      />
-      <Profile
-        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
-      />
-      <Profile
-        person={{ username: "John Doe", avatar: "/media/images/first.jpg" }}
-      />
-    </>
-  );
-};
-
-const ChatList = () => {
-  return (
-    <>
-      {/* <MsgMe msg={"Hello World 123456789  dwadawdad"} />
-      <MsgMe msg={"Hello World <h1>adwa</h1>"} />
-      
-      <MsgYou msg={"Hi there!"} person={{ name: "Jane Doe", avatar: "/media/images/first.jpg" }} /> */}
-      <MsgYou
-        msg={
-          "Hi thereaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!"
-        }
-        person={{ username: "Jane Doe", avatar: "/media/images/first.jpg" }}
-      />
-    </>
-  );
-};
 
 const page = () => {
-  const [person, setPerson] = useState<User | null>(null);
+  const [focusRoom, setFocusRoom] = useState<ChatRoomFocus | null>(null);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [recentRooms, setRecentRooms] = useState<RecentRoom[] | null>(null);
 
   useEffect(() => {
-    setPerson({
-      username: "John Doe",
-      avatar: "/media/images/first.jpg",
-    });
+    // Simulate receiving data from WebSocket or API
+    setTimeout(() => {
+      setRecentRooms([
+        {
+          room_id: "b1d1a6dc-9f5e-4c93-8a6e-83dcb9a6a1c1",
+          is_group: false,
+          room_name: "John Doe",
+          last_message: "Hey, how are you?",
+          timestamp: 1709295600000,
+        },
+        {
+          room_id: "a8b1a9d2-3e7b-4c97-9a6e-12cde7f8b9f2",
+          is_group: true,
+          room_name: "Project Team",
+          last_message: "Meeting at 3PM, don't forget.",
+          timestamp: 1709300000000,
+        },
+        {
+          room_id: "d5f3a2b4-8c6d-4e5f-9a7b-19cde8f8c9f3",
+          is_group: false,
+          room_name: "Jane Smith",
+          last_message: "See you tomorrow!",
+          timestamp: 1709312000000,
+        },
+        {
+          room_id: "f3c5a4b7-1d6e-4e8f-9a8c-25cde9f8d9f4",
+          is_group: true,
+          room_name: "Family Chat",
+          last_message: "Dinner at 7?",
+          timestamp: 1709328000000,
+        },
+      ]);
+
+      setFocusRoom({
+        room_id: "b1d1a6dc-9f5e-4c93-8a6e-83dcb9a6a1c1",
+        is_group: false,
+        room_name: "John Doe",
+      });
+    }, 1000);
   }, []);
 
   return (
@@ -90,18 +62,26 @@ const page = () => {
         </div>
         <Search pholder={"Search chat"} />
         <div className="h-full w-full overflow-y-auto scrollbar-transparent">
-          <FriendList />
+        {
+          recentRooms === null ? (
+            <p>Loading...</p>
+          ) : recentRooms.length === 0 ? (
+            <p>No recent rooms found.</p>
+          ) : (
+            <RoomList recentRooms={recentRooms} />
+          )
+        }
         </div>
       </div>
-      {person ? (
+      {focusRoom !== null ? (
         <div className="flex-1 flex flex-col">
           <div className="h-20 p-4 border-b border-second flex flex-row items-center">
             <img
-              src={person.avatar}
-              alt={person.username}
+              src={focusRoom.room_id}
+              alt={focusRoom.room_name}
               className="rounded-full h-full"
             />
-            <p className="pl-4">{person.username}</p>
+            <p className="pl-4">{focusRoom.room_name}</p>
             <div className="ml-auto">
               <svg
                 aria-label="Conversation information"
@@ -142,7 +122,7 @@ const page = () => {
           </div>
           <div className="flex-1 flex flex-col">
             <div className="flex-1 flex flex-col-reverse max-w-full overflow-y-auto p-2 scroll-smooth whitespace-normal">
-              <ChatList />
+              <MessageList Messages={messages} />
             </div>
             <InputMessage pholder={"Type a message"} />
           </div>

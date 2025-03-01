@@ -148,8 +148,24 @@ export interface PartyResponse {
 // chatMessage
 
 export interface ChatMessage {
-  username: string;
+  id: number
+  room_id: string;
+  sender_id: string;
   content: string;
+  timestamp: number;
+}
+
+export interface ChatRoomFocus {
+  room_id: string;
+  is_group: boolean;
+  room_name: string;
+}
+export interface RecentRoom {
+  room_id: string;
+  is_group: boolean;
+  room_name: string;
+  last_message: string;
+  timestamp: number;
 }
 
 export interface UserProfile {
