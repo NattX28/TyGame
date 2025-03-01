@@ -3,24 +3,24 @@ import type { NextRequest } from "next/server";
 
 const ADMIN_PATHS = ["/void"]; // เดี๋ยวมาแก้
 // real
-// const PUBLIC_PATHS = ["/", "/communities", "/login", "/register"];
+const PUBLIC_PATHS = ["/", "/explore", "/login", "/register"];
 // test
-const PUBLIC_PATHS = [
-  "/",
-  "/communities",
-  "/login",
-  "/register",
-  "/feed",
-  "/profile",
-  "/chat",
-  "/admin",
-  "/admin/dashboard",
-  "/admin/communities",
-];
+// const PUBLIC_PATHS = [
+//   "/",
+//   "/communities",
+//   "/login",
+//   "/register",
+//   "/feed",
+//   "/profile",
+//   "/chat",
+//   "/admin",
+//   "/admin/dashboard",
+//   "/admin/communities",
+// ];
 // real
-// const PROTECTED_PATHS = ["/feed", "/profile", "/chat"];
+const PROTECTED_PATHS = ["/feed", "/profile", "/chat"];
 // test
-const PROTECTED_PATHS = ["/void"];
+// const PROTECTED_PATHS = ["/void"];
 
 // Combine all valid paths
 const ALL_VALID_PATHS = [...PUBLIC_PATHS, ...PROTECTED_PATHS, ...ADMIN_PATHS];
