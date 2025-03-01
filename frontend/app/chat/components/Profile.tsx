@@ -6,6 +6,7 @@ const Profile = ({ person }: { person: User }) => {
     <div className="py-2 px-8 flex items-center hover:bg-second transition">
       <div className="h-14 w-14 relative">
         <Image
+          fill
           src={person.avatar}
           alt={person.username}
           className="rounded-full"

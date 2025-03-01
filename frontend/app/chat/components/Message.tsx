@@ -15,6 +15,8 @@ const MsgYou = ({ msg, person }: { msg: string; person: User }) => {
   return (
     <div className="max-w-full mx-4 flex mb-1 text-[15px]">
       <Image
+        width={40}
+        height={40}
         src={person.avatar}
         alt={person.username}
         className="rounded-full w-10 h-10 mr-4"

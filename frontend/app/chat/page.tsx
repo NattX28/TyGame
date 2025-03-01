@@ -84,7 +84,7 @@ const page = () => {
 
   return (
     <div className="h-screen w-screen flex flex-row bg-black">
-      <div className="h-full hidden md:flex md:flex-col gap-4 py-4 border-r border-second">
+      <div className="h-full w-[400px] hidden md:flex md:flex-col gap-4 py-4 border-r border-second">
         <div className="px-8 pt-4">
           <p className="text-2xl font-bold tracking-widest">CHAT</p>
         </div>
