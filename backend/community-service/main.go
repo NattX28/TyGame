@@ -37,6 +37,10 @@ func main() {
 	}))
 
 	communities := app.Group("/communities")
+	communities.Get("/", func(c *fiber.Ctx) error {
+		return c.SendString("Hello World")
+	})
+
 	communities.Use(middleware.JWTMiddleware)
 	communities.Get("/getall", middleware.CanAccess, routes.GetAllCommunities)
 	communities.Post("/create", middleware.CanManagement, routes.CreateCommunityHandler)
