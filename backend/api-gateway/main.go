@@ -12,13 +12,13 @@ import (
 
 func CookieLogger() fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		// Get raw cookie header
-		rawCookies := string(c.Request().Header.Cookie())
+		// Get all cookies as a single string
+		rawCookies := c.Get("Cookie")
 
 		if rawCookies == "" {
 			log.Printf("No cookies found")
 		} else {
-			// Split and log each cookie (name=value)
+			// Split and print each individual cookie
 			cookiePairs := strings.Split(rawCookies, "; ")
 			for _, cookie := range cookiePairs {
 				log.Printf("Cookie:", cookie)
