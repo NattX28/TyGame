@@ -9,7 +9,7 @@ const BASE_URL_COMMU: string = "/communities";
 export const listAllCommunities = async (): Promise<Community[]> => {
   try {
     const { data } = await api.get(`${BASE_URL_COMMU}/getall`);
-    return data; // คืนค่า array ของ Community
+    return data.communities; // คืนค่า array ของ Community
   } catch (error) {
     console.error("listAllCommunities error: ", error);
     throw new Error("Failed to fetch communities");
