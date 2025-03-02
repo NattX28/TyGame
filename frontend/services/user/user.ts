@@ -14,17 +14,17 @@ export const login = async (
   password: string
 ): Promise<LoginResponse> => {
   try {
-    const response = await api.post(`${BASE_URL_USER}/login`, {
+    const { data } = await api.post(`${BASE_URL_USER}/login`, {
       username,
       password,
     });
     
-    localStorage.setItem("userid", response.data.userid);
-    localStorage.setItem("role", response.data.role);
-    localStorage.setItem("name", response.data.name);
-    localStorage.setItem("username", response.data.username);
+    localStorage.setItem("userid", data.user.userid);
+    localStorage.setItem("role", data.user.role);
+    localStorage.setItem("name", data.user.name);
+    localStorage.setItem("username", data.user.username);
 
-    return response.data;
+    return data;
   } catch (error: any) {
     console.log("login failed: ", error);
 
