@@ -10,7 +10,7 @@ import (
 // JWTMiddleware checks the JWT token from the Authorization header or cookie
 func JWTMiddleware(c *fiber.Ctx) error {
 
-	tokenString := c.Get("Authorization")
+	tokenString := c.Cookies("Authorization")
 
 	if tokenString == "" {
 		tokenString = c.Cookies("Authorization")

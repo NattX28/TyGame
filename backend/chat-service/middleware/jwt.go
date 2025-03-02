@@ -14,7 +14,7 @@ func JWTMiddleware(c *fiber.Ctx) error {
 	if jwtSecret == nil {
 		jwtSecret = []byte(os.Getenv("JWT_SECRET"))
 	}
-	authHeader := c.Get("Authorization")
+	authHeader := c.Cookies("Authorization")
 	if authHeader == "" {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Authorization header missing",
