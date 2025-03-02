@@ -8,6 +8,26 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/proxy"
 )
 
+func CookieLogger() fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		// Get raw cookie header
+		rawCookies := string(c.Request().Header.Cookie())
+
+		if rawCookies == "" {
+			fmt.Println("No cookies found")
+		} else {
+			// Split and log each cookie (name=value)
+			cookiePairs := strings.Split(rawCookies, "; ")
+			for _, cookie := range cookiePairs {
+				fmt.Println("Cookie:", cookie)
+			}
+		}
+
+		// Continue to the next handler
+		return c.Next()
+	}
+}
+
 func main() {
 	app := fiber.New(fiber.Config{
 		DisableStartupMessage: false,
@@ -20,6 +40,8 @@ func main() {
 		AllowMethods: "GET,POST,PUT,DELETE",
 		AllowCredentials: true,
 	}))
+
+	app.Use(CookieLogger())
 
 	// กำหนดค่า URL ของ Services จาก ENV หรือใช้ค่า Default (บน Railway)
 	userServiceURL := os.Getenv("USER_SERVICE_URL")
