@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"os"
+	"strings"
+	
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/proxy"
@@ -14,12 +16,12 @@ func CookieLogger() fiber.Handler {
 		rawCookies := string(c.Request().Header.Cookie())
 
 		if rawCookies == "" {
-			fmt.Println("No cookies found")
+			log.Printf("No cookies found")
 		} else {
 			// Split and log each cookie (name=value)
 			cookiePairs := strings.Split(rawCookies, "; ")
 			for _, cookie := range cookiePairs {
-				fmt.Println("Cookie:", cookie)
+				log.Printf("Cookie:", cookie)
 			}
 		}
 
