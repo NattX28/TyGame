@@ -18,22 +18,11 @@ export const login = async (
       username,
       password,
     });
-
-    const token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("Authorization="))
-      ?.split("=")[1];
-      
-    // Save name, username, and userid to localStorage
-    if (!token) {
-      throw new Error("Token not found");
-    }
     
-    const data = jwtDecode<DecodedToken>(token);
-    localStorage.setItem("userid", data.userid);
-    localStorage.setItem("role", data.role);
-    localStorage.setItem("name", data.name);
-    localStorage.setItem("username", data.username);
+    localStorage.setItem("userid", response.data.userid);
+    localStorage.setItem("role", response.data.role);
+    localStorage.setItem("name", response.data.name);
+    localStorage.setItem("username", response.data.username);
 
     return response.data;
   } catch (error: any) {
@@ -42,7 +31,7 @@ export const login = async (
     if (error.response) {
       throw error.response.data;
     } else {
-      throw new Error("Register failed. Please try again.");
+      throw new Error("Login failed. Please try again.");
     }
   }
 };
