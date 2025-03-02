@@ -48,7 +48,7 @@ const CommunityCard = ({ community }: { community: Community }) => {
         <div className="flex flex-col items-center justify-around space-y-4">
           {/* Community Avatar */}
           <Avatar className="w-16 h-16 md:w-20 md:h-20 transition-transform duration-300 group-hover:scale-110 group-hover:ring-2 group-hover:ring-third">
-            <AvatarImage src={getCommunityImage(community.uuid)} alt="Community Avatar" />
+            <AvatarImage src={getCommunityImage(community.image)} alt="Community Avatar" />
             <AvatarFallback>GC</AvatarFallback>
           </Avatar>
 

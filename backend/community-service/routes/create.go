@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/microcosm-cc/bluemonday"
@@ -18,8 +18,9 @@ func CreateCommunityHandler(c *fiber.Ctx) error {
 
 	name := c.FormValue("name")
 	description := c.FormValue("description")
+	category := c.FormValue("category")
 	image, err := c.FormFile("image")
-	if name == "" || description == "" || err != nil {
+	if name == "" || description == "" || category == "" || err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request form"})
 	}
 
@@ -57,10 +58,12 @@ func CreateCommunityHandler(c *fiber.Ctx) error {
 	policy := bluemonday.StrictPolicy()
 	safeName := policy.Sanitize(name)
 	safeDes := policy.Sanitize(description)
+	safeCategory := policy.Sanitize(category)
 
 	community := models.Community{
 		Name: 		 		safeName,
 		Description: 	safeDes,
+		Category: 		safeCategory,
 		Image: 				filename,
 		CreatorID:    userID,
 	}
@@ -70,7 +73,7 @@ func CreateCommunityHandler(c *fiber.Ctx) error {
 	if result.Error != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to create community"})
 	}
-	if err := c.SaveFile(image, fmt.Sprintf(imagePath, filename)); err != nil {
+	if err := c.SaveFile(image, log.Println(imagePath, filename)); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to save image",
 		})

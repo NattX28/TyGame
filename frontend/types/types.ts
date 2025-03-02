@@ -28,8 +28,8 @@ export interface Community {
   name: string;
   description: string;
   category: string;
-  image?: string;
-  members?: number;
+  image: string;
+  member_count: number;
 }
 
 // CommunityMember
