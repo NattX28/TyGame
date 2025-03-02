@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"strconv"
+
 	"github.com/gofiber/fiber/v2"
 
 	"community-service/db"
@@ -8,26 +10,43 @@ import (
 )
 
 func GetAllCommunities(c *fiber.Ctx) error {
-	var communities []models.Community
+	limit := 10
 
-	if err := db.DB.Find(&communities).Error; err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Error fetching communities",
-		})
+	if limitStr := c.Query("limit"); limitStr != "" {
+		if parsedLimit, err := strconv.Atoi(limitStr); err == nil && parsedLimit > 0 {
+			limit = parsedLimit
+		}
 	}
 
-	var response []fiber.Map
-	for _, community := range communities {
-		response = append(response, fiber.Map{
-			"id":          community.ID,
-			"name":        community.Name,
-			"description": community.Description,
-			"image":       community.Image,
+	var topCommunities []models.CommunityResponse
+
+	if err := db.DB.Raw(`
+		SELECT 
+			c.id,
+			c.name,
+			c.description,
+			c.category,
+			c.image,
+			COUNT(cm.user_id) AS member_count
+		FROM
+			communities c
+		LEFT JOIN
+			community_members cm
+		ON
+			c.id = cm.community_id
+		GROUP BY
+			c.id
+		ORDER BY
+			member_count DESC
+		LIMIT ?
+	`, limit).Scan(&topCommunities).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to fetch top communities",
 		})
 	}
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"message":    "Success",
-		"communities": response,
+		"message":      "Success",
+		"communities": 	topCommunities,
 	})
 }

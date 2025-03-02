@@ -43,9 +43,9 @@ func main() {
 	})
 
 	communities.Use(middleware.JWTMiddleware)
+	communities.Get("/logo/:nameFile", routes.LogoCommunityHandler)
 	communities.Get("/getall", middleware.CanAccess, routes.GetAllCommunities)
 	communities.Post("/create", middleware.CanManagement, routes.CreateCommunityHandler)
-	communities.Get("/gettop", middleware.CanAccess, routes.GetTopCommunitiesHandler)
 
 	community_focus := communities.Group("/:CommuID")
 	community_focus.Get("/", middleware.CanAccess, routes.GetCommunityHandler)
