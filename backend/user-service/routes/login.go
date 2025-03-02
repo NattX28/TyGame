@@ -82,7 +82,7 @@ func LoginHandler(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message": "Login successful",
-		"user":	{
+		"user": fiber.Map{
 			"userid":        user.ID,
 			"role":           user.Role,
 			"name":          user.Name,
