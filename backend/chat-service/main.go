@@ -1,8 +1,9 @@
 package main
 
 import (
-	"log"
 	"os"
+	"log"
+    "time"
 
 	"chat-service/db"
 	"chat-service/routes"
