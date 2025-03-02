@@ -27,8 +27,8 @@ export const getCommunity = async (id: string): Promise<Community> => {
   }
 };
 
-export const getCommunityImage = (id: string): string => {
-  return `https://tygame.up.railway.app/${BASE_URL_COMMU}/${id}/avatar`;
+export const getCommunityImage = (nameFile: string): string => {
+  return `https://tygame.up.railway.app/${BASE_URL_COMMU}/logo/${nameFile}`;
 };
 
 
