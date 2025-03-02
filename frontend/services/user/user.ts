@@ -1,5 +1,7 @@
 import api from "../api";
+import { jwtDecode } from "jwt-decode";
 import { UpdateUserRequest } from "@/types/user";
+import { DecodedToken } from "@/types/auth";
 import { LoginResponse, RegisterResponse } from "@/types/auth";
 import { MessageBackend } from "@/types/samePattern";
 
@@ -12,11 +14,28 @@ export const login = async (
   password: string
 ): Promise<LoginResponse> => {
   try {
-    const { data } = await api.post(`${BASE_URL_USER}/login`, {
+    const response = await api.post(`${BASE_URL_USER}/login`, {
       username,
       password,
     });
-    return data;
+
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("Authorization="))
+      ?.split("=")[1];
+      
+    // Save name, username, and userid to localStorage
+    if (!token) {
+      throw new Error("Token not found");
+    }
+    
+    const data = jwtDecode<DecodedToken>(token);
+    localStorage.setItem("userid", data.userid);
+    localStorage.setItem("role", data.role);
+    localStorage.setItem("name", data.name);
+    localStorage.setItem("username", data.username);
+
+    return response.data;
   } catch (error: any) {
     console.log("login failed: ", error);
 

@@ -25,3 +25,10 @@ export interface RegisterResponse {
   success: boolean;
   message?: string;
 }
+
+export interface DecodedToken {
+  userid: string;
+  role: string;
+  name: string;
+  username: string;
+}
