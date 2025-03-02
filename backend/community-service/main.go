@@ -4,6 +4,7 @@ import (
 	"os"
 	"log"
 	"time"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
@@ -14,6 +15,26 @@ import (
 	"community-service/db"
 	"community-service/routes"
 )
+
+func CookieLogger() fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		// Get all cookies as a single string
+		rawCookies := c.Get("Cookie")
+
+		if rawCookies == "" {
+			log.Printf("No cookies found")
+		} else {
+			// Split and print each individual cookie
+			cookiePairs := strings.Split(rawCookies, "; ")
+			for _, cookie := range cookiePairs {
+				log.Printf("Cookie:", cookie)
+			}
+		}
+
+		// Continue to the next handler
+		return c.Next()
+	}
+}
 
 func main() {
 	err := godotenv.Load()
@@ -36,6 +57,8 @@ func main() {
 		AllowMethods: "GET,POST,PUT,DELETE",
 		AllowCredentials: true,
 	}))
+
+	app.Use(CookieLogger())
 
 	communities := app.Group("/communities")
 	communities.Get("/", func(c *fiber.Ctx) error {
