@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"os"
-	"log"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
