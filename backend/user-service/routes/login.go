@@ -70,11 +70,13 @@ func LoginHandler(c *fiber.Ctx) error {
 	// Debug: Log the generated token
 	log.Println("Generated Token:", tokenString)
 
+	EXP := time.Now().Add(24 * time.Hour)
+
 	// Set the JWT token as a cookie
 	c.Cookie(&fiber.Cookie{
 		Name:     "Authorization",
 		Value:    "Bearer " + tokenString,
-		Expires:  time.Now().Add(24 * time.Hour),
+		Expires:  EXP,
 		HTTPOnly: true,
 		Secure:   true,
 		SameSite: "None",
@@ -84,9 +86,10 @@ func LoginHandler(c *fiber.Ctx) error {
 		"message": "Login successful",
 		"user": fiber.Map{
 			"userid":        user.ID,
-			"role":           user.Role,
+			"role":          user.Role,
 			"name":          user.Name,
-			"username":       user.Username,
+			"username":      user.Username,
+			"exp":           EXP.Unix(),
 		},
 	})
 }
