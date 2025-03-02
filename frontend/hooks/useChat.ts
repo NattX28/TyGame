@@ -9,7 +9,7 @@ export const useParty = (partyId: string, userId: string) => {
     if (!partyId || !userId) return;
 
     const socket = new WebSocket(
-      `ws://${process.env.NEXT_PUBLIC_API_URL}/ws/${partyId}?user-id=${userId}`
+      `${process.env.NEXT_PUBLIC_WS_URL}/chat/ws/${partyId}?user_id=${userId}`
     );
 
     socket.onopen = () => {

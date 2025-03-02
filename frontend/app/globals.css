@@ -2,14 +2,293 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@layer components {
+  /* Background */
+  .bg-main {
+    background-color: #151515;
+  }
+  .bg-second {
+    background-color: #222222;
+  }
+  .bg-third {
+    background-color: #ce1212;
+  }
+  .bg-forth {
+    background-color: #2d2d2d;
+  }
+  .bg-fifth {
+    background-color: #3d3d3d;
+  }
+  .bg-contrast {
+    background-color: #ff0000;
+  }
+  .bg-frame {
+    background-color: #171717;
+  }
+  .bg-sub-frame {
+    background-color: #1f1f1f;
+  }
+  .btn-contrast{
+    background-color: #900000;
+  }
+
+  /* Text */
+  .text-main-color {
+    color: #ffffff;
+  }
+  .text-second-color {
+    color: #222222;
+  }
+  .text-third-color {
+    color: #151515;
+  }
+  .text-forth-color {
+    color: #2d2d2d;
+  }
+  .text-fifth-color {
+    color: #3d3d3d;
+  }
+  .text-title {
+    color: #f5f5f5;
+  }
+  .text-sub-title {
+    color: #a8a8a8;
+  }
+  .text-contrast-color {
+    color: #8b5dff;
+  }
+
+  /* Border */
+  .border-main {
+    border-color: #ff0000;
+  }
+  .border-second {
+    border-color: #222222;
+  }
+  .border-third {
+    border-color: #151515;
+  }
+  .border-forth {
+    border-color: #2d2d2d;
+  }
+  .border-fifth {
+    border-color: #3d3d3d;
+  }
+  .stroke-text {
+    color: white;
+    text-shadow: 1px 1px 5px #151515;
+  }
+  .chat-bg {
+    background-color: #3797F0;
+  }
 }
 
-@media (prefers-color-scheme: dark) {
+@layer component {
+  .container {
+    @apply px-16 mx-auto;
+  }
+}
+
+@layer components {
+  /* Background hovers */
+  .hover\:bg-main:hover {
+    background-color: #1a1a1a;
+  }
+  .hover\:bg-second:hover {
+    background-color: #2a2a2a;
+  }
+  .hover\:bg-third:hover {
+    background-color: #e51515;
+  }
+  .hover\:bg-forth:hover {
+    background-color: #343434;
+  }
+  .hover\:bg-fifth:hover {
+    background-color: #454545;
+  }
+  .hover\:bg-contrast:hover {
+    background-color: #ff1a1a;
+  }
+  .hover\:bg-frame:hover {
+    background-color: #1c1c1c;
+  }
+  .hover\:bg-sub-frame:hover {
+    background-color: #252525;
+  }
+
+  /* Text color hovers */
+  .hover\:text-main-color:hover {
+    color: #f0f0f0;
+  }
+  .hover\:text-second-color:hover {
+    color: #2a2a2a;
+  }
+  .hover\:text-third-color:hover {
+    color: #1a1a1a;
+  }
+  .hover\:text-forth-color:hover {
+    color: #343434;
+  }
+  .hover\:text-fifth-color:hover {
+    color: #454545;
+  }
+  .hover\:text-contrast-color:hover {
+    color: #9b6dff;
+  }
+
+  /* Border color hovers */
+  .hover\:border-main:hover {
+    border-color: #ff1a1a;
+  }
+  .hover\:border-second:hover {
+    border-color: #2a2a2a;
+  }
+  .hover\:border-third:hover {
+    border-color: #1a1a1a;
+  }
+  .hover\:border-forth:hover {
+    border-color: #343434;
+  }
+  .hover\:border-fifth:hover {
+    border-color: #454545;
+  }
+}
+
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 10% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --dark-chart-1: 359 2% 90%;
+    --dark-chart-2: 240 1% 74%;
+    --dark-chart-3: 240 1% 58%;
+    --dark-chart-4: 240 1% 42%;
+    --dark-chart-5: 240 2% 26%;
+    --radius: 0.5rem;
+    --sidebar-background: #151515;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+    --color-1: 0 100% 63%;
+    --color-2: 270 100% 63%;
+    --color-3: 210 100% 63%;
+    --color-4: 195 100% 63%;
+    --color-5: 90 100% 63%;
+  }
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+    --color-1: 0 100% 63%;
+    --color-2: 270 100% 63%;
+    --color-3: 210 100% 63%;
+    --color-4: 195 100% 63%;
+    --color-5: 90 100% 63%;
+  }
+}
+
+/* @layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+} */
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .overflow-y-auto::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3); /* Set the color and transparency */
+    border-radius: 8px;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.5); /* Change color on hover */
+  }
+  
+  .scrollbar-transparent::-webkit-scrollbar {
+    width: 0px;
+  }
+}
+
+
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
