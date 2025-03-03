@@ -61,7 +61,7 @@ const CommunityCardContainer = ({
           },
         }}
         cssMode={false}>
-        {duplicatedCommunities && duplicatedCommunities.map((community, index) => (
+        {duplicatedCommunities.map((community, index) => (
           <SwiperSlide
             key={`${community.name}-${index}`}
             className="!w-72 !flex-shrink-0 transition-all duration-500 ease-linear">

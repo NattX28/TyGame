@@ -45,6 +45,10 @@ func GetAllCommunities(c *fiber.Ctx) error {
 		})
 	}
 
+	if topCommunities == nil {
+		topCommunities = []models.CommunityResponse{}
+	}
+
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message":      "Success",
 		"communities": 	topCommunities,

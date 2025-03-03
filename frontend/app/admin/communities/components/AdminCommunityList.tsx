@@ -4,7 +4,7 @@ import AdminCommunityCard from "./AdminCommunityCard";
 const AdminCommunityList = ({ communities }: { communities: Community[] }) => {
   return (
     <div className="flex flex-wrap px-6 mt-8 bg-main">
-      {communities && communities.map((community, index) => (
+      {communities.map((community, index) => (
         <AdminCommunityCard key={index} community={community} />
       ))}
     </div>

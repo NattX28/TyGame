@@ -115,7 +115,7 @@ const CommunityList = () => {
     <div className="max-w-screen-2xl mx-auto p-12">
       <h1 className="text-2xl font-bold mb-8">Choose a Community</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
-        {communities && communities.map((community, index) => (
+        {communities.map((community, index) => (
           <CommunityCard key={index} community={community} />
         ))}
       </div>
