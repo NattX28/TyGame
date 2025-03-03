@@ -39,12 +39,14 @@ export interface CommunityMember {
   CreatedAt: Date;
   Community: Community;
 }
-// CreateCommunityForm
-export interface CreateCommunityForm {
+// ReqCommunityForm
+export interface ReqCommunityForm {
+  uuid?: string;
   name: string;
   description: string;
   category: string;
-  image: string;
+  image?: File;
+  imageUrl?: string;
 }
 
 //// Post-services Category

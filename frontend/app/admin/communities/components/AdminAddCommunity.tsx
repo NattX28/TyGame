@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Swal from "sweetalert2";
-import { CreateCommunityForm } from "@/types/types";
+import { ReqCommunityForm } from "@/types/types";
 import { createCommunity } from "@/services/community/communities";
 import { ImageIcon, X } from "lucide-react";
 import { z } from "zod";
@@ -50,15 +50,14 @@ const AdminAddCommunity = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false); // beautify btn
   const [error, setError] = useState<string | null>(null);
-  const [community, setCommunity] = useState<CreateCommunityForm>({
+  const [community, setCommunity] = useState<ReqCommunityForm>({
     name: "",
     description: "",
     category: "",
-    image: "",
+    image: undefined,
   });
 
   // Image Selection State
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -71,7 +70,10 @@ const AdminAddCommunity = () => {
     try {
       imageSchema.parse({ file });
 
-      setSelectedImage(file);
+      setCommunity({
+        ...community,
+        image: file
+      });
       setImagePreview(URL.createObjectURL(file));
       setError(null);
     } catch (err) {
@@ -87,7 +89,6 @@ const AdminAddCommunity = () => {
   // Remove Image
   const removeImage = (e: React.MouseEvent) => {
     e.preventDefault();
-    setSelectedImage(null);
     setImagePreview(null);
     setError(null);
     if (fileInputRef.current) {
@@ -98,7 +99,7 @@ const AdminAddCommunity = () => {
   // รอ test !!!
   const handleCreateCommunity = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!community.name || !community.description || !community.category || !selectedImage) {
+    if (!community.name || !community.description || !community.category || !community.image) {
       Swal.fire("Error", "Please fill in all required fields!", "error");
       return;
     }
@@ -109,7 +110,7 @@ const AdminAddCommunity = () => {
     formData.append("name", community.name)
     formData.append("description", community.description)
     formData.append("category", community.category)
-    formData.append("image", selectedImage);
+    formData.append("image", community.image);
     try {
       const response = await createCommunity(formData);
       Swal.fire("Success", "Community created successfully!", "success");
@@ -118,7 +119,7 @@ const AdminAddCommunity = () => {
         name: "",
         description: "",
         category: "",
-        image: "",
+        image: undefined,
       });
       console.log(response);
     } catch (error: any) {

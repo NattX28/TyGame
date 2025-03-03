@@ -1,6 +1,6 @@
 // Import API และ Type
 import api from "../api";
-import { Community, CreateCommunityForm } from "@/types/types";
+import { Community } from "@/types/types";
 
 const BASE_URL_COMMU: string = "/communities";
 
@@ -31,6 +31,18 @@ export const getCommunityImage = (nameFile: string): string => {
   return `https://tygame.up.railway.app/${BASE_URL_COMMU}/profile/${nameFile}`;
 };
 
+// join community
+export const joinCommunity = async (commuID: string) => {
+  try {
+    console.log(commuID);
+    const { data } = await api.post(`${BASE_URL_COMMU}/join/${commuID}`);
+    return data;
+  } catch (error) {
+    console.error("Join Community error: ", error);
+    throw new Error("Join community failed");
+  }
+};
+
 
 //// POST
 // create community
@@ -48,22 +60,14 @@ export const createCommunity = async (formData: FormData) => {
   }
 };
 
-// join community
-export const joinCommunity = async (commuID: string) => {
-  try {
-    console.log(commuID);
-    const { data } = await api.post(`${BASE_URL_COMMU}/join/${commuID}`);
-    return data;
-  } catch (error) {
-    console.error("Join Community error: ", error);
-    throw new Error("Join community failed");
-  }
-};
-
 //// PUT
-export const editCommunity = async (id: string) => {
+export const editCommunity = async (uuid:string, formData: FormData) => {
   try {
-    const { data } = await api.put(`${BASE_URL_COMMU}/edit/${id}`);
+    const { data } = await api.put(`${BASE_URL_COMMU}/${uuid}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    });
     return data;
   } catch (error) {
     console.error("Edit Community error: ", error);

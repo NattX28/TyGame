@@ -85,7 +85,7 @@ export const refreshToken = async (): Promise<MessageBackend> => {
 //get user image
 export const getUserImage = (id: string): string => {
   const path = `${process.env.NEXT_PUBLIC_API_URL}/users/${id}/avatar`;
-  console.log(path);
+  // console.log(path);
   return path;
 };
 

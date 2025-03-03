@@ -24,7 +24,7 @@ type CommunityMember struct {
 	Community   		Community			`gorm:"foreignKey:CommunityID;references:ID;constraint:OnDelete:CASCADE"`
 }
 
-type CreateCommunityForm struct {
+type ReqCommunityForm struct {
 	Name        	string 			`json:"name" 					gorm:"not null;unique"`
 	Description 	string 			`json:"description" 	gorm:"not null"`
 	Category    	string    	`json:"category"			gorm:"not null"`
