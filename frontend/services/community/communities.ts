@@ -35,7 +35,7 @@ export const getCommunityImage = (nameFile: string): string => {
 export const joinCommunity = async (commuID: string) => {
   try {
     console.log(commuID);
-    const { data } = await api.post(`${BASE_URL_COMMU}/join/${commuID}`);
+    const { data } = await api.post(`${BASE_URL_COMMU}/${commuID}`);
     return data;
   } catch (error) {
     console.error("Join Community error: ", error);
