@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { logOut } from "./../services/user/user";
 
 interface User {
-  id: string;
+  userid: string;
   username: string;
   name: string;
   role: "Super Admin" | "Admin" | "User";
@@ -13,7 +13,7 @@ interface User {
 
 const isValidUser = (user: any): user is User => {
   return (
-    typeof user?.id === "string" &&
+    typeof user?.userid === "string" &&
     typeof user?.username === "string" &&
     typeof user?.name === "string" &&
     ["Super Admin", "Admin", "User"].includes(user?.role) &&
@@ -34,7 +34,7 @@ export const useAuth = () => {
       setUser(storedUser);
     } else {
       setUser(null);
-      localStorage.removeItem("user");
+      // localStorage.removeItem("user");
     }
 
     setLoading(false);
