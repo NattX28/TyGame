@@ -1,4 +1,4 @@
-import { Comment, FeedPost } from "./types";
+import { Comment, Post } from "./types";
 
 export interface getMessageResponse {
   message: string;
@@ -11,5 +11,5 @@ export interface getCommentsResponse {
 
 export interface getAllPost {
   message: string;
-  post: FeedPost[];
+  post: Post[];
 }

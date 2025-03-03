@@ -52,15 +52,16 @@ export interface ReqCommunityForm {
 //// Post-services Category
 // Post
 export interface Post {
-  ID: string;
-  CommunityID: string;
-  UserID: string;
-  Content: string;
-  Visibility: string;
-  Image: string;
-  CreatedAt: string;
-  Comments: string;
-  Likes: string;
+  uuid: string;
+  community_id: string;
+  user_id: string;
+  content: string;
+  visibility: string;
+  image?: string;
+  score: number;
+  likes?: number;
+  comments?: number;
+  timestamp: number;
 }
 
 // EditPostRequest
@@ -102,17 +103,6 @@ export interface Like {
 
   Post: Post;
   Comment: Comment;
-}
-
-//FeedPost
-export interface FeedPost {
-  CommunityID: string;
-  UserID: string;
-  Content: string;
-  Visibility: string;
-  Image: string;
-  Score?: number;
-  CreatedAt: string;
 }
 
 ////Party-services Category

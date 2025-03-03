@@ -15,14 +15,14 @@ import {
 } from "../ui/card";
 import { useEffect, useState } from "react";
 
-const PostCard = (post : Post) => {
+const PostCard = ({ post }: { post: Post }) => {
   const [userData, setUserData] = useState<UserPublicData>();
   const [timeAgo, setTimeAgo] = useState<string>();
 
   useEffect(() => {
     const fetchFeed = async () => {
       try {
-        const data = await getUserData(post.UserID);;
+        const data = await getUserData(post.user_id);;
         setUserData(data);
       } catch (err) {
         console.log(err);
@@ -33,8 +33,8 @@ const PostCard = (post : Post) => {
 
   useEffect(() => {
     const updateTime = () => {
-      const timeMs = post.CreatedAt * 1000;
-      setTimeAgo(timeagoInstance.format(timeMs));
+      const timeMs = post.timestamp * 1000;
+      setTimeAgo(moment.unix(timeMs).fromNow());
     };
     updateTime();
     const intervalId = setInterval(updateTime, 1000);
@@ -60,11 +60,11 @@ const PostCard = (post : Post) => {
       <CardFooter className="p-2 flex gap-4">
         <Button className="flex items-center gap-1">
           <ThumbsUp className="w-5 h-5" />
-          <span>Like</span>
+          <span>Like {post.likes}</span>
         </Button>
         <Button className="flex items-center gap-1">
           <MessageCircle className="w-5 h-5" />
-          <span>comment</span>
+          <span>comment {post.comments}</span>
         </Button>
       </CardFooter>
     </Card>
