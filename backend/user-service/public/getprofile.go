@@ -1,12 +1,10 @@
 package routes
 
 import (
-	"os"
 	"user-service/db"
 	"user-service/models"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v5"
 )
 
 // GetProfileHandler retrieves the user's profile information
