@@ -2,6 +2,7 @@ package routes
 
 import (
     "fmt"
+    "os"
 
     "github.com/gofiber/fiber/v2"
     "github.com/microcosm-cc/bluemonday"
@@ -14,6 +15,14 @@ import (
 
 func CreateCommunityHandler(c *fiber.Ctx) error {
     imagePath := "./uploads/profile/%s"
+
+    // Check if the folder exists, if not create it
+    if _, err := os.Stat("./uploads/profile"); os.IsNotExist(err) {
+        err := os.MkdirAll("./uploads/profile", os.ModePerm)
+        if err != nil {
+            return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to create directory"})
+        }
+    }
 
     name := c.FormValue("name")
     description := c.FormValue("description")
