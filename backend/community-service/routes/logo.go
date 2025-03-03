@@ -3,7 +3,6 @@ package routes
 import (
 	"strings"
 	"path/filepath"
-	"log"
 
 	"github.com/gofiber/fiber/v2"
 )

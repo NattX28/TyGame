@@ -34,7 +34,7 @@ export const useAuth = () => {
       setUser(storedUser);
     } else {
       setUser(null);
-      // localStorage.removeItem("user");
+      localStorage.removeItem("user");
     }
 
     setLoading(false);
