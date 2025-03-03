@@ -1,7 +1,6 @@
 package routes
 
 import (
-    "fmt"
     "os"
 
     "github.com/gofiber/fiber/v2"
