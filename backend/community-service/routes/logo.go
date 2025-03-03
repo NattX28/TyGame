@@ -1,13 +1,14 @@
-package main
+package routes
 
 import (
-	"fmt"
-	"log"
-	"net/http"
-	"path/filepath"
 	"strings"
+	"path/filepath"
+	"log"
 
 	"github.com/gofiber/fiber/v2"
+
+	"community-service/db"
+	"community-service/models"
 )
 
 func LogoCommunityHandler(c *fiber.Ctx) error {
@@ -39,7 +40,4 @@ func LogoCommunityHandler(c *fiber.Ctx) error {
 	}
 
 	return c.SendFile(filePath)
-})
-
-log.Fatal(app.Listen(":3000"))
 }
