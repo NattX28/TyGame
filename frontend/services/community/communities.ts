@@ -28,7 +28,7 @@ export const getCommunity = async (id: string): Promise<Community> => {
 };
 
 export const getCommunityImage = (nameFile: string): string => {
-  return `https://tygame.up.railway.app/${BASE_URL_COMMU}/profile/${nameFile}`;
+  return `${process.env.NEXT_PUBLIC_API_URL}${BASE_URL_COMMU}/profile/${nameFile}`;
 };
 
 // join community

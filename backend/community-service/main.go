@@ -43,7 +43,7 @@ func main() {
 	})
 
 	communities.Use(middleware.JWTMiddleware)
-	communities.Get("/profile/:nameFile", routes.LogoCommunityHandler)
+	communities.Get("/profile/:nameFile", routes.ProfileCommunityHandler)
 	communities.Get("/getall", middleware.CanAccess, routes.GetAllCommunities)
 	communities.Post("/create", middleware.CanManagement, routes.CreateCommunityHandler)
 

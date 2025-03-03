@@ -7,7 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func LogoCommunityHandler(c *fiber.Ctx) error {
+func ProfileCommunityHandler(c *fiber.Ctx) error {
 	nameFile := c.Params("nameFile")
 
 	// Ensure no sneaky path traversal (like ../../../etc/passwd)
@@ -16,7 +16,7 @@ func LogoCommunityHandler(c *fiber.Ctx) error {
 	}
 
 	// Construct full path (only allow files inside ./uploads/logo/)
-	filePath := filepath.Join("./uploads/logo", nameFile)
+	filePath := filepath.Join("./uploads/profile", nameFile)
 
 	// Optionally, check file extension (allow only certain types)
 	allowedExtensions := map[string]bool{
