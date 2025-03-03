@@ -1,8 +1,11 @@
+import moment from 'moment';
 import { Button } from "../ui/button";
 import Image from "next/image";
 import { MessageCircle } from "lucide-react";
 import { ThumbsUp } from "lucide-react";
 import { Post } from "@/types/types";
+import { UserPublicData } from "@/types/user";
+import { getUserData } from "@/services/user/user";
 import {
   Card,
   CardContent,
@@ -10,13 +13,39 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
+import { useEffect, useState } from "react";
 
 const PostCard = (post : Post) => {
+  const [userData, setUserData] = useState<UserPublicData>();
+  const [timeAgo, setTimeAgo] = useState<string>();
+
+  useEffect(() => {
+    const fetchFeed = async () => {
+      try {
+        const data = await getUserData(post.UserID);;
+        setUserData(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchFeed();
+  }, []);
+
+  useEffect(() => {
+    const updateTime = () => {
+      const timeMs = post.CreatedAt * 1000;
+      setTimeAgo(timeagoInstance.format(timeMs));
+    };
+    updateTime();
+    const intervalId = setInterval(updateTime, 1000);
+    return () => clearInterval(intervalId);
+  }, []);
+
   return (
-    <Card className="w-full px-0 mx-0 bg-main text-main-color">
+    userData && <Card className="w-full px-0 mx-0 bg-main text-main-color">
       <CardHeader className="p-4">
-        <CardTitle>{post.UserID}</CardTitle>
-        <CardTitle className="text-sm">17 January 2025 16:45:31</CardTitle>
+        <CardTitle>{userData.name}</CardTitle>
+        <CardTitle className="text-sm">{timeAgo}</CardTitle>
       </CardHeader>
       <CardContent className="p-0">
         <div className="relative w-full aspect-[16/9]">

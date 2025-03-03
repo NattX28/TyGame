@@ -11,8 +11,9 @@ type Post struct {
 	UserID      	uuid.UUID     `gorm:"type:uuid;not null"`
 	Content     	string    		`gorm:"type:text;null"`
 	Visibility  	string    		`gorm:"type:varchar(20);default:'public';check:visibility IN ('public', 'private', 'friends')"`
-	Image       	string    		`gorm:"type:text;"`	
-	CreatedAt   	time.Time 		`gorm:"default:current_timestamp"`
+	Image 				string 				`json:"image,omitempty" gorm:"type:text;null"`
+	Timestamp   	int64     		`json:"timestamp"`
+	CreatedAt   	time.Time 		`gorm:"autoCreateTime"`
 
 	Comments    	[]Comment 		`gorm:"foreignKey:PostID;onDelete:CASCADE"`
 	Likes       	[]Like    		`gorm:"foreignKey:PostID;onDelete:CASCADE"`

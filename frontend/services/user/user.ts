@@ -1,6 +1,6 @@
 import api from "../api";
 import { jwtDecode } from "jwt-decode";
-import { UpdateUserRequest } from "@/types/user";
+import { UpdateUserRequest, UserPublicData } from "@/types/user";
 import { DecodedToken } from "@/types/auth";
 import { LoginResponse, RegisterResponse } from "@/types/auth";
 import { MessageBackend } from "@/types/samePattern";
@@ -97,5 +97,16 @@ export const getAllUserAllCommunity = async (): Promise<number> => {
   } catch (error) {
     console.log("get count users failed: ", error);
     throw new Error("get count users failed");
+  }
+};
+
+// get user profile by id
+export const getUserData = async (uuid: string): Promise<UserPublicData> => {
+  try {
+    const { data } = await api.get(`${BASE_URL_USER}/${uuid}`);
+    return data;
+  } catch (error) {
+    console.log("get user data failed: ", error);
+    throw new Error("get user data failed");
   }
 };

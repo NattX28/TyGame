@@ -12,5 +12,5 @@ type FeedPost struct {
 	Visibility  		string    			`json:"visibility"`
 	Image       		string    			`json:"image"`
 	Score       		float64   			`json:"score"`
-	CreatedAt   		time.Time 			`json:"created_at"`
+	Timestamp   		int64     			`json:"timestamp"
 }

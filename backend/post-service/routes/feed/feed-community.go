@@ -20,11 +20,12 @@ func GetFeedCommunity(c *fiber.Ctx) error {
 
 	var posts []models.FeedPost
 	err = db.DB.Raw(`
-    SELECT community_id, user_id, content, visibility, image, created_at,
+    SELECT community_id, user_id, content, visibility, image, timestamp, created_at,
            (COALESCE(likes_count, 0) * 2 + COALESCE(comments_count, 0) * 3 - 
            (EXTRACT(EPOCH FROM NOW() - created_at) / 3600) * 5) AS score
     FROM (
-        SELECT p.community_id, p.user_id, p.content, p.visibility, p.image, p.created_at,
+        SELECT p.community_id, p.user_id, p.content, p.visibility, p.image, 
+               p.timestamp, p.created_at,
                (SELECT COUNT(*) FROM likes WHERE post_id = p.id) AS likes_count,
                (SELECT COUNT(*) FROM comments WHERE post_id = p.id) AS comments_count
         FROM posts p
