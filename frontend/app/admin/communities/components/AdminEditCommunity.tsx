@@ -85,7 +85,7 @@ const AdminEditCommunity = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-full">
-                  {communities.map((community) => (
+                  {communities && communities.map((community) => (
                     <div
                       key={community.uuid}
                       className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-black"
