@@ -6,9 +6,21 @@ import { logOut } from "./../services/user/user";
 interface User {
   id: string;
   username: string;
-  email: string;
-  role: "admin" | "user";
+  name: string;
+  role: "Super Admin" | "Admin" | "User";
+  exp: number;
 }
+
+const isValidUser = (user: any): user is User => {
+  return (
+    typeof user?.id === "string" &&
+    typeof user?.username === "string" &&
+    typeof user?.name === "string" &&
+    ["Super Admin", "Admin", "User"].includes(user?.role) &&
+    typeof user?.exp === "number" &&
+    user?.exp > Math.floor(Date.now() / 1000) // Check if exp is in the future (not expired)
+  );
+};
 
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -16,21 +28,13 @@ export const useAuth = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("Authorization="))
-      ?.split("=")[1];
+    const storedUser = JSON.parse(localStorage.getItem("user") || "null");
 
-    if (!token) {
+    if (isValidUser(storedUser)) {
+      setUser(storedUser);
+    } else {
       setUser(null);
-      setLoading(false);
-      return;
-    }
-
-    // ดึงข้อมูล User จาก Cookie หรือ API ถ้าจำเป็น
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      localStorage.removeItem("user");
     }
 
     setLoading(false);
@@ -41,6 +45,7 @@ export const useAuth = () => {
       const response = await logOut();
       document.cookie = `Authorization=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
       localStorage.removeItem("user");
+
       setUser(null);
       router.push("/login");
     } catch (error) {

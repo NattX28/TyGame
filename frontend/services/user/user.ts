@@ -19,12 +19,7 @@ export const login = async (
       password,
     });
     
-    localStorage.setItem("userid", data.user.userid);
-    localStorage.setItem("role", data.user.role);
-    localStorage.setItem("name", data.user.name);
-    localStorage.setItem("username", data.user.username);
-    localStorage.setItem("exp", data.user.exp);
-
+    localStorage.setItem("user", JSON.stringify(data.user))
     return data;
   } catch (error: any) {
     console.log("login failed: ", error);
