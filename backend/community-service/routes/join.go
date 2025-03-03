@@ -32,6 +32,15 @@ func JoinCommunityHandler(c *fiber.Ctx) error {
 		CommunityID: 	commuID,
 	}
 
+	var existingMember models.CommunityMember
+	result := db.DB.Where("user_id = ? AND community_id = ?", userID, commuID).First(&existingMember)
+	if result.RowsAffected > 0 {
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{
+			"message": "User already in community",
+			"community": community,
+		})
+	}
+
 	if err := db.DB.Create(&joinReq).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to join community"})
 	}
