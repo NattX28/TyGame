@@ -20,7 +20,7 @@ const AdminCommunityCard = ({ community }: { community: Community }) => {
             {community.name}
           </h4>
           <p className="transition-colors duration-300 group-hover:text-gray-400">
-            {community.members?.toLocaleString()} members
+            {community.member_count?.toLocaleString() || 0} members
           </p>
         </div>
         <Pencil className="w-4 h-4 transition-all duration-300 hover:text-red-500 hover:scale-110" />
