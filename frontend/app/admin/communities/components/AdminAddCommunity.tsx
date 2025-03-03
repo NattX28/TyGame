@@ -98,14 +98,20 @@ const AdminAddCommunity = () => {
   // รอ test !!!
   const handleCreateCommunity = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!community.name || !community.description || !community.category) {
+    if (!community.name || !community.description || !community.category || !selectedImage) {
       Swal.fire("Error", "Please fill in all required fields!", "error");
       return;
     }
 
     setLoading(true);
+
+    const formData = new FormData();
+    formData.append("name", community.name)
+    formData.append("description", community.description)
+    formData.append("category", community.category)
+    formData.append("image", selectedImage);
     try {
-      const response = await createCommunity(community);
+      const response = await createCommunity(formData);
       Swal.fire("Success", "Community created successfully!", "success");
       setIsOpen(false);
       setCommunity({

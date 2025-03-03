@@ -28,15 +28,19 @@ export const getCommunity = async (id: string): Promise<Community> => {
 };
 
 export const getCommunityImage = (nameFile: string): string => {
-  return `https://tygame.up.railway.app/${BASE_URL_COMMU}/logo/${nameFile}`;
+  return `https://tygame.up.railway.app/${BASE_URL_COMMU}/profile/${nameFile}`;
 };
 
 
 //// POST
 // create community
-export const createCommunity = async (community: CreateCommunityForm) => {
+export const createCommunity = async (formData: FormData) => {
   try {
-    const { data } = await api.post(`${BASE_URL_COMMU}/create`, community);
+    const { data } = await api.post(`${BASE_URL_COMMU}/create`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    });
     return data;
   } catch (error) {
     console.error("Create Community error: ", error);

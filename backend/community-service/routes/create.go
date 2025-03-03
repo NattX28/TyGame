@@ -68,16 +68,17 @@ func CreateCommunityHandler(c *fiber.Ctx) error {
     }
 
     // Store Data
-    result := db.DB.Create(&community)
-    if result.Error != nil {
-        return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to create community"})
-    }
-
+    
     fullImagePath := fmt.Sprintf(imagePath, filename)
     if err := c.SaveFile(image, fullImagePath); err != nil {
         return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
             "error": "Failed to save image",
         })
+    }
+
+    result := db.DB.Create(&community)
+    if result.Error != nil {
+        return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to create community"})
     }
 
     return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "Community created successfully"})
