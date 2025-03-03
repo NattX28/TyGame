@@ -7,10 +7,11 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { userSidebarItems } from "@/utils/utils";
 import { useEffect, useState } from "react";
+import { getUserImage } from "@/services/user/user";
 
 const UserSidebar = () => {
   const pathname = usePathname();
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const [lastCommunity, setLastCommunity] = useState<string | null>(null);
 
   useEffect(() => {
@@ -25,22 +26,22 @@ const UserSidebar = () => {
   const homeUrl = lastCommunity ? `/feed/${lastCommunity}` : "/explore";
 
   return (
-    <div className="px-4 py-8 h-full flex flex-col">
+    user && (<div className="px-4 py-8 h-full flex flex-col">
       {/* Top section */}
       <div className="space-y-8">
         {/* Header sidebar */}
         <div className="flex flex-col items-center justify-center gap-3">
           <Avatar className="h-24 w-24 ">
             <AvatarImage
-              src="https://github.com/shadcn.png"
+              src={getUserImage(user.userid)}
               alt="@shadcn"
               className="rounded-full"
             />
             <AvatarFallback className="rounded-lg">CN</AvatarFallback>
           </Avatar>
           <div className="grid flex-1 text-center text-sm leading-tight">
-            <span className="truncate font-semibold">username</span>
-            <span className="truncate text-xs">example@email</span>
+            <span className="truncate font-semibold">{user.name}</span>
+            <span className="truncate text-xs">{user.username}</span>
           </div>
         </div>
 
@@ -78,7 +79,7 @@ const UserSidebar = () => {
           <span>{"Logout"}</span>
         </Button>
       </div>
-    </div>
+    </div>)
   );
 };
 

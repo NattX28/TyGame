@@ -24,7 +24,7 @@ const CommunitiesPage = () => {
     
   return (                                                    
     <>
-      <div className="flex flex-col flex-wrap">
+      <div className="flex flex-col flex-wrap items-center">
         <AdminAddCommunity />
         <AdminEditCommunity />
       </div>

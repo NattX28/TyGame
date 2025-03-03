@@ -73,7 +73,7 @@ const AdminEditCommunity = () => {
 
             {/* Step 1: Choose Community */}
             <div>
-              <label className="block text-sm font-medium mb-1">
+              <label className="block text-sm font-medium mb-10">
                 Select Community:
               </label>
               <DropdownMenu>

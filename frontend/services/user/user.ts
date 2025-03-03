@@ -84,7 +84,9 @@ export const refreshToken = async (): Promise<MessageBackend> => {
 
 //get user image
 export const getUserImage = (id: string): string => {
-  return `https://tygame.up.railway.app/users/${id}/avatar`;
+  const path = `${process.env.NEXT_PUBLIC_API_URL}/users/${id}/avatar`;
+  console.log(path);
+  return path;
 };
 
 // get all user every community

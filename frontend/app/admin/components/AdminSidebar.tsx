@@ -4,7 +4,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Handshake, Home, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useAuth } from "@/hooks/useAuth";
 import { usePathname } from "next/navigation";
+import { getUserImage } from "@/services/user/user";
 
 const items = [
   {
@@ -21,23 +23,25 @@ const items = [
 
 const AdminSidebar = () => {
   const pathname = usePathname();
+  const { user, logout } = useAuth();
+
   return (
-    <div className="px-4 py-8 h-full flex flex-col">
+    user && (<div className="px-4 py-8 h-full flex flex-col">
       {/* Top section */}
       <div className="space-y-8">
         {/* Header sidebar */}
         <div className="flex flex-col items-center justify-center gap-3">
           <Avatar className="h-24 w-24 ">
             <AvatarImage
-              src="https://github.com/shadcn.png"
+              src={getUserImage(user.userid)}
               alt="@shadcn"
               className="rounded-full"
             />
             <AvatarFallback className="rounded-lg">CN</AvatarFallback>
           </Avatar>
           <div className="grid flex-1 text-center text-sm leading-tight">
-            <span className="truncate font-semibold">username</span>
-            <span className="truncate text-xs">example@email</span>
+            <span className="truncate font-semibold">{user.name}</span>
+            <span className="truncate text-xs">{user.username}</span>
           </div>
         </div>
 
@@ -79,7 +83,7 @@ const AdminSidebar = () => {
           </Link>
         </Button>
       </div>
-    </div>
+    </div>)
   );
 };
 
