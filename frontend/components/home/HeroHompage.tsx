@@ -32,7 +32,7 @@ const HeroHompage = () => {
           src="/media/images/console-game-controller-3d-image.png"
           alt="background"
           fill
-          className="absolute top-0 left-0 w-full h-full z-0 transform object-contain md:scale-125 md:translate-x-5 lg:translate-x-10 lg:object-cover xl:scale-150 xl:translate-y-24 xl:-translate-x-40"
+          className="absolute top-0 left-0 w-full h-full z-[-100] transform object-contain md:scale-125 md:translate-x-5 lg:translate-x-10 lg:object-cover xl:scale-150 xl:translate-y-24 xl:-translate-x-40"
         />
       </div>
       {isModalOpen && (
