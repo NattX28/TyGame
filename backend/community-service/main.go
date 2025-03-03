@@ -42,8 +42,8 @@ func main() {
 		return c.SendString("Hello World")
 	})
 
-	communities.Use(middleware.JWTMiddleware)
 	communities.Get("/profile/:nameFile", routes.ProfileCommunityHandler)
+	communities.Use(middleware.JWTMiddleware)
 	communities.Get("/getall", middleware.CanAccess, routes.GetAllCommunities)
 	communities.Post("/create", middleware.CanManagement, routes.CreateCommunityHandler)
 
