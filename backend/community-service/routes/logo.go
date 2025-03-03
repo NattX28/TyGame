@@ -6,9 +6,6 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
-
-	"community-service/db"
-	"community-service/models"
 )
 
 func LogoCommunityHandler(c *fiber.Ctx) error {
