@@ -51,6 +51,11 @@ func main() {
 		})
 	})
 
+	userFocus := userRoutes.Group("/:userID")
+	userFocus.Get("/", public.GetProfileHandler)
+	userFocus.Get("/avatar", public.GetAvatarHandler)
+
+	userRoutes.Use(middleware.JWTMiddleware)
 	userRoutes.Get("/count", routes.GetUserCount)
 	userRoutes.Post("/register", routes.RegisterHandler)
 	userRoutes.Post("/login", routes.LoginHandler)
@@ -72,8 +77,6 @@ func main() {
 	protectedRoutes.Post("/upload-profile", usersmanagement.UploadProfileHandler)
 	protectedRoutes.Get("/profile", usersmanagement.GetUserProfileHandler)
 
-	userFocus := userRoutes.Group("/:userID")
-	userFocus.Get("/avatar", public.GetAvatarHandler)
 
 	// Handle 404 - catch-all route
 	app.Use(func(c *fiber.Ctx) error {

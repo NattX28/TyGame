@@ -36,7 +36,7 @@ export const joinCommunity = async (commuID: string) => {
   try {
     console.log(commuID);
     const { data } = await api.post(`${BASE_URL_COMMU}/${commuID}`);
-    return data;
+    return data.community;
   } catch (error) {
     console.error("Join Community error: ", error);
     throw new Error("Join community failed");

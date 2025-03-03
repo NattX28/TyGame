@@ -2,6 +2,7 @@ import { Button } from "../ui/button";
 import Image from "next/image";
 import { MessageCircle } from "lucide-react";
 import { ThumbsUp } from "lucide-react";
+import { Post } from "@/types/types";
 import {
   Card,
   CardContent,
@@ -10,11 +11,11 @@ import {
   CardTitle,
 } from "../ui/card";
 
-const PostCard = () => {
+const PostCard = (post : Post) => {
   return (
     <Card className="w-full px-0 mx-0 bg-main text-main-color">
       <CardHeader className="p-4">
-        <CardTitle>Joney Star</CardTitle>
+        <CardTitle>{post.UserID}</CardTitle>
         <CardTitle className="text-sm">17 January 2025 16:45:31</CardTitle>
       </CardHeader>
       <CardContent className="p-0">
