@@ -58,7 +58,7 @@ func CreatePostHandler(c *fiber.Ctx) error {
 		CommunityID: communityID,
 		Content:     safeContent,
 		Visibility:  visibility,
-		Timestamp:   time.Now().Unix()
+		Timestamp:   time.Now().Unix(),
 	}
 
 	// Handle file upload
