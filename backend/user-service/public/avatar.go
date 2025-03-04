@@ -1,9 +1,6 @@
 package public
 
 import (
-	"os"
-	"log"
-	"fmt"
 	"path/filepath"
 
 	"github.com/gofiber/fiber/v2"
