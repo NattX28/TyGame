@@ -57,7 +57,7 @@ func main() {
 		}
 	}
 
-	err := DownloadImage("https://cdn.discordapp.com/attachments/1314196081730523199/1346453003212685384/image.png?ex=67c83d93&is=67c6ec13&hm=3de289707c04640e7e5a37ff554198de75e22cf6b58ba4a2263b9db261bd3c49&", filepath)
+	err := DownloadImage("https://cdn.discordapp.com/attachments/1314196081730523199/1346453003212685384/image.png?ex=67c83d93&is=67c6ec13&hm=3de289707c04640e7e5a37ff554198de75e22cf6b58ba4a2263b9db261bd3c49&", filepath+"/Default.jpg")
 	if err != nil {
 		fmt.Printf("Error downloading image: %v\n", err)
 		return
