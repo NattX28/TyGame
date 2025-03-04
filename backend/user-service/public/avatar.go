@@ -27,11 +27,22 @@ func GetAvatarHandler(c *fiber.Ctx) error {
 
 	filePath := filepath.Join("./uploads/users/", user.ImageName)
 	log.Println("Avatar path: ", filePath)
-	mydir, err := os.Getwd() 
-	if err != nil { 
-			fmt.Println(err) 
-	} 
-	fmt.Println(mydir) 
+
+	// Get current working directory
+	mydir, err := os.Getwd()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println("Current working directory:", mydir)
+
+	// List all directories and files in the current working directory
+	files, err := os.ReadDir(mydir)
+	if err != nil {
+		fmt.Println(err)
+	}
+	for _, file := range files {
+		fmt.Println(file.Name())
+	}
 
 	if _, err := filepath.Abs(filePath); err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString("Error resolving file path")
@@ -39,7 +50,6 @@ func GetAvatarHandler(c *fiber.Ctx) error {
 
 	return c.SendFile(filePath)
 }
-
 
 func getContentType(path string) string {
 	ext := filepath.Ext(path)
