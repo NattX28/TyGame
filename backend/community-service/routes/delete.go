@@ -2,7 +2,7 @@ package routes
 
 import (
 	"os"
-	"fmt"
+	"path/filepath"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
@@ -12,7 +12,7 @@ import (
 )
 
 func DeleteCommunityHandler(c *fiber.Ctx) error {
-	var imagePath = "./uploads/profile/%s"
+	var imagePath = "./uploads/profile/"
 	commuID, err1 := uuid.Parse(c.Params("CommuID"))
 	if err1 != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid Param"})
@@ -25,7 +25,7 @@ func DeleteCommunityHandler(c *fiber.Ctx) error {
 	}
 
 	// Delete Data
-	os.Remove(fmt.Sprintf(imagePath, community.Image))
+	os.Remove(filepath.Join(imagePath, community.Image))
 
 	if err := db.DB.Delete(&community).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to delete community"})

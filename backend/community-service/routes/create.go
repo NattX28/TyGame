@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"path/filepath"
+    
     "github.com/gofiber/fiber/v2"
     "github.com/google/uuid"
     "github.com/microcosm-cc/bluemonday"
@@ -69,8 +71,8 @@ func CreateCommunityHandler(c *fiber.Ctx) error {
     }
 
     // Save file to disk
-	imagePath := "./uploads/profile"
-    fullImagePath := imagePath + filename
+	imagePath := "./uploads/profile/"
+    fullImagePath := filepath.Join(imagePath, community.Image)
     if err := c.SaveFile(image, fullImagePath); err != nil {
         return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
             "error": "Failed to save image",

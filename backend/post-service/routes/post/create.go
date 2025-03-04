@@ -14,7 +14,7 @@ import (
 	"post-service/models"
 )
 
-var imagePath = "./uploads/posts/%s"
+var imagePath = "./uploads/posts/"
 
 func CreatePostHandler(c *fiber.Ctx) error {
 	userID, err := uuid.Parse(c.Locals("UserID").(string))
@@ -90,8 +90,8 @@ func CreatePostHandler(c *fiber.Ctx) error {
 		filename := fmt.Sprintf("%d%s", time.Now().UnixNano(), extension)
 
 		// Save file
-		savePath := fmt.Sprintf(imagePath, filename)
-		if err := c.SaveFile(file, savePath); err != nil {
+		fullImagePath := filepath.Join(imagePath, filename)
+		if err := c.SaveFile(file, fullImagePath); err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 				"error": "Failed to save file",
 			})
@@ -104,7 +104,7 @@ func CreatePostHandler(c *fiber.Ctx) error {
 	result := db.DB.Create(&post)
 	if result.Error != nil {
 		if post.Image != "" {
-			imagePath, err := filepath.Abs(fmt.Sprintf(imagePath, post.Image))
+			imagePath, err := filepath.Abs(filepath.Join(imagePath, post.Image))
 			if err != nil {
 				return fmt.Errorf("failed to get absolute path: %v", err)
 			}
