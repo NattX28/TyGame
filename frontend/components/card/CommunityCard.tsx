@@ -64,7 +64,7 @@ const CommunityCard = ({ community }: { community: Community }) => {
 
           {/* Stats */}
           <div className="flex items-center space-x-2 mb-4">
-            <div className="w-4 h-4 bg-green-300 transition-transform duration-300 group-hover:bg-green-500 group-hover:scale-110"></div>
+            <div className="w-4 h-4 bg-green-300 transition-transform duration-300 group-hover:bg-green-500 group-hover:scale-110 rounded-full"></div>
             <span className="text-xs text-main-color transition-colors duration-300 group-hover:text-main-color/90">
             {community.member_count}
             </span>
