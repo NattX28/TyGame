@@ -21,9 +21,10 @@ func main() {
 		log.Println("No .env file found, skipping...")
 	}
 
-	if _, err := os.Stat("./uploads/profile/"); os.IsNotExist(err) {
-		if err := os.MkdirAll("./uploads/profile/", os.ModePerm); err != nil {
-				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to create directory"})
+	imagePath := "./uploads/profile"
+	if _, err := os.Stat(imagePath); os.IsNotExist(err) {
+		if err := os.MkdirAll(imagePath, os.ModePerm); err != nil {
+				return
 		}
 	}
 

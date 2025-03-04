@@ -69,6 +69,7 @@ func CreateCommunityHandler(c *fiber.Ctx) error {
     }
 
     // Save file to disk
+	imagePath := "./uploads/profile"
     fullImagePath := imagePath + filename
     if err := c.SaveFile(image, fullImagePath); err != nil {
         return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{

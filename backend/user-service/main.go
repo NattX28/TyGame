@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"io"
+	"net/http"
 	"log"
 	"os"
 	"time"
@@ -53,11 +56,11 @@ func main() {
 	filePath := "./uploads/users"
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
 		if err := os.MkdirAll(filePath, os.ModePerm); err != nil {
-				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to create directory"})
+				return
 		}
 	}
 
-	err := DownloadImage("https://cdn.discordapp.com/attachments/1314196081730523199/1346453003212685384/image.png?ex=67c83d93&is=67c6ec13&hm=3de289707c04640e7e5a37ff554198de75e22cf6b58ba4a2263b9db261bd3c49&", filepath+"/Default.jpg")
+	err = DownloadImage("https://cdn.discordapp.com/attachments/1314196081730523199/1346453003212685384/image.png?ex=67c83d93&is=67c6ec13&hm=3de289707c04640e7e5a37ff554198de75e22cf6b58ba4a2263b9db261bd3c49&", filePath+"/Default.jpg")
 	if err != nil {
 		fmt.Printf("Error downloading image: %v\n", err)
 		return
