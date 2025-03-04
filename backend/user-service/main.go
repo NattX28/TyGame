@@ -21,6 +21,7 @@ import (
 	"user-service/usersmanagement"
 )
 
+
 func DownloadImage(url string, filepath string) error {
 	resp, err := http.Get(url)
 	if err != nil {
@@ -44,14 +45,6 @@ func DownloadImage(url string, filepath string) error {
 	}
 
 	return nil
-}
-
-func getFeedURL() string {
-	lastCommunity := os.Getenv("LAST_COMMUNITY")
-	if lastCommunity != "" {
-		return "/feed/" + lastCommunity
-	}
-	return "/feed"
 }
 
 func main() {
@@ -91,9 +84,6 @@ func main() {
 		AllowMethods: "GET,POST,PUT,DELETE",
 		AllowCredentials: true,
 	}))
-
-	feedURL := getFeedURL()
-	fmt.Println("Feed URL:", feedURL)
 
 	// Define public routes
 	userRoutes := app.Group("/users")
