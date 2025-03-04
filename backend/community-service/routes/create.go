@@ -1,15 +1,15 @@
 package routes
 
 import (
-    "os"
+	"os"
 
-    "github.com/gofiber/fiber/v2"
-    "github.com/google/uuid"
-    "github.com/microcosm-cc/bluemonday"
+	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
+	"github.com/microcosm-cc/bluemonday"
 
-    "community-service/db"
-    "community-service/models"
-    "community-service/utils"
+	"community-service/db"
+	"community-service/models"
+	"community-service/utils"
 )
 
 func CreateCommunityHandler(c *fiber.Ctx) error {
