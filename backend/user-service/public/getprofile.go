@@ -9,6 +9,11 @@ import (
 
 // GetProfileHandler retrieves the user's profile information
 func GetProfileHandler(c *fiber.Ctx) error {
+	userID, err := uuid.Parse(c.Params("userID"))
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid user ID"})
+	}
+	
 	var user models.User
 	if err := db.DB.First(&user, "id = ?", userID).Error; err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "User not found"})
