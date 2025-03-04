@@ -1,7 +1,6 @@
 package models
 
 import (
-	"time"
 	"github.com/google/uuid"
 )
 
@@ -15,5 +14,5 @@ type FeedPost struct {
 	Score       		float64   			`json:"score"`
   LikesCount    	int        			`json:"likes"`
   CommentsCount 	int        			`json:"comments"`
-	Timestamp   		int64     			`json:"timestamp"
+	Timestamp   		int64     			`json:"timestamp"`
 }
