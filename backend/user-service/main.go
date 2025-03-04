@@ -93,17 +93,17 @@ func main() {
 		})
 	})
 
-	userFocus := userRoutes.Group("/:userID")
-	userFocus.Get("/avatar", public.GetAvatarHandler)
-	userFocus.Use(middleware.JWTMiddleware)
-	userFocus.Get("/", public.GetProfileHandler)
-
-	
 	userRoutes.Get("/count", routes.GetUserCount)
 	userRoutes.Post("/register", routes.RegisterHandler)
 	userRoutes.Post("/login", routes.LoginHandler)
 	userRoutes.Post("/logout", routes.LogoutHandler)
 	userRoutes.Post("/refresh-token", routes.RefreshTokenHandler)
+
+	
+	userFocus := userRoutes.Group("/:userID")
+	userFocus.Get("/avatar", public.GetAvatarHandler)
+	userFocus.Use(middleware.JWTMiddleware)
+	userFocus.Get("/", public.GetProfileHandler)
 
 	// Define friend management routes (Require JWT)
 	friendRoutes := app.Group("/friends")
