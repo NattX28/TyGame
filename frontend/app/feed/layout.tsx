@@ -1,6 +1,6 @@
 "use client";
 import UserSidebar from "@/components/shared/UserSidebar";
-import Button from "./components/ModalBtn";
+import Button from "./[id]/components/ModalBtn";
 import FindPartyButton from "@/components/party/FindPartyButton";
 import PeopleInCommunity from "@/components/people/PeopleInCommunity";
 

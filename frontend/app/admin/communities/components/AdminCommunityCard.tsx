@@ -1,3 +1,4 @@
+import { getCommunityImage } from "@/services/community/communities";
 import { Community } from "@/types/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Pencil } from "lucide-react";
@@ -12,7 +13,7 @@ const AdminCommunityCard = ({ community }: { community: Community }) => {
                     hover:bg-black hover:bg-opacity-80 hover:scale-102
                     hover:border-red-600 hover:border hover:cursor-pointer">
         <Avatar className="w-4 h-4 md:w-8 md:h-8">
-          <AvatarImage src={community.image} alt="Community Avatar" />
+          <AvatarImage src={getCommunityImage(community.image)} alt="Community Avatar" />
           <AvatarFallback>GC</AvatarFallback>
         </Avatar>
         <div className="flex flex-col text-main-color mx-3">

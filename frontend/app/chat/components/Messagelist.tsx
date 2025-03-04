@@ -18,7 +18,7 @@ const MsgYou = ({ Message }: { Message: ChatMessage }) => {
         width={40}
         height={40}
         src={Message.sender_id}
-        alt={Message.id.toString()}
+        alt={Message.sender_id.toString()}
         className="rounded-full w-10 h-10 mr-4"
       />
       <div className="bg-second rounded-3xl px-3 py-1 max-w-sm md:max-w-80 lg:max-w-lg xl:max-w-xl">

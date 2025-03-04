@@ -6,14 +6,13 @@ import { getPost } from "@/services/post/feed";
 import { useParams } from "next/navigation";
 import { Post } from "@/types/types";
 
-const commuID = "1";
 const Feed = () => {
   const [PostFeed, setPostFeed] = useState<Post[]>([]);
   const idCommunity = useParams().idCommunity as string;
   useEffect(() => {
     const fetchFeed = async () => {
       try {
-        const data = await getPost(commuID);
+        const data = await getPost(idCommunity);
         setPostFeed(data.post);
       } catch (err) {
         console.log(err);

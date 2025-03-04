@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ImageIcon } from "lucide-react";
-import FeedPostModal from "@/app/feed/components/FeedPostModal";
+import FeedPostModal from "@/app/feed/[id]/components/FeedPostModal";
 import { User } from "@/types/types";
 
 const CreatePostTrigger = ({ profile }: { profile: User }) => {

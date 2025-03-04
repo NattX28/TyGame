@@ -1,8 +1,12 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
 import FormData from "form-data";
+import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@/hooks/useAuth";
+import { useParams } from "next/navigation";
+
 import {
   Card,
   CardContent,
@@ -11,6 +15,7 @@ import {
 } from "@/components/ui/card";
 import { ImageIcon, X } from "lucide-react";
 import { z } from "zod";
+import { getUserImage } from "@/services/user/user";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ACCEPTED_IMAGE_TYPES = [
@@ -37,6 +42,9 @@ const FeedPostModal = ({
   isOpen: boolean;
   onClose: () => void;
 }) => {
+  const idCommunity = useParams().idCommunity as string;
+  const { user } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
   const [postContent, setPostContent] = useState("");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -75,16 +83,11 @@ const FeedPostModal = ({
 
     let data = new FormData();
     data.append("content", postContent);
-    data.append("community_id", "15616556");
+    data.append("community_id", idCommunity);
     data.append("image", selectedImage);
 
     try {
-      const res = await axios.post("/api/submit", data, {
-        headers: {
-          ...data.getHeaders(),
-        },
-        withCredentials: true,
-      });
+      const res = await axios.post("/api/submit", data);
       console.log(res.data);
       onClose();
     } catch (error:any) {
@@ -109,7 +112,7 @@ const FeedPostModal = ({
   if (!isOpen) return null;
 
   return (
-    <form className="space-y-4" onSubmit={handleSubmit}>
+    user && <form className="space-y-4" onSubmit={handleSubmit}>
       <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50">
         <Card className="w-full max-w-lg mx-4">
           <CardHeader className="relative border-b">
@@ -125,9 +128,22 @@ const FeedPostModal = ({
 
           <CardContent className="p-4">
             <div className="flex items-start space-x-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-gray-300 flex-shrink-0" />
-              <div className="flex-grow">
-                <div className="font-semibold">User Name</div>
+              <div className="w-10 h-10">
+                {isLoading && (
+                  <div className="w-full h-full animate-pulse bg-gray-300 rounded-full" />
+                )}
+
+                {/* Actual Image */}
+                <Image
+                  fill
+                  alt={user.userid}
+                  src={getUserImage(user.userid)}
+                  className={`rounded-full mr-4 ${isLoading ? "invisible" : "visible"}`}
+                  onLoadingComplete={() => setIsLoading(false)}
+                />
+              </div>
+              <div className="flex-grow my-auto">
+                <div className="font-semibold">{user?.name}</div>
                 <div className="text-sm text-gray-500">Public</div>
               </div>
             </div>
