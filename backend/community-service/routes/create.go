@@ -1,9 +1,6 @@
 package routes
 
 import (
-    "fmt"
-    "os"
-
     "github.com/gofiber/fiber/v2"
     "github.com/google/uuid"
     "github.com/microcosm-cc/bluemonday"
@@ -14,16 +11,6 @@ import (
 )
 
 func CreateCommunityHandler(c *fiber.Ctx) error {
-    const imagePath = "./uploads/profile/"
-
-    // Ensure the directory exists
-    if _, err := os.Stat(imagePath); os.IsNotExist(err) {
-        err := os.MkdirAll(imagePath, os.ModePerm)
-        if err != nil {
-            return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to create directory"})
-        }
-    }
-
     // Get form data
     name := c.FormValue("name")
     description := c.FormValue("description")

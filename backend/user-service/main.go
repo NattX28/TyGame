@@ -18,10 +18,49 @@ import (
 	"user-service/usersmanagement"
 )
 
+
+func DownloadImage(url string, filepath string) error {
+	resp, err := http.Get(url)
+	if err != nil {
+		return fmt.Errorf("failed to fetch image: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("failed to fetch image, status code: %d", resp.StatusCode)
+	}
+
+	outFile, err := os.Create(filepath)
+	if err != nil {
+		return fmt.Errorf("failed to create file: %v", err)
+	}
+	defer outFile.Close()
+
+	_, err = io.Copy(outFile, resp.Body)
+	if err != nil {
+		return fmt.Errorf("failed to save image: %v", err)
+	}
+
+	return nil
+}
+
 func main() {
 	err := godotenv.Load()
 	if err != nil {
 		log.Println("No .env file found, skipping...")
+	}
+
+	filePath := "./uploads/users"
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		if err := os.MkdirAll(filePath, os.ModePerm); err != nil {
+				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to create directory"})
+		}
+	}
+
+	err := DownloadImage("https://cdn.discordapp.com/attachments/1314196081730523199/1346453003212685384/image.png?ex=67c83d93&is=67c6ec13&hm=3de289707c04640e7e5a37ff554198de75e22cf6b58ba4a2263b9db261bd3c49&", filepath)
+	if err != nil {
+		fmt.Printf("Error downloading image: %v\n", err)
+		return
 	}
 
 	// Connect to the database
