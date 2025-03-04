@@ -98,7 +98,6 @@ func main() {
 	userFocus.Use(middleware.JWTMiddleware)
 	userFocus.Get("/", public.GetProfileHandler)
 
-	userRoutes.Use(middleware.JWTMiddleware)
 	userRoutes.Get("/count", routes.GetUserCount)
 	userRoutes.Post("/register", routes.RegisterHandler)
 	userRoutes.Post("/login", routes.LoginHandler)
