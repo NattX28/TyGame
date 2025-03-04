@@ -21,6 +21,13 @@ func main() {
 	err := godotenv.Load()
 	if (err != nil) { log.Println("No .env file found, skipping..."); }
 	
+	filePath := "./uploads/posts"
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		if err := os.MkdirAll(filePath, os.ModePerm); err != nil {
+				return
+		}
+	}
+
 	db.Connect()
 	defer db.Close()
 

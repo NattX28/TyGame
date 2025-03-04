@@ -1,5 +1,4 @@
 import React, { useState, useRef } from "react";
-import axios from "axios";
 import FormData from "form-data";
 import Image from 'next/image';
 import { Button } from "@/components/ui/button";
@@ -16,6 +15,8 @@ import {
 import { ImageIcon, X } from "lucide-react";
 import { z } from "zod";
 import { getUserImage } from "@/services/user/user";
+import api from "@/services/api";
+import { createPost } from "@/services/post/post";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ACCEPTED_IMAGE_TYPES = [
@@ -81,23 +82,20 @@ const FeedPostModal = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    let data = new FormData();
-    data.append("content", postContent);
-    data.append("community_id", idCommunity);
-    data.append("image", selectedImage);
+    if (!selectedImage) return;
 
     try {
-      const res = await axios.post("/api/submit", data);
-      console.log(res.data);
+      const data = await createPost(selectedImage, idCommunity, postContent, "public");
+      console.log(data);
+      
+      setPostContent("");
+      setSelectedImage(null);
+      setImagePreview(null);
+      setError(null);
       onClose();
-    } catch (error:any) {
-      setError(error);
+    } catch (error: any) {
+      setError(error.message || "An error occurred");
     }
-    setPostContent("");
-    setSelectedImage(null);
-    setImagePreview(null);
-    setError(null);
-    onClose();
   };
   const removeImage = (e:any) => {
     e.preventDefault();
