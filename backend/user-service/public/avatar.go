@@ -23,14 +23,14 @@ func GetAvatarHandler(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "User not found"})
 	}
 
-	filePath := "./uploads/users/" + user.ImageName
+	filePath := filepath.Join("./uploads/users/", user.ImageName)
 	log.Println("Avatar path: ", filePath)
 
 	if _, err := filepath.Abs(filePath); err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString("Error resolving file path")
 	}
 
-	return c.Send(filePath)
+	return c.SendFile(filePath)
 }
 
 
