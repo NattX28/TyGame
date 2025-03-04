@@ -6,24 +6,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { userSidebarItems } from "@/utils/utils";
-import { useEffect, useState } from "react";
 import { getUserImage } from "@/services/user/user";
 
 const UserSidebar = () => {
   const pathname = usePathname();
   const { user, logout } = useAuth();
-  const [lastCommunity, setLastCommunity] = useState<string | null>(null);
-
-  useEffect(() => {
-    // ดึง idCommunity ล่าสุดจาก local storage
-    const storedCommunity = localStorage.getItem("lastCommunity");
-    if (storedCommunity) {
-      setLastCommunity(storedCommunity);
-    }
-  }, []);
-
-  // update url ของ ปุ่มhome
-  const homeUrl = lastCommunity ? `/feed/${lastCommunity}` : "/explore";
 
   return (
     user && (<div className="px-4 py-8 h-full flex flex-col">
@@ -48,8 +35,7 @@ const UserSidebar = () => {
         {/* Navigation links */}
         <div className="flex flex-col gap-1">
           {userSidebarItems.map((item, index) => {
-            const isHome = item.url === "/feed";
-            const isActive = pathname === (isHome ? homeUrl : item.url);
+            const isActive = pathname === item.url;
             return (
               <Button
                 key={index}

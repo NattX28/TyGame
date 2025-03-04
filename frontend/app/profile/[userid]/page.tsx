@@ -8,7 +8,7 @@ import { useParams } from "next/navigation";
 // wait to call api
 
 const OtherUserProfile = () => {
-  const { userid } = useParams();
+  const userid = useParams().userid as string;
   const [profileData, setProfileData] = useState<User | null>(null);
   const [isFollowing, setIsFollowing] = useState(false);
 

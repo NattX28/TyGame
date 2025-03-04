@@ -28,7 +28,7 @@ const CommunityCard = ({ community }: { community: Community }) => {
   };
 
   return (
-    <Card
+    community && <Card
       className="w-full max-w-sm md:max-w-md lg:max-w-lg bg-second border-third 
                   hover:shadow-xl hover:shadow-third/30 hover:border-main hover:border-2
                   transition-all duration-300 cursor-pointer relative
@@ -66,7 +66,7 @@ const CommunityCard = ({ community }: { community: Community }) => {
           <div className="flex items-center space-x-2 mb-4">
             <div className="w-4 h-4 bg-green-300 transition-transform duration-300 group-hover:bg-green-500 group-hover:scale-110 rounded-full"></div>
             <span className="text-xs text-main-color transition-colors duration-300 group-hover:text-main-color/90">
-            {community.member_count}
+              {community.member_count.toLocaleString()} Members
             </span>
           </div>
 

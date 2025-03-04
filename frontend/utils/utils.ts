@@ -6,10 +6,13 @@ import {
   Contact,
 } from "lucide-react";
 
+const lastCommunity = localStorage.getItem("lastCommunity");
+const feedURL = lastCommunity ? `/feed/${lastCommunity}` : "/explore";
+
 export const userSidebarItems = [
   {
     title: "Home",
-    url: "/feed",
+    url: feedURL,
     icon: Home,
   },
   {

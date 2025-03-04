@@ -1,6 +1,9 @@
 package public
 
 import (
+	"os"
+	"log"
+	"fmt"
 	"path/filepath"
 
 	"github.com/gofiber/fiber/v2"
@@ -23,6 +26,12 @@ func GetAvatarHandler(c *fiber.Ctx) error {
 	}
 
 	filePath := filepath.Join("./uploads/users/", user.ImageName)
+	log.Println("Avatar path: ", filePath)
+	mydir, err := os.Getwd() 
+	if err != nil { 
+			fmt.Println(err) 
+	} 
+	fmt.Println(mydir) 
 
 	if _, err := filepath.Abs(filePath); err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString("Error resolving file path")
@@ -30,6 +39,7 @@ func GetAvatarHandler(c *fiber.Ctx) error {
 
 	return c.SendFile(filePath)
 }
+
 
 func getContentType(path string) string {
 	ext := filepath.Ext(path)

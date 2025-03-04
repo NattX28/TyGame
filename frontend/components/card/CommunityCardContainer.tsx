@@ -11,13 +11,6 @@ const CommunityCardContainer = ({
   communities: Community[];
 }) => {
   // สร้างชุดข้อมูลที่ยาวขึ้นเพื่อให้การเลื่อนต่อเนื่อง
-  const duplicatedCommunities = [
-    ...communities,
-    ...communities,
-    ...communities,
-    ...communities,
-  ];
-
   return (
     <div className="w-full overflow-hidden relative">
       <Swiper
@@ -61,7 +54,7 @@ const CommunityCardContainer = ({
           },
         }}
         cssMode={false}>
-        {duplicatedCommunities.map((community, index) => (
+        {communities.map((community, index) => (
           <SwiperSlide
             key={`${community.name}-${index}`}
             className="!w-72 !flex-shrink-0 transition-all duration-500 ease-linear">

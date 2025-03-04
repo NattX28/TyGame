@@ -42,7 +42,7 @@ const FeedPostModal = ({
   isOpen: boolean;
   onClose: () => void;
 }) => {
-  const idCommunity = useParams().idCommunity as string;
+  const idCommunity = useParams().id as string;
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [postContent, setPostContent] = useState("");
@@ -113,8 +113,8 @@ const FeedPostModal = ({
 
   return (
     user && <form className="space-y-4" onSubmit={handleSubmit}>
-      <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50">
-        <Card className="w-full max-w-lg mx-4">
+      <div className="fixed inset-0 flex bg-black/75 items-center justify-center z-50">
+        <Card className="w-full max-w-lg mx-4 bg-black/75 text-white">
           <CardHeader className="relative border-b">
             <h2 className="text-xl font-semibold text-center">Create Post</h2>
             <Button
@@ -135,7 +135,8 @@ const FeedPostModal = ({
 
                 {/* Actual Image */}
                 <Image
-                  fill
+                  width={40}
+                  height={40}
                   alt={user.userid}
                   src={getUserImage(user.userid)}
                   className={`rounded-full mr-4 ${isLoading ? "invisible" : "visible"}`}

@@ -6,7 +6,7 @@ import Chat from "../components/Message";
 import Banner from "../components/Profile";
 
 function PartyRoom() {
-  const partyID = useParams().partyId as string;
+  const partyID = useParams().id as string;
   const userID = "user-123";
 
   const { messages, sendMessage, users } = useParty(partyID, userID);

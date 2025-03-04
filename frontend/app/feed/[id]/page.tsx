@@ -8,7 +8,8 @@ import { Post } from "@/types/types";
 
 const Feed = () => {
   const [PostFeed, setPostFeed] = useState<Post[]>([]);
-  const idCommunity = useParams().idCommunity as string;
+  const idCommunity = useParams().id as string;
+
   useEffect(() => {
     const fetchFeed = async () => {
       try {
