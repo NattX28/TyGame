@@ -43,8 +43,8 @@ func main() {
 	})
 
 	communities.Get("/profile/:nameFile", routes.ProfileCommunityHandler)
-	communities.Use(middleware.JWTMiddleware)
 	communities.Get("/getall", middleware.CanAccess, routes.GetAllCommunities)
+	communities.Use(middleware.JWTMiddleware)
 	communities.Post("/create", middleware.CanManagement, routes.CreateCommunityHandler)
 
 	community_focus := communities.Group("/:CommuID")

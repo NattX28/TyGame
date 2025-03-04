@@ -54,7 +54,7 @@ func main() {
 	userFocus := userRoutes.Group("/:userID")
 	userFocus.Get("/avatar", public.GetAvatarHandler)
 	userFocus.Use(middleware.JWTMiddleware)
-	userFocus.Get("/", routes.GetProfileHandler)
+	userFocus.Get("/", public.GetProfileHandler)
 
 	userRoutes.Use(middleware.JWTMiddleware)
 	userRoutes.Get("/count", routes.GetUserCount)

@@ -2,6 +2,7 @@ package public
 
 import (
 	"os"
+	"log"
 	"path/filepath"
 
 	"github.com/gofiber/fiber/v2"
@@ -24,7 +25,8 @@ func GetAvatarHandler(c *fiber.Ctx) error {
 	}
 
 	filePath := "/uploads/users/" + user.ImageName
-
+	log.Println("Avatar path: ", filePath)
+	
 	contentType := getContentType(filePath)
 	data, err := os.ReadFile(filePath)
 	if err != nil {
