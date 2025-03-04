@@ -5,6 +5,7 @@ import (
 	"user-service/models"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 )
 
 // GetProfileHandler retrieves the user's profile information
@@ -13,7 +14,7 @@ func GetProfileHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid user ID"})
 	}
-	
+
 	var user models.User
 	if err := db.DB.First(&user, "id = ?", userID).Error; err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "User not found"})
