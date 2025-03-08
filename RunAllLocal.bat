@@ -16,8 +16,8 @@ start cmd /k "cd /d %BASE_DIR%\backend\party-service && air"
 REM Start community-service
 start cmd /k "cd /d %BASE_DIR%\backend\community-service && air"
 
-REM Start chat-service
-start cmd /k "cd /d %BASE_DIR%\backend\chat-service && air"
+@REM REM Start chat-service
+@REM start cmd /k "cd /d %BASE_DIR%\backend\chat-service && air"
 
 REM Start api-gateway
 start cmd /k "cd /d %BASE_DIR%\backend\api-gateway && air"
