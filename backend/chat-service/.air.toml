@@ -1,0 +1,5 @@
+[build]
+cmd = "go run main.go"
+include_ext = ["go"]
+exclude_dir = ["vendor"]
+exclude_file = ["air.toml"]
