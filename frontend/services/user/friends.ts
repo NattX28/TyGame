@@ -1,5 +1,5 @@
 import { MessageBackend } from "@/types/samePattern";
-import api from "../api";
+import { api } from "../api";
 import { Friend } from "@/types/types";
 
 const BASE_URL_FRIENDS = "/friends";

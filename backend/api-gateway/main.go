@@ -24,14 +24,35 @@ func main() {
 
 	// กำหนดค่า URL ของ Services จาก ENV หรือใช้ค่า Default (บน Railway)
 	userServiceURL := os.Getenv("USER_SERVICE_URL")
+	if userServiceURL == "" {
+		userServiceURL = "http://localhost:5001"
+	}
+
 	postServiceURL := os.Getenv("POST_SERVICE_URL")
+	if postServiceURL == "" {
+		postServiceURL = "http://localhost:5002"
+	}
+
 	// chatServiceURL := os.Getenv("CHAT_SERVICE_URL")
+	// if chatServiceURL == "" {
+	// 	chatServiceURL = "http://localhost:5003"
+	// }
+
 	communityServiceURL := os.Getenv("COMMUNITY_SERVICE_URL")
+	if communityServiceURL == "" {
+		communityServiceURL = "http://localhost:5004"
+	}
+
 	partyServiceURL := os.Getenv("PARTY_SERVICE_URL")
-	
+	if partyServiceURL == "" {
+		partyServiceURL = "http://localhost:5005"
+	}
 
 	log.Printf("🔗 User Service URL: %s", userServiceURL)
 	log.Printf("🔗 Post Service URL: %s", postServiceURL)
+	// log.Printf("🔗 Chat Service URL: %s", chatServiceURL)
+	log.Printf("🔗 Community Service URL: %s", communityServiceURL)
+	log.Printf("🔗 Party Service URL: %s", partyServiceURL)
 
 	// Proxy ไปยัง User Service
 	app.All("/users/*", func(c *fiber.Ctx) error {

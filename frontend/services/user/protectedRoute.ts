@@ -1,6 +1,6 @@
 // CRUD for user
 import { UpdateUserRequest } from "@/types/user";
-import api from "../api";
+import { api } from "../api";
 import { AuthResponse } from "./../../types/auth";
 import { MessageBackend } from "@/types/samePattern";
 import { User } from "@/types/types";

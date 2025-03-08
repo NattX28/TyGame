@@ -1,5 +1,5 @@
 import { getCommentsResponse } from "@/types/response";
-import api from "../api";
+import { api } from "../api";
 
 const BASE_URL_COMMENT: string = "/posts";
 

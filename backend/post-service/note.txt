@@ -1,7 +1,0 @@
-comment check permission only owner ✅
-get comment [+] add count like ✅
-
-v2
-create middleware check access
-allow private post
-feed endpoint

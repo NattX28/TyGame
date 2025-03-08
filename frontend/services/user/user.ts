@@ -1,4 +1,4 @@
-import api from "../api";
+import { api, Endpoint_Gateway } from "../api";
 import { jwtDecode } from "jwt-decode";
 import { UpdateUserRequest, UserPublicData } from "@/types/user";
 import { DecodedToken } from "@/types/auth";
@@ -84,7 +84,7 @@ export const refreshToken = async (): Promise<MessageBackend> => {
 
 //get user image
 export const getUserImage = (id: string): string => {
-  const path = `${process.env.NEXT_PUBLIC_API_URL}/users/${id}/avatar`;
+  const path = `${Endpoint_Gateway}/users/${id}/avatar`;
   // console.log(path);
   return path;
 };

@@ -1,6 +1,6 @@
 import { MessageBackend } from "@/types/samePattern";
 import { BannedUser } from "@/types/types";
-import api from "../api";
+import { api } from "../api";
 
 const BASE_URL_ADMINS = "/admin";
 

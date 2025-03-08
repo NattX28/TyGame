@@ -1,4 +1,4 @@
-import api from "../api";
+import { api } from "../api";
 import { PartyResponse } from "@/types/types";
 
 const BASE_URL_PARTY: string = "/party";

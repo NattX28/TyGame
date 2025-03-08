@@ -1,4 +1,4 @@
-import api from "../api";
+import { api } from "../api";
 import { getAllPost } from "@/types/response";
 
 const BASE_URL_FEED: string = "/feeds";

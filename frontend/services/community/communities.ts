@@ -1,5 +1,5 @@
 // Import API และ Type
-import api from "../api";
+import { api, Endpoint_Gateway } from "../api";
 import { Community } from "@/types/types";
 
 const BASE_URL_COMMU: string = "/communities";
@@ -28,7 +28,7 @@ export const getCommunity = async (id: string): Promise<Community> => {
 };
 
 export const getCommunityImage = (nameFile: string): string => {
-  return `${process.env.NEXT_PUBLIC_API_URL}${BASE_URL_COMMU}/profile/${nameFile}`;
+  return `${Endpoint_Gateway}${BASE_URL_COMMU}/profile/${nameFile}`;
 };
 
 // join community

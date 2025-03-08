@@ -1,5 +1,5 @@
 import { getCommentsResponse, getMessageResponse } from "@/types/response";
-import api from "../api";
+import { api } from "../api";
 import { Post } from "@/types/types";
 
 const BASE_URL_POSTS: string = "/posts";

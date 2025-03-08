@@ -1,8 +1,9 @@
+import { Endpoint_Gateway } from "@/services/api";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "lhttp://localhost:5005";
+const BASE_URL = Endpoint_Gateway;
 
 export const useFindParty = () => {
   const [loading, setLoading] = useState(false);
