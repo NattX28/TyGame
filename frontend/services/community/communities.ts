@@ -6,13 +6,23 @@ const BASE_URL_COMMU: string = "/communities";
 
 //// GET
 // get all community
-export const listAllCommunities = async (): Promise<Community[]> => {
+export const listAllCommunities = async (limit?: number): Promise<Community[]> => {
   try {
-    const { data } = await api.get(`${BASE_URL_COMMU}/getall`);
+    const { data } = await api.get(`${BASE_URL_COMMU}/getall${limit ? `?limit=${limit}` : ''}`);
     return data.communities; // คืนค่า array ของ Community
   } catch (error) {
     console.error("listAllCommunities error: ", error);
     throw new Error("Failed to fetch communities");
+  }
+};
+
+export const getAmountCommunity = async (): Promise<number> => {
+  try {
+    const { data } = await api.get(`${BASE_URL_COMMU}/getamount`);
+    return data.amount;
+  } catch (error) {
+    console.error(`getAmountCommunity error : `, error);
+    throw new Error(`Failed to fetch community amount`);
   }
 };
 

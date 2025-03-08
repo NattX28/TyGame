@@ -10,3 +10,9 @@ export interface UserPublicData {
   username: string; // เพิ่มฟิลด์ password ตามที่ Backend มี
   description: string;
 }
+
+export interface UserRegisterStat {
+  name: string;
+  username: string; // เพิ่มฟิลด์ password ตามที่ Backend มี
+  description: string;
+}

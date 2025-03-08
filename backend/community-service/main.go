@@ -50,6 +50,7 @@ func main() {
 	})
 
 	communities.Get("/getall", routes.GetAllCommunities)
+	communities.Get("/getamount", routes.GetAmountCommunities)
 	communities.Get("/profile/:nameFile", routes.ProfileCommunityHandler)
 	communities.Use(middleware.JWTMiddleware)
 	communities.Post("/create", middleware.CanManagement, routes.CreateCommunityHandler)
@@ -62,7 +63,6 @@ func main() {
 
 	
 	community_focus.Get("/member", middleware.CanAccess, routes.GetMemberCommunityHandler)
-
 
 	port := os.Getenv("PORT_COMMUNITY_SERVICE")
 	if port == "" {

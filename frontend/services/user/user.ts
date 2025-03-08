@@ -89,17 +89,6 @@ export const getUserImage = (id: string): string => {
   return path;
 };
 
-// get all user every community
-export const getAllUserAllCommunity = async (): Promise<number> => {
-  try {
-    const { data } = await api.get(`${BASE_URL_USER}/count`);
-    return data;
-  } catch (error) {
-    console.log("get count users failed: ", error);
-    throw new Error("get count users failed");
-  }
-};
-
 // get user profile by id
 export const getUserData = async (uuid: string): Promise<UserPublicData> => {
   try {

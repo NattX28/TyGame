@@ -18,7 +18,7 @@ const UserSidebar = () => {
       <div className="space-y-8">
         {/* Header sidebar */}
         <div className="flex flex-col items-center justify-center gap-3">
-          <Avatar className="h-24 w-24 ">
+          <Avatar className="max-h-24 max-w-24">
             <AvatarImage
               src={getUserImage(user.userid)}
               alt="@shadcn"

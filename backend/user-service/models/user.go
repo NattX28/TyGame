@@ -1,6 +1,8 @@
 package models
 
 import (
+	"time"
+	
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
@@ -16,6 +18,7 @@ type User struct {
 	Name          string    `gorm:"size:255;not null"`
 	CookieVersion int       `gorm:"default:0;not null"` // Auto-incrementing version field
 	Description   string    `gorm:"size:255"`           // A new field to describe the user
+	CreatedAt     time.Time
 }
 
 // BeforeCreate hook to generate a UUID if not set

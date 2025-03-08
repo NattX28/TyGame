@@ -93,12 +93,16 @@ func main() {
 		})
 	})
 
-	userRoutes.Get("/count", routes.GetUserCount)
 	userRoutes.Post("/register", routes.RegisterHandler)
 	userRoutes.Post("/login", routes.LoginHandler)
 	userRoutes.Post("/logout", routes.LogoutHandler)
 	userRoutes.Post("/refresh-token", routes.RefreshTokenHandler)
 
+	adminRoutes := userRoutes.Group("/admin")
+	adminRoutes.Use(middleware.JWTMiddleware)
+	adminRoutes.Use(middleware.CanManagement)
+	adminRoutes.Get("/count", routes.GetUserCount)
+	adminRoutes.Post("/recent-register", routes.GetUserRegistrationStats)
 	
 	userFocus := userRoutes.Group("/:userID")
 	userFocus.Get("/avatar", public.GetAvatarHandler)

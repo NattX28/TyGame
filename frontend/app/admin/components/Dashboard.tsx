@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Bar, BarChart, XAxis } from "recharts";
 import {
   Chart,
   CategoryScale,
@@ -12,7 +11,7 @@ import {
 } from "chart.js";
 import { UsersRound, Flame, Activity, Handshake } from "lucide-react";
 import { TrendingUp } from "lucide-react";
-import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
+import { Bar, BarChart, XAxis, Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
 import {
   Card,
   CardContent,
@@ -27,7 +26,9 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { getAllUserAllCommunity } from "@/services/user/user";
+import { getAllUserAllCommunity } from "@/services/user/admin";
+import { getAmountCommunity, listAllCommunities } from "@/services/community/communities";
+import { Community } from "@/types/types";
 
 Chart.register(
   CategoryScale,
@@ -64,6 +65,7 @@ function StatCard({ title, value, icon }: statCardProps) {
 const Dashboard = () => {
   const [totalUsers, setTotalUsers] = useState<number | null>(null);
   const [totalCommunities, setTotalCommunities] = useState<number | null>(null);
+  const [topCommunities, setTopCommunities] = useState<Community[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -71,13 +73,15 @@ const Dashboard = () => {
 
     const fetchStats = async () => {
       try {
-        const [userRes, communitiesRes] = await Promise.all([
+        const [resUserTotal, resCommuTotal, resTopCommu] = await Promise.all([
           getAllUserAllCommunity(),
-          getAllUserAllCommunity(),
+          getAmountCommunity(),
+          listAllCommunities(5),
         ]);
 
-        setTotalUsers(userRes.data);
-        setTotalCommunities(communitiesRes.data);
+        setTotalUsers(resUserTotal);
+        setTotalCommunities(resCommuTotal);
+        setTopCommunities(resTopCommu);
       } catch (error) {
         console.error("Error fetching stats:", error);
       } finally {
@@ -91,38 +95,6 @@ const Dashboard = () => {
   // const totalUsers = 10500;
   const activeUsers = 6800;
   // const totalCommunities = 120;
-  const topCommunities = [
-    {
-      name: "League of legends",
-      shortname: "LOL",
-      members: 2300,
-      color: "hsl(var(--chart-5))",
-    },
-    {
-      name: "Valorant",
-      shortname: "Valorant",
-      members: 1800,
-      color: "hsl(var(--chart-5))",
-    },
-    {
-      name: "ROV",
-      shortname: "ROV",
-      members: 1500,
-      color: "hsl(var(--chart-5))",
-    },
-    {
-      name: "Call of duty",
-      shortname: "COD",
-      members: 1200,
-      color: "hsl(var(--chart-5))",
-    },
-    {
-      name: "Dead by daylight",
-      shortname: "DBD",
-      members: 900,
-      color: "hsl(var(--chart-5))",
-    },
-  ];
 
   // Config Bar Chart
   const BarConfig = {
@@ -151,12 +123,12 @@ const Dashboard = () => {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
-          title={"Total User"}
+          title={"Users"}
           value={totalUsers?.toLocaleString() ?? "N/A"}
           icon={<UsersRound className="w-8 h-8" />}
         />
         <StatCard
-          title={"Total Communities"}
+          title={"Communities"}
           value={totalCommunities?.toLocaleString() ?? "N/A"}
           icon={<Handshake className="w-8 h-8" />}
         />
@@ -188,12 +160,10 @@ const Dashboard = () => {
                     tickLine={false}
                     tickMargin={10}
                     axisLine={false}
-                    tickFormatter={(_, index) =>
-                      topCommunities[index].shortname
-                    }
+                    tickFormatter={(name) => name.slice(0, 10)}
                   />
                   <Bar
-                    dataKey="members"
+                    dataKey="member_count"
                     stackId="a"
                     fill="var(--color-commu)"
                     radius={[4, 4, 0, 0]}

@@ -16,6 +16,7 @@ func GetUserCount(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(fiber.Map{
-		"user_count": count,
+		"message":     "Successfully get user count",
+		"user_count": 	count,
 	})
 }
