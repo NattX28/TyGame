@@ -59,6 +59,7 @@ export interface Post {
   visibility: string;
   image?: string;
   score: number;
+  liked: boolean;
   likes?: number;
   comments?: number;
   timestamp: number;
@@ -123,6 +124,11 @@ export interface PartyMember {
   partyId: number;
   userId: string;
   joinedAt: Date;
+}
+
+export interface StatRegister {
+  month: string;
+  count: number;
 }
 
 //Can't use yet

@@ -10,8 +10,7 @@ import {
   Legend,
 } from "chart.js";
 import { UsersRound, Flame, Activity, Handshake } from "lucide-react";
-import { TrendingUp } from "lucide-react";
-import { Bar, BarChart, XAxis, Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
+import { Bar, BarChart, XAxis, Label, PolarRadiusAxis, RadialBar, RadialBarChart, ResponsiveContainer } from "recharts";
 import {
   Card,
   CardContent,
@@ -26,9 +25,9 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { getAllUserAllCommunity } from "@/services/user/admin";
+import { getAllUserAllCommunity, getStatRegister } from "@/services/user/admin";
 import { getAmountCommunity, listAllCommunities } from "@/services/community/communities";
-import { Community } from "@/types/types";
+import { Community, StatRegister } from "@/types/types";
 
 Chart.register(
   CategoryScale,
@@ -66,6 +65,8 @@ const Dashboard = () => {
   const [totalUsers, setTotalUsers] = useState<number | null>(null);
   const [totalCommunities, setTotalCommunities] = useState<number | null>(null);
   const [topCommunities, setTopCommunities] = useState<Community[]>([]);
+  const [monthLimit, setMonthLimit] = useState(6);
+  const [statRegis, setStatRegis] = useState<StatRegister[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -91,10 +92,28 @@ const Dashboard = () => {
     fetchStats();
   }, []);
 
-  // Mock data
-  // const totalUsers = 10500;
-  const activeUsers = 6800;
-  // const totalCommunities = 120;
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const [resStatRegis] = await Promise.all([
+          getStatRegister(monthLimit),
+        ]);
+
+        setStatRegis(resStatRegis);
+      } catch (error) {
+        console.error("Error fetching stats:", error);
+      }
+    };
+    fetchStats();
+  }, [monthLimit]);
+
+  const handleMonthLimitChange = (e) => {
+    const value = parseInt(e.target.value);
+    if (!isNaN(value) && value > 0) {
+      setMonthLimit(value);
+    }
+  };
+
 
   // Config Bar Chart
   const BarConfig = {
@@ -114,14 +133,11 @@ const Dashboard = () => {
       color: "hsl(var(--dark-chart-4))",
     },
   } satisfies ChartConfig;
-  const RadialData = [
-    { month: "abc", Active: activeUsers, Inactive: totalUsers - activeUsers },
-  ];
 
   return (
     <div className="container mx-auto px-4 py-6 w-full">
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <StatCard
           title={"Users"}
           value={totalUsers?.toLocaleString() ?? "N/A"}
@@ -132,10 +148,16 @@ const Dashboard = () => {
           value={totalCommunities?.toLocaleString() ?? "N/A"}
           icon={<Handshake className="w-8 h-8" />}
         />
+        <StatCard
+          title={"Posts"}
+          value={totalCommunities?.toLocaleString() ?? "N/A"}
+          icon={<Flame className="w-8 h-8" />}
+        />
       </div>
       <h1 className="text-2xl font-bold text-main-color my-6">Statical</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+        {/* ===================== Communities Member ========================== */}
         <div className="bg-second p-6 rounded-lg ">
           <div className="flex gap-2">
             <Flame />
@@ -178,90 +200,93 @@ const Dashboard = () => {
             </CardContent>
           </Card>
         </div>
-        <div className="bg-second p-6 rounded-lg">
+
+        {/* ===================== Communities Post ========================== */}
+        <div className="bg-second p-6 rounded-lg ">
           <div className="flex gap-2">
-            <Activity />
+            <Flame />
             <h2 className="text-xl font-semibold text-main-color mb-4">
-              Active Users
+              Top 5 Communities Member
             </h2>
           </div>
-          {/* Radial Chart */}
-          <Card className="flex flex-col bg-second border-none shadow-none">
-            <CardHeader className="items-center pb-0">
-              <CardTitle className="text-white">Radial Chart - Users</CardTitle>
-              <CardDescription>January - June 2025</CardDescription>
+
+          {/* Bar Chart */}
+          <Card className="bg-second border-none shadow-none z-0">
+            <CardHeader className="text-white">
+              <CardTitle>Admin Analysis</CardTitle>
+              <CardDescription>
+                Tools For Analysis Top Community.
+              </CardDescription>
             </CardHeader>
-            <CardContent className="flex flex-1 items-center pb-0">
-              <ChartContainer
-                config={RadialConfig}
-                className="mx-auto aspect-square w-full max-w-[250px]">
-                <RadialBarChart
-                  data={RadialData}
-                  endAngle={180}
-                  innerRadius={80}
-                  outerRadius={130}>
-                  <ChartTooltip
-                    cursor={false}
-                    content={<ChartTooltipContent hideLabel />}
-                  />
-                  <PolarRadiusAxis
-                    tick={false}
+            <CardContent>
+              <ChartContainer config={BarConfig}>
+                <BarChart accessibilityLayer data={topCommunities}>
+                  <XAxis
+                    dataKey="name"
                     tickLine={false}
-                    axisLine={false}>
-                    <Label
-                      content={({ viewBox }) => {
-                        if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                          return (
-                            <text
-                              x={viewBox.cx}
-                              y={viewBox.cy}
-                              textAnchor="middle">
-                              <tspan
-                                x={viewBox.cx}
-                                y={(viewBox.cy || 0) - 16}
-                                className="fill-white text-2xl font-bold">
-                                {totalUsers?.toLocaleString()}
-                              </tspan>
-                              <tspan
-                                x={viewBox.cx}
-                                y={(viewBox.cy || 0) + 4}
-                                className="fill-muted-foreground">
-                                Total Users
-                              </tspan>
-                            </text>
-                          );
-                        }
-                      }}
-                    />
-                  </PolarRadiusAxis>
-                  <RadialBar
-                    dataKey="Active"
-                    stackId="a"
-                    cornerRadius={5}
-                    fill="var(--color-Active)"
-                    className="stroke-transparent stroke-2"
+                    tickMargin={10}
+                    axisLine={false}
+                    tickFormatter={(name) => name.slice(0, 10)}
                   />
-                  <RadialBar
-                    dataKey="Inactive"
-                    fill="var(--color-Inactive)"
+                  <Bar
+                    dataKey="member_count"
                     stackId="a"
-                    cornerRadius={5}
-                    className="stroke-transparent stroke-2"
+                    fill="var(--color-commu)"
+                    radius={[4, 4, 0, 0]}
                   />
-                </RadialBarChart>
+                  <ChartTooltip
+                    content={<ChartTooltipContent />}
+                    cursor={false}
+                    defaultIndex={1}
+                  />
+                </BarChart>
               </ChartContainer>
             </CardContent>
-            <CardFooter className="flex-col gap-2 text-sm">
-              <div className=" text-white flex items-center gap-2 font-medium leading-none">
-                Trending up by 5.2% this month{" "}
-                <TrendingUp className="h-4 w-4" />
-              </div>
-              <div className="leading-none text-muted-foreground">
-                Showing total users for the last 6 months
-              </div>
-            </CardFooter>
           </Card>
         </div>
+      </div>
+      <div className="space-y-4">
+        <div className="flex items-center space-x-4">
+          <label htmlFor="monthLimit" className="font-medium">
+            Number of months:
+          </label>
+          <select 
+            id="monthLimit"
+            value={monthLimit}
+            onChange={handleMonthLimitChange}
+            className="p-2 border rounded"
+          >
+            <option value="3">3 months</option>
+            <option value="6">6 months</option>
+            <option value="12">12 months</option>
+            <option value="24">24 months</option>
+          </select>
+        </div>
+        <Card className="w-full">
+        <CardHeader>
+          <CardTitle>User Registrations - Last {monthLimit} Months</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart
+              data={sampleData}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="count" fill="#3b82f6" name="New Users" />
+            </BarChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
       </div>
     </div>
   );

@@ -2,37 +2,38 @@ package middleware
 
 import (
 	"os"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v5"
+	"github.com/golang-jwt/jwt/v4"
 )
 
-// JWTMiddleware checks the JWT token from the Authorization header or cookie
+var jwtSecret []byte
+
 func JWTMiddleware(c *fiber.Ctx) error {
-
-	tokenString := c.Cookies("Authorization")
-
-	if tokenString == "" {
-		tokenString = c.Cookies("Authorization")
+	if jwtSecret == nil {
+		jwtSecret = []byte(os.Getenv("JWT_SECRET"))
 	}
-
-	if tokenString == "" {
+	authHeader := c.Cookies("Authorization")
+	if authHeader == "" {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"error": "Missing token",
+			"error": "Authorization header missing",
 		})
 	}
 
-	if len(tokenString) > 7 && tokenString[:7] == "Bearer " {
-		tokenString = tokenString[7:]
+	parts := strings.Split(authHeader, " ")
+	if len(parts) != 2 || parts[0] != "Bearer" {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": "Invalid Authorization format",
+		})
 	}
 
-	// Parse the token
-	secret := os.Getenv("JWT_SECRET")
+	tokenString := parts[1]
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fiber.ErrUnauthorized
+			return nil, fiber.NewError(fiber.StatusUnauthorized, "Invalid signing method")
 		}
-		return []byte(secret), nil
+		return jwtSecret, nil
 	})
 
 	if err != nil || !token.Valid {
@@ -40,6 +41,16 @@ func JWTMiddleware(c *fiber.Ctx) error {
 			"error": "Invalid or expired token",
 		})
 	}
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": "Invalid token claims",
+		})
+	}
+
+	c.Locals("Role", claims["role"])
+	c.Locals("UserID", claims["userid"])
 
 	return c.Next()
 }

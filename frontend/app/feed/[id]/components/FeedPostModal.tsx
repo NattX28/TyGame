@@ -81,9 +81,7 @@ const FeedPostModal = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!selectedImage) return;
-
+    
     try {
       const data = await createPost(selectedImage, idCommunity, postContent, "public");
       console.log(data);

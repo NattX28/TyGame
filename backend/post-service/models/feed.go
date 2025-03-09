@@ -12,6 +12,7 @@ type FeedPost struct {
 	Visibility  		string    			`json:"visibility"`
 	Image       		string    			`json:"image"`
 	Score       		float64   			`json:"score"`
+  Liked    				bool        		`json:"liked"`
   LikesCount    	int        			`json:"likes"`
   CommentsCount 	int        			`json:"comments"`
 	Timestamp   		int64     			`json:"timestamp"`

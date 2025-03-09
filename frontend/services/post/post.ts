@@ -1,19 +1,24 @@
 import { getCommentsResponse, getMessageResponse } from "@/types/response";
-import { api } from "../api";
+import { api, Endpoint_Gateway } from "../api";
 import { Post } from "@/types/types";
 
 const BASE_URL_POSTS: string = "/posts";
 
+export const getPostImage = (nameFile: string): string => {
+  return `${Endpoint_Gateway}${BASE_URL_POSTS}/image/${nameFile}`;
+};
 
 export const createPost = async (
-  imageFile: File,
+  imageFile: File | null,
   community_id: string,
   content: string,
   visibility: string
 ): Promise<getCommentsResponse> => {
   try {
     const formData = new FormData();
-    formData.append("image", imageFile)
+    if (imageFile) {
+      formData.append("image", imageFile)
+    }
     formData.append("community_id", community_id)
     formData.append("content", content)
     formData.append("visibility", visibility)

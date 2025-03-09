@@ -14,7 +14,7 @@ const Feed = () => {
     const fetchFeed = async () => {
       try {
         const data = await getPost(idCommunity);
-        setPostFeed(data.post);
+        setPostFeed(data.posts);
       } catch (err) {
         console.log(err);
       }

@@ -10,6 +10,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	
 	"post-service/middleware"
+	"post-service/public"
 	"post-service/routes/post"
 	"post-service/routes/feed"
 	"post-service/routes/comment"
@@ -44,15 +45,17 @@ func main() {
 		AllowCredentials: true,
 	}))
 
-	feeds := app.Group("/feeds")
-	// feeds.Get("/", middleware.JWTMiddleware, post.LikePostHandler)
-	feeds.Get("community/:CommunityID", feed.GetFeedCommunity)
-	// feeds.Get("friend/", middleware.JWTMiddleware, post.LikePostHandler)
-	// feeds.Get("friend/:CommunityID", middleware.JWTMiddleware, post.LikePostHandler)
 
 	posts := app.Group("/posts")
 	posts.Use(middleware.JWTMiddleware)
   posts.Post("/", post.CreatePostHandler)
+  posts.Get("/image/:nameFile", public.GetImageHandler)
+
+	feeds := posts.Group("/feeds")
+	// feeds.Get("/", middleware.JWTMiddleware, post.LikePostHandler)
+	feeds.Get("community/:CommunityID", feed.GetFeedCommunity)
+	// feeds.Get("friend/", middleware.JWTMiddleware, post.LikePostHandler)
+	// feeds.Get("friend/:CommunityID", middleware.JWTMiddleware, post.LikePostHandler)
 
 	postFocus := posts.Group("/:PostID")
 	postFocus.Put("/", post.EditPostHandler)
