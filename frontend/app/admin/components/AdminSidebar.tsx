@@ -76,6 +76,7 @@ const AdminSidebar = () => {
         <Button
           className="w-full h-12 justify-start gap-2 rounded-sm px-4"
           variant={"ghost"}
+          onClick={logout}
           asChild>
           <Link href={"#"}>
             <LogOut className="h-4 w-4" />

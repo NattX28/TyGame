@@ -10,7 +10,7 @@ import {
   Legend,
 } from "chart.js";
 import { UsersRound, Flame, Activity, Handshake } from "lucide-react";
-import { Bar, BarChart, XAxis, Label, PolarRadiusAxis, RadialBar, RadialBarChart, ResponsiveContainer } from "recharts";
+import { Bar, BarChart, XAxis, Label, PolarRadiusAxis, RadialBar, RadialBarChart, ResponsiveContainer, CartesianGrid, YAxis } from "recharts";
 import {
   Card,
   CardContent,
@@ -193,7 +193,7 @@ const Dashboard = () => {
                   <ChartTooltip
                     content={<ChartTooltipContent />}
                     cursor={false}
-                    defaultIndex={1}
+                    defaultIndex={-1}
                   />
                 </BarChart>
               </ChartContainer>
@@ -237,7 +237,7 @@ const Dashboard = () => {
                   <ChartTooltip
                     content={<ChartTooltipContent />}
                     cursor={false}
-                    defaultIndex={1}
+                    defaultIndex={-1}
                   />
                 </BarChart>
               </ChartContainer>
@@ -245,48 +245,51 @@ const Dashboard = () => {
           </Card>
         </div>
       </div>
-      <div className="space-y-4">
-        <div className="flex items-center space-x-4">
-          <label htmlFor="monthLimit" className="font-medium">
-            Number of months:
-          </label>
-          <select 
-            id="monthLimit"
-            value={monthLimit}
-            onChange={handleMonthLimitChange}
-            className="p-2 border rounded"
-          >
-            <option value="3">3 months</option>
-            <option value="6">6 months</option>
-            <option value="12">12 months</option>
-            <option value="24">24 months</option>
-          </select>
-        </div>
-        <Card className="w-full">
-        <CardHeader>
-          <CardTitle>User Registrations - Last {monthLimit} Months</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart
-              data={sampleData}
-              margin={{
-                top: 5,
-                right: 30,
-                left: 20,
-                bottom: 5,
-              }}
+      <div className="w-full mt-6">
+        <div className="p-4 bg-second rounded-lg">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-white text-lg font-medium">User Registrations - Last {monthLimit} Months</h2>
+            <select 
+              value={monthLimit}
+              onChange={(e) => setMonthLimit(parseInt(e.target.value))}
+              className="bg-second text-white rounded p-1 text-sm border border-gray-700"
             >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="count" fill="#3b82f6" name="New Users" />
-            </BarChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
+              <option value="3">3 months</option>
+              <option value="6">6 months</option>
+              <option value="12">12 months</option>
+            </select>
+          </div>
+          
+          <div className="h-64 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={statRegis}
+                margin={{ top: 5, right: 20, left: 0, bottom: 5 }}
+                barSize={20}
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke="#374151" vertical={false} />
+                <XAxis 
+                  dataKey="month" 
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: '#9CA3AF' }}
+                />
+                <YAxis 
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: '#9CA3AF' }}
+                />
+                <Bar 
+                  dataKey="count" 
+                  name="New Users" 
+                  fill="#3B82F6" 
+                  radius={[4, 4, 0, 0]}
+                  background={{ fill: "bg-second" }}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
       </div>
     </div>
   );

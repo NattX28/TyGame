@@ -5,7 +5,7 @@ import { MessageCircle, ThumbsUp } from "lucide-react";
 import { Post } from "@/types/types";
 import { UserPublicData } from "@/types/user";
 import { getUserData, getUserImage } from "@/services/user/user";
-import { getPostImage } from "@/services/post/post";
+import { getPostImage, likePost, unlikePost } from "@/services/post/post";
 import {
   Card,
   CardContent,
@@ -14,25 +14,41 @@ import {
   CardTitle,
   CardDescription
 } from "../ui/card";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 
 const PostCard = ({ post }: { post: Post }) => {
   const [userData, setUserData] = useState<UserPublicData>();
   const [timeAgo, setTimeAgo] = useState<string>();
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
+  const [liked, setLiked] = useState<boolean>(post.liked);
+  const [likes, setLikes] = useState<number>(post.likes || 0);
 
   useEffect(() => {
-    const fetchFeed = async () => {
-      try {
-        const data = await getUserData(post.user_id);
-        setUserData(data);
-      } catch (err) {
-        console.log(err);
+    if (!userData) {
+      const fetchFeed = async () => {
+        try {
+          const data = await getUserData(post.user_id);
+          setUserData(data);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      fetchFeed();
+    }
+  }, [post]);
+
+  const handlerLike = async () => {
+    try {
+      if (likes !== undefined) {
+        liked ? await unlikePost(post.uuid) : await likePost(post.uuid);
+        setLiked(!liked);
+        setLikes(likes - (liked ? 1 : -1));
       }
-    };
-    fetchFeed();
-  }, [post.user_id]);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   useEffect(() => {
     const updateTime = () => {
@@ -62,12 +78,12 @@ const PostCard = ({ post }: { post: Post }) => {
       </CardHeader>
       <CardContent className="p-0">
         {post.content && (
-          <div className="p-4">
+          <div className="px-4">
             <p>{post.content}</p>
           </div>
         )}
         {post.image && (
-          <div className="relative w-full aspect-[16/9]">
+          <div className="mt-4 relative w-full aspect-[16/9]">
             {!imageLoaded && (
               <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-second animate-pulse">
                 <svg className="w-10 h-10 text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
@@ -87,11 +103,11 @@ const PostCard = ({ post }: { post: Post }) => {
         )}
       </CardContent>
       <CardFooter className="p-2 flex gap-4">
-        <Button className="flex items-center gap-1">
+        <Button onClick={handlerLike} className={`flex items-center gap-1 ${liked ? '' : 'bg-transparent'}`}>
           <ThumbsUp className="w-5 h-5" />
-          <span>Like {post.likes}</span>
+          <span>Like {likes}</span>
         </Button>
-        <Button className="flex items-center gap-1">
+        <Button className="flex items-center gap-1 bg-transparent">
           <MessageCircle className="w-5 h-5" />
           <span>Comment {post.comments}</span>
         </Button>

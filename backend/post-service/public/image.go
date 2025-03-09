@@ -21,6 +21,7 @@ func GetImageHandler(c *fiber.Ctx) error {
 		".jpeg": true,
 		".png":  true,
 		".gif":  true,
+		".jfif":  true,
 	}
 
 	if !allowedExtensions[strings.ToLower(filepath.Ext(nameFile))] {

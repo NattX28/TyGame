@@ -1,4 +1,4 @@
-package post
+	package post
 
 import (
 	"github.com/gofiber/fiber/v2"

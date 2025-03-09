@@ -26,7 +26,7 @@ func UnlikePostHandler(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusConflict).JSON(fiber.Map{"error": "You have not liked this post before"})
 	}
 
-	if err := db.DB.Delete(&likeReq).Error; err != nil {
+	if err := db.DB.Where("user_id = ? AND post_id = ?", userID, postID).Delete(&likeReq).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to unliked the post"})
 	}
 

@@ -14,6 +14,13 @@ func GetFeedCommunity(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid Param"})
 	}
 
+	userID, err := uuid.Parse(c.Locals("UserID").(string))
+	if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+					"error": "Failed to get userID",
+			})
+	}
+
 	page := c.QueryInt("page", 1)
 	limit := 100
 	offset := (page - 1) * limit
@@ -34,13 +41,17 @@ func GetFeedCommunity(c *fiber.Ctx) error {
         FROM posts p
         WHERE p.visibility = 'public'
           AND p.community_id = ?
-    ) AS post_scores p
+    ) AS p
     ORDER BY score DESC
     LIMIT ? OFFSET ?
-	`, commuID, limit, offset).Scan(&posts).Error
+	`, userID, commuID, limit, offset).Scan(&posts).Error
 
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "Error fetching posts"})
+	}
+
+	if posts == nil {
+		posts = []models.FeedPost{}
 	}
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
