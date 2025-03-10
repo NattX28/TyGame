@@ -60,7 +60,7 @@ func main() {
 		}
 	}
 
-	err = DownloadImage("https://cdn.discordapp.com/attachments/1262339474449371186/1347973087060037682/image_7.png?ex=67cdc544&is=67cc73c4&hm=01f5494ded86a6615b7dc43a16a11ff2383a1810c65a1f1d5f66f7d6012b9d71&", filePath+"/Default.jpg")
+	err = DownloadImage("https://raw.githubusercontent.com/NattX28/TyGame/refs/heads/main/backend/user-service/uploads/users/Default.jpg", filePath+"/Default.jpg")
 	if err != nil {
 		fmt.Printf("Error downloading image: %v\n", err)
 		return
@@ -79,7 +79,7 @@ func main() {
 	})
 
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "http://localhost:3000,https://tygame.vercel.app,https://tygame.up.railway.app,https://user-service-tygame.up.railway.app,https://post-service-tygame.up.railway.app,https://community-service-tygame.up.railway.app,https://party-service-tygame.up.railway.app,https://chat-service-tygame.up.railway.app",
+		AllowOrigins: "http://localhost:3000,http://localhost:5001,http://localhost:5002,http://localhost:5003,http://localhost:5004,http://localhost:5005,https://tygame.vercel.app,https://tygame.up.railway.app,https://user-service-tygame.up.railway.app,https://post-service-tygame.up.railway.app,https://community-service-tygame.up.railway.app,https://party-service-tygame.up.railway.app,https://chat-service-tygame.up.railway.app",
 		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
 		AllowMethods: "GET,POST,PUT,DELETE",
 		AllowCredentials: true,

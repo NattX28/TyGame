@@ -5,23 +5,7 @@ import ProfileFeed from "./components/ProfileFeed";
 import ProfileHeader from "./components/ProfileHeader";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { getUserProfile } from "@/services/user/protectedRoute";
-
-// Mock Data
-// const profileData: User = {
-// id: "12345",
-// username: "johndoe",
-// email: "johndoe@example.com",
-// name: "John",
-// role: "admin",
-// posts: 42,
-// friends: 150,
-// cookieVersion: 2,
-// fullName: "John Doe",
-// bio: "Full-stack developer and tech enthusiast.",
-// imageName: "https://randomuser.me/api/portraits/men/3.jpg",
-// description: "Loves coding and solving problems.",
-// };
+import { getUserData } from "@/services/user/user";
 
 // wait to call api
 const Profile = () => {
@@ -29,28 +13,33 @@ const Profile = () => {
   const [profile, setProfile] = useState<User>();
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
     const fetchProfile = async () => {
       try {
-        const data = await getUserProfile();
+        const data = await getUserData(user.userid);
+        console.log(data)
         setProfile(data);
       } catch (error) {
         console.error("Error fetching profile", error);
       }
     };
 
-    fetchProfile();
+    if (user.userid) {
+      fetchProfile();
+    }
   }, []);
 
-  if (!profile) {
-    return <div className="text-center py-10">Profile not found.</div>;
-  }
   return (
-    <div className="max-w-4xl mx-auto pt-16 pb-4 px-12 space-y-16">
-      <ProfileHeader profile={profile} isOwnProfile={true} />
-      <div className="w-full bg-second h-[1px]"></div>
-      <CreatePostTrigger profile={profile} />
-      <ProfileFeed profile={profile} />
-    </div>
+    profile ? (
+      <div className="max-w-4xl mx-auto pt-16 pb-4 px-12 space-y-16">
+        <ProfileHeader profile={profile} isOwnProfile={true} />
+        <div className="w-full bg-second h-[1px]"></div>
+        <CreatePostTrigger profile={profile} />
+        <ProfileFeed profile={profile} />
+      </div>
+    ) : (
+      <div className="text-center py-10">Profile not found.</div>
+    )
   );
 };
 export default Profile;

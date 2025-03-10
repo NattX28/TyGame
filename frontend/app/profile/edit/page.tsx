@@ -8,17 +8,19 @@ import { Save, X, Upload } from "lucide-react";
 import {
   updateProfilePic,
   updateUser,
-  getUserProfile,
 } from "@/services/user/protectedRoute";
 import { UserProfile } from "@/types/types";
+import { getUserData } from "@/services/user/user";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function EditProfile() {
   const router = useRouter();
+  const { user: userAuth } = useAuth();
+
   const [user, setUser] = useState<UserProfile>({
     id: "",
     name: "",
     bio: "",
-    image_name: "",
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -32,13 +34,17 @@ export default function EditProfile() {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const userData = await getUserProfile();
-        setUser({
-          id: userData.id,
-          name: userData.name,
-          bio: userData.bio || "",
-          image_name: userData.image_name || "",
-        });
+        if (userAuth == undefined) {
+          throw new Error("get user data failed");
+        }
+        const userData = await getUserData(userAuth.userid);
+        if (userData.id != undefined) {
+          setUser({
+            id: userData.id,
+            name: userData.name,
+            bio: userData.description || "",
+          });
+        }
       } catch (err) {
         setError("Failed to load profile data");
         console.error(err);

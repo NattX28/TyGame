@@ -3,6 +3,7 @@ import ProfileActions from "./ProfileActions";
 import { ProfileStats } from "./ProfileStats";
 import ProfileBio from "./ProfileBio";
 import { User } from "@/types/types";
+import { getUserImage } from "@/services/user/user";
 
 const ProfileHeader = ({
   profile,
@@ -16,9 +17,9 @@ const ProfileHeader = ({
   return (
     <div className="flex items-start gap-24 mb-8 px-8">
       {/* Avatar */}
-      <Avatar className="h-48 w-48 ">
+      <Avatar className="h-36 w-36 ">
         <AvatarImage
-          src={profile.imageName || "https://github.com/shadcn.png"}
+          src={getUserImage(profile.id)}
           alt={profile.username}
           className="rounded-full"
         />
@@ -34,8 +35,8 @@ const ProfileHeader = ({
           isOwnProfile={isOwnProfile}
           isFollowing={isFollowing}
         />
-        <ProfileStats posts={profile.posts} friends={profile.friends} />
-        <ProfileBio fullName={profile.fullName} bio={profile.bio} />
+        <ProfileStats posts={0} friends={0} />
+        <ProfileBio bio={profile.description} />
       </div>
     </div>
   );

@@ -23,17 +23,17 @@ const isValidUser = (user: any): user is User => {
 };
 
 export const useAuth = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User>(<User>{});
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user") || "null");
+    const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
 
     if (isValidUser(storedUser)) {
       setUser(storedUser);
     } else {
-      setUser(null);
+      setUser(<User>{});
       localStorage.removeItem("user");
     }
 
@@ -46,7 +46,7 @@ export const useAuth = () => {
       document.cookie = `Authorization=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
       localStorage.removeItem("user");
 
-      setUser(null);
+      setUser(<User>{});
       router.push("/login");
     } catch (error) {
       console.log();

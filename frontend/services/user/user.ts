@@ -1,9 +1,7 @@
 import { api, Endpoint_Gateway } from "../api";
-import { jwtDecode } from "jwt-decode";
-import { UpdateUserRequest, UserPublicData } from "@/types/user";
-import { DecodedToken } from "@/types/auth";
 import { LoginResponse, RegisterResponse } from "@/types/auth";
 import { MessageBackend } from "@/types/samePattern";
+import { User } from "@/types/types";
 
 const BASE_URL_USER: string = "/users";
 
@@ -89,8 +87,8 @@ export const getUserImage = (id: string): string => {
   return path;
 };
 
-// get user profile by id
-export const getUserData = async (uuid: string): Promise<UserPublicData> => {
+// get user data by id
+export const getUserData = async (uuid: string): Promise<User> => {
   try {
     const { data } = await api.get(`${BASE_URL_USER}/${uuid}`);
     return data;

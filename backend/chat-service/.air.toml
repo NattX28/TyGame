@@ -1,5 +1,8 @@
 [build]
 cmd = "go run main.go"
-include_ext = ["go"]
-exclude_dir = ["vendor"]
-exclude_file = ["air.toml"]
+include_ext = ["go", "tpl", "tmpl", "html"]
+exclude_dir = ["assets", "tmp", "vendor"]
+exclude_file = []
+[misc]
+# Copy directory contents
+copy_directory = ["uploads"]

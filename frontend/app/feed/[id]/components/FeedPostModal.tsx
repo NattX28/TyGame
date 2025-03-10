@@ -110,7 +110,7 @@ const FeedPostModal = ({
   return (
     user && <form className="space-y-4" onSubmit={handleSubmit}>
       <div className="fixed inset-0 flex bg-black/75 items-center justify-center z-50">
-        <Card className="w-full max-w-lg mx-4 bg-black/75 text-white">
+        <Card className="w-full max-w-lg mx-4 text-white bg-main">
           <CardHeader className="relative border-b">
             <h2 className="text-xl font-semibold text-center">Create Post</h2>
             <Button

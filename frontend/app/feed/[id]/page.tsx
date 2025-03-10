@@ -15,6 +15,7 @@ const Feed = () => {
       try {
         const data = await getPost(idCommunity);
         setPostFeed(data.posts);
+        console.log("Posts : ", data.posts)
       } catch (err) {
         console.log(err);
       }

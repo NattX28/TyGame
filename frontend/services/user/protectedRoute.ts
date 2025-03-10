@@ -59,14 +59,3 @@ export const deleteAccount = async (): Promise<MessageBackend> => {
     throw new Error("Failed to delete account");
   }
 };
-
-//getuserprofile
-export const getUserProfile = async (): Promise<User> => {
-  try {
-    const { data } = await api.get(`${BASE_URL_PROTECTED}/profile`);
-    return data;
-  } catch (error) {
-    console.error("Error fetching user profile:", error);
-    throw new Error("Failed to fetch user profile");
-  }
-};

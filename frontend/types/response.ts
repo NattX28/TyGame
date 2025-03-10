@@ -11,5 +11,5 @@ export interface getCommentsResponse {
 
 export interface getAllPost {
   message: string;
-  post: Post[];
+  posts: Post[];
 }

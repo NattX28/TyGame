@@ -2,9 +2,8 @@ import moment from 'moment';
 import { Button } from "../ui/button";
 import Image from "next/image";
 import { MessageCircle, ThumbsUp } from "lucide-react";
-import { Post } from "@/types/types";
-import { UserPublicData } from "@/types/user";
-import { getUserData, getUserImage } from "@/services/user/user";
+import { Post, User } from "@/types/types";
+import { getUserProfile, getUserImage } from "@/services/user/user";
 import { getPostImage, likePost, unlikePost } from "@/services/post/post";
 import {
   Card,
@@ -14,11 +13,11 @@ import {
   CardTitle,
   CardDescription
 } from "../ui/card";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 
 const PostCard = ({ post }: { post: Post }) => {
-  const [userData, setUserData] = useState<UserPublicData>();
+  const [userData, setUserData] = useState<User>();
   const [timeAgo, setTimeAgo] = useState<string>();
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
   const [liked, setLiked] = useState<boolean>(post.liked);
@@ -26,15 +25,15 @@ const PostCard = ({ post }: { post: Post }) => {
 
   useEffect(() => {
     if (!userData) {
-      const fetchFeed = async () => {
+      const fetchUserData = async () => {
         try {
-          const data = await getUserData(post.user_id);
+          const data = await getUserProfile(post.user_id);
           setUserData(data);
         } catch (err) {
           console.log(err);
         }
       };
-      fetchFeed();
+      fetchUserData();
     }
   }, [post]);
 

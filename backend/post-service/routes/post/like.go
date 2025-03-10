@@ -33,6 +33,7 @@ func LikePostHandler(c *fiber.Ctx) error {
 	}
 
 	likeReq = models.Like{
+		ID:      uuid.New(),
 		UserID:  userID,
 		PostID:  &postID,
 	}

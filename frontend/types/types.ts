@@ -2,16 +2,8 @@
 // User
 export interface User {
   id: string;
-  username: string;
-  email: string;
   name: string;
-  role: string;
-  posts: number;
-  friends: number;
-  fullName?: string;
-  bio?: string;
-  image_name?: string;
-  cookieVersion?: number;
+  username: string;
   description?: string;
 }
 //Friends
@@ -167,7 +159,7 @@ export interface RecentRoom {
 }
 
 export interface UserProfile {
-  id: string;
+  id: string | null;
   name: string;
   bio: string; // เปลี่ยนจาก bio เป็น description ตาม Backend
   image_name?: string; // เพิ่มฟิลด์สำหรับชื่อไฟล์รูปภาพ
