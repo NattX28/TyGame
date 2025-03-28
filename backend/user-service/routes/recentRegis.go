@@ -30,26 +30,21 @@ func GetUserRegistrationStats(c *fiber.Ctx) error {
 	
 	now := time.Now()
 	
+	var startOfMonth time.Time
+	nextMonth := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, now.Location()).AddDate(0, -monthLimit+1, 0)
 	for i := monthLimit - 1; i >= 0; i-- {
-		targetMonth := now.AddDate(0, -i, 0)
-		startOfMonth := time.Date(targetMonth.Year(), targetMonth.Month(), 1, 0, 0, 0, 0, targetMonth.Location())
-		
-		var nextMonth time.Time
-		if i == 0 {
-			nextMonth = now
-		} else {
-			nextMonth = time.Date(targetMonth.Year(), targetMonth.Month()+1, 1, 0, 0, 0, 0, targetMonth.Location())
-		}
-		
+		startOfMonth = nextMonth.Add(time.Nanosecond)
+		nextMonth = time.Date(startOfMonth.Year(), startOfMonth.Month()+1, 1, 0, 0, 0, 0, now.Location()).Add(-time.Nanosecond)
+
 		var count int64
 		if err := db.DB.Model(&models.User{}).Where("created_at BETWEEN ? AND ?", startOfMonth, nextMonth).Count(&count).Error; err != nil {
 			return c.Status(500).JSON(fiber.Map{
 				"error": "Failed to get registration stats",
 			})
 		}
-		
-		monthName := targetMonth.Format("Jan")
-		
+
+		monthName := startOfMonth.Format("Jan")
+
 		results = append(results, MonthlyRegistration{
 			Month: monthName,
 			Count: int(count),
