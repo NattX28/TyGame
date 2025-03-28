@@ -9,6 +9,7 @@ import {
   MessageSquare,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const ProfileActions = ({
   profile,
@@ -21,6 +22,7 @@ const ProfileActions = ({
   friendCount: number;
   setFriendCount: React.Dispatch<React.SetStateAction<number>>;
 }) => {
+  const router = useRouter();
   const [isFollowing, setIsFollowing] = useState(false);
 
   async function handleFollow() {
@@ -55,7 +57,13 @@ const ProfileActions = ({
     return (
       <div className="flex items-center gap-6">
         <h1 className="text-xl font-semibold"> {profile.name} </h1>
-        <Button className="rounded-md" size={"sm"}>
+        <Button
+          className="rounded-md"
+          size={"sm"}
+          onClick={() => 
+            router.push("/profile/edit")
+          }
+        >
           <Settings className="mr-2 h-4 w-4" />
           Edit Profile
         </Button>

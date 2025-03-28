@@ -3,7 +3,6 @@ import { User } from "@/types/types";
 import CreatePostTrigger from "./components/CreatePostTrigger";
 import ProfileFeed from "./components/ProfileFeed";
 import ProfileHeader from "./components/ProfileHeader";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { getUserData } from "@/services/user/user";
 

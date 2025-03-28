@@ -11,6 +11,7 @@ FROM alpine:latest
 WORKDIR /app
 
 COPY --from=builder /app/main .
+COPY uploads ./uploads
 
 EXPOSE 5001
 
