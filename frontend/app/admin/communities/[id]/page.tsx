@@ -1,6 +1,5 @@
 "use client";
-import { Pencil } from "lucide-react";
-import Link from "next/link";
+import moment from 'moment';
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,144 +11,83 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import AdminModal from "../components/AdminCommunityModal";
 import DeleteButton from "@/components/shared/DeleteButton";
-import { deleteCommunity, getCommunity } from "@/services/community/communities";
+import { deleteCommunity, getCommunity, getCommunityMember } from "@/services/community/communities";
 import Swal from "sweetalert2";
 import { useParams, useRouter } from "next/navigation";
-import { Community } from "@/types/types";
-
-// Mock data
-//Types
-interface User {
-  name: string;
-  username: string;
-  role: "user" | "admin" | "moderator";
-  image: string;
-  detail: string;
-  date: Date;
-}
-const users: User[] = [
-  {
-    name: "Alice Johnson",
-    username: "alice.johnson@email.com",
-    role: "admin",
-    image: "https://randomuser.me/api/portraits/women/1.jpg",
-    detail: "spamming",
-    date: new Date("2023-11-01"),
-  },
-  {
-    name: "Alice Johnson",
-    username: "alice.johnson@email.com",
-    role: "admin",
-    image: "https://randomuser.me/api/portraits/women/1.jpg",
-    detail: "spamming",
-    date: new Date("2023-11-01"),
-  },
-  {
-    name: "Alice Johnson",
-    username: "alice.johnson@email.com",
-    role: "admin",
-    image: "https://randomuser.me/api/portraits/women/1.jpg",
-    detail: "spamming",
-    date: new Date("2023-11-01"),
-  }
-]
-
-console.log("อยู่หน้ารายชื่อ commu");
+import { Community, UserFullAccess } from "@/types/types";
+import { getUserImage } from '@/services/user/user';
+import AdminBanUserModal from "../components/AdminBanUserModal";
+import AdminDeleteUserModal from "../components/AdminDeleteUserModal";
+import AdminInfoUserModal from "../components/AdminInfoUserModal";
+import { getUsersData } from '@/services/user/admin';
 
 // UUID
 const DetailCommunityPage = ({ param }: { param: string }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedAction, setSelectedAction] = useState("");
-  const [selectedUser, setSelectedUser] = useState("");
   const router = useRouter();
+
+  const [banModelOpen, setBanModelOpen] = useState<UserFullAccess | null>(null);
+  const [delModelOpen, setDelModelOpen] = useState<UserFullAccess | null>(null);
+  const [infoModelOpen, setInfoModelOpen] = useState<UserFullAccess | null>(null);
+  const [users, setUsers] = useState<UserFullAccess[]>([])
+  const [usersFilter, setUsersFilter] = useState<UserFullAccess[]>([])
 
   const [community, setCommunity] = useState<Community|null>();
   const idCommunity = useParams().id as string;
   useEffect(() => {
-    const fetchCommunity = async () => {
+    const fetchData = async () => {
       if (idCommunity) {
         try {
           const commu = await getCommunity(idCommunity);
+          const userids = await getCommunityMember(commu.uuid)
+          const users = await getUsersData(userids);
           setCommunity(commu);
+          setUsers(users)
+          setUsersFilter(users);
         } catch (error) {
-          console.error("Failed to fetch community");
+          console.error("Failed to fetch community", error);
         }
       }
     };
   
-    fetchCommunity();
-  }, [idCommunity]);
-
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString("th-TH", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
-  const openModal = (username: string, action: string) => {
-    if (action !== "pending") {
-      setSelectedUser(username);
-      setSelectedAction(action);
-      setIsOpen(true);
-    }
-  };
-
-  // Create Object to store status (PK -> username)
-  const [positions, setPositions] = useState(() =>
-    users.reduce((acc, user) => {
-      acc[user.username] = "pending";
-      return acc;
-    }, {} as Record<string, string>)
-  );
-
-  // Function to update a specific user's status
-  const updatePosition = (userId: string, newPosition: string) => {
-    setPositions((prev) => ({
-      ...prev,
-      [userId]: newPosition,
-    }));
-  };
-
-  // Function to update all statuses at once
-  const updateAllStatuses = (newPosition: string) => {
-    setPositions((prev) =>
-      Object.keys(prev).reduce((acc, username) => {
-        acc[username] = newPosition;
-        return acc;
-      }, {} as Record<string, string>)
-    );
-  };
+    fetchData();
+  }, []);
 
   const handleDeleteCommunity = async (communityId: string) => {
-    // ลบ commu ใส่ทีหลัง
     try {
       const response = await deleteCommunity(communityId);
-      Swal.fire(
-        "Correct",
-        `Delete Community: ${communityId} Success`,
-        "success"
-      );
+      Swal.fire({
+        title: "Correct",
+        text: `Delete Community: ${communityId} Success`,
+        icon: "success",
+        timer: 3000,
+        showConfirmButton: false,
+            theme: 'dark'
+      });
       console.log("delete community : ", communityId);
       console.log(response);
       router.push("/admin/communities");
     } catch (error: any) {
       Swal.fire({
-        title: "ERROR!!",
-        text: error?.message,
+        title: "Error",
+        text: error?.message || "An error occurred while deleting the community.",
         icon: "error",
+        timer: 3000,
+        showConfirmButton: false,
+            theme: 'dark'
       });
+      console.error("Failed to delete community", error);
     }
   };
 
   return (
-    <div className="rounded-lg overflow-hidden w-full max-w-5xl mx-auto">
+    <div className="rounded-lg overflow-hidden w-full mx-auto">
       <div className="px-10 mx-auto my-10">
         {/* Bulk Status Dropdown */}
-        <div className="flex justify-end gap-4 text-main-color">
+        <div className="flex justify-end gap-4 text-main-color items-center">
+          <strong className='mr-auto text-3xl'>
+            Community <span className='text-red-600'>{`| ${community?.name}`}</span>
+          </strong>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant={"ghost"} className="border border-zinc-200">
@@ -159,12 +97,26 @@ const DetailCommunityPage = ({ param }: { param: string }) => {
             <DropdownMenuContent className="w-40 bg-forth">
               {/* <DropdownMenuLabel>Filter</DropdownMenuLabel>
               <DropdownMenuSeparator /> */}
-              <DropdownMenuRadioGroup onValueChange={updateAllStatuses}  className="text-center">
-                <DropdownMenuRadioItem value="all" className="text-main-color">
-                  All User
+              <DropdownMenuRadioGroup 
+                onValueChange={(status) => {
+                  setUsersFilter(
+                    status === "All" ?
+                    users : users.filter((user) => 
+                      (status === "Normal" && !user.banned) || 
+                      (status === "Banned" && user.banned)
+                    )
+                  );
+                }}  
+                className="text-center"
+              >
+                <DropdownMenuRadioItem value="All" className="text-main-color">
+                  All
                 </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="banned" className="text-main-color">
-                  Banned User
+                <DropdownMenuRadioItem value="Normal" className="text-main-color">
+                  Normal
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="Banned" className="text-main-color">
+                  Banned
                 </DropdownMenuRadioItem>
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>
@@ -177,8 +129,7 @@ const DetailCommunityPage = ({ param }: { param: string }) => {
         </div>
 
         {/* Table Header */}
-        <div className="grid grid-cols-[5%_35%_20%_20%_20%] gap-4 mt-10 mb-4 text-xs font-semibold uppercase tracking-wide text-gray-400">
-          <div>No.</div>
+        <div className="grid grid-cols-[30%_15%_15%_40%] gap-4 mt-10 mb-4 text-xs font-semibold uppercase tracking-wide text-gray-400">
           <div>Username</div>
           <div>Status</div>
           <div>Timeout</div>
@@ -187,17 +138,16 @@ const DetailCommunityPage = ({ param }: { param: string }) => {
 
         {/* Table Body */}
         <div className="divide-y divide-gray-700">
-          {users.map((user, index) => (
+          {usersFilter.map((user, index) => (
             <div
-              key={user.username}
-              className="py-4 space-y-3 md:space-y-0 grid grid-cols-[5%_35%_20%_20%_20%] gap-4 md:items-center">
+              key={index}
+              className="py-4 space-y-3 md:space-y-0 grid grid-cols-[30%_15%_15%_40%] gap-4 md:items-center">
               {/* Number */}
-              <div className="text-sm text-white">{index + 1}</div>
 
               {/* User Info */}
               <div className="flex items-center">
                 <img
-                  src={user.image}
+                  src={getUserImage(user.id)}
                   alt={user.name}
                   className="h-8 w-8 rounded-full"
                 />
@@ -209,58 +159,78 @@ const DetailCommunityPage = ({ param }: { param: string }) => {
                 </div>
               </div>
 
-              (
-                <div className={`text-sm text-red-600`}>
-                  {"Banned"}
-                </div> : <div className={`text-sm text-red-600`}>
+              { user.banned ? (
+                <div className={`text-sm font-medium text-red-600`}>
                   {"Banned"}
                 </div>
-              )
+              ) : (
+                <div className={`text-sm font-medium text-green-600`}>
+                  {"Normal"}
+                </div>
+              )}
 
               {/* Date */}
               <div className="text-sm text-gray-500 dark:text-gray-400">
-                {formatDate(user.date)}
+                {user.banned && user.timestamp && moment.unix(user.timestamp).fromNow()}
               </div>
 
               {/* Status Dropdown */}
-              <div>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant={"ghost"} className="border border-red-600">
-                      {positions[user.username]}
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56">
-                    <DropdownMenuLabel>Permission :</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuRadioGroup
-                      value={positions[user.username]}
-                      onValueChange={(value) =>
-                        updatePosition(user.username, value)
-                      }>
-                      <DropdownMenuRadioItem value="banned">
-                        Banned
-                      </DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="kick">
-                        Kick
-                      </DropdownMenuRadioItem>
-                    </DropdownMenuRadioGroup>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+              <div className='flex items-center gap-4'>
+                <Button
+                  variant={"ghost"}
+                  className="border border-red-600"
+                  onClick={() => {
+                    setInfoModelOpen(user);
+                  }}
+                >
+                  {"Info"}
+                </Button>
+                { user.banned ? (
+                  <Button
+                    variant={"ghost"}
+                    className="border border-red-600"
+                    onClick={() => {
+                      setBanModelOpen(user);
+                    }}
+                  >
+                    {"Unban"}
+                  </Button>
+                ) : (
+                  <Button
+                    variant={"ghost"}
+                    className="border border-red-600"
+                    onClick={() => {
+                      setBanModelOpen(user);
+                    }}
+                  >
+                    {"Ban"}
+                  </Button>
+                )}
               </div>
             </div>
           ))}
         </div>
-
-        {selectedUser && selectedAction && (
-          <AdminModal
-            isOpen={isOpen}
-            onClose={() => setIsOpen(false)}
-            username={selectedUser}
-            action={selectedAction}
-          />
-        )}
       </div>
+
+      {/* Modal */}
+      {infoModelOpen && (
+        <AdminInfoUserModal
+          onClose={() => setInfoModelOpen(null)}
+          user={infoModelOpen}
+        />
+      )}
+      {banModelOpen && (
+        <AdminBanUserModal
+          onClose={() => setBanModelOpen(null)}
+          user={banModelOpen}
+        />
+      )}
+      {delModelOpen && (
+        <AdminDeleteUserModal
+          onClose={() => setDelModelOpen(null)}
+          user={delModelOpen}
+        />
+      )}
     </div>
   );
 };

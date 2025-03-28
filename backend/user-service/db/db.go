@@ -27,5 +27,5 @@ func Connect() {
 	log.Println("Connected to the database")
 
 	// Auto-migrate the User model
-	DB.AutoMigrate(&models.User{})
+	DB.AutoMigrate(&models.User{}, &models.Ban{}, &models.Friend{}) // Add the BanUser model
 }

@@ -6,6 +6,18 @@ export interface User {
   username: string;
   description?: string;
 }
+
+export interface UserFullAccess {
+  id: string;
+  name: string;
+  username: string;
+  banned?: boolean;
+  role?: "User" | "Admin" | "Super Admin";
+  reason?: string;
+  timestamp?: number;
+  description?: string;
+}
+
 //Friends
 export interface Friend {
   userid: string;
@@ -126,7 +138,8 @@ export interface StatRegister {
 //Can't use yet
 export interface BannedUser {
   userid: string;
-  time: Date;
+  reason: string;
+  timestamp: number;
 }
 
 export interface PartyResponse {

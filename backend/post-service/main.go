@@ -48,7 +48,7 @@ func main() {
 
 	posts := app.Group("/posts")
 	posts.Use(middleware.JWTMiddleware)
-  posts.Post("/", post.CreatePostHandler)
+  posts.Post("/", middleware.CheckUseBanned, post.CreatePostHandler)
   posts.Get("/image/:nameFile", public.GetImageHandler)
 
 	feeds := posts.Group("/feeds")
@@ -58,6 +58,7 @@ func main() {
 	// feeds.Get("friend/:CommunityID", middleware.JWTMiddleware, post.LikePostHandler)
 
 	postFocus := posts.Group("/:PostID")
+	postFocus.Use(middleware.CheckUseBanned)
 	postFocus.Put("/", post.EditPostHandler)
 	postFocus.Delete("/", post.DeletePostHandler)
 	postFocus.Get("/like", post.LikePostHandler)
@@ -73,11 +74,6 @@ func main() {
 	commentFocus.Get("/like", comment.LikeCommentHandler)
 	commentFocus.Get("/unlike", comment.UnlikeCommentHandler)
 
-	admins := posts.Group("/admin")
-	admins.Use(middleware.CanManagement)
-	// admins.Post("/ban", comment.BanUserHandler)
-	// admins.Post("/unban", comment.BanUserHandler)
-	// admins.Post("/unban", comment.BanUserHandler)
 
 	port := os.Getenv("PORT_POST_SERVICE")
   if port == "" {

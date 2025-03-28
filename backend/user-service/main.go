@@ -18,6 +18,7 @@ import (
 	"user-service/models"
 	"user-service/public"
 	"user-service/routes"
+	"user-service/routes/admin"
 	"user-service/usersmanagement"
 )
 
@@ -103,9 +104,13 @@ func main() {
 	adminRoutes.Use(middleware.CanManagement)
 	adminRoutes.Get("/count", routes.GetUserCount)
 	adminRoutes.Get("/recent-register", routes.GetUserRegistrationStats)
+	adminRoutes.Post("/ban", admin.BanUserHandler)
+	adminRoutes.Post("/unban", admin.UnbanUserHandler)
+	adminRoutes.Post("/getusersdata", admin.GetUsersDataHandler)
 	
 	userFocus := userRoutes.Group("/:userID")
 	userFocus.Get("/avatar", public.GetAvatarHandler)
+	userFocus.Get("/checkban", admin.CheckUseBanned)
 	userFocus.Use(middleware.JWTMiddleware)
 	userFocus.Get("/", public.GetProfileHandler)
 
@@ -122,7 +127,6 @@ func main() {
 	protectedRoutes := userRoutes.Group("/protected")
 	protectedRoutes.Use(middleware.JWTMiddleware)
 	protectedRoutes.Put("/update", usersmanagement.UpdateUserHandler)
-	protectedRoutes.Delete("/delete", usersmanagement.DeleteUserHandler)
 	protectedRoutes.Post("/upload-profile", usersmanagement.UploadProfileHandler)
 	protectedRoutes.Get("/profile", usersmanagement.GetUserProfileHandler)
 
