@@ -28,13 +28,25 @@ export const useAuth = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+    const storedUser = localStorage.getItem("user");
 
-    if (isValidUser(storedUser)) {
-      setUser(storedUser);
+    if (storedUser && storedUser !== "undefined") {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+
+        if (isValidUser(parsedUser)) {
+          setUser(parsedUser);
+        } else {
+          setUser(<User>{});
+          localStorage.removeItem("user");
+        }
+      } catch (error) {
+        console.error("Error parsing user from localStorage:", error);
+        setUser(<User>{});
+        localStorage.removeItem("user");
+      }
     } else {
       setUser(<User>{});
-      localStorage.removeItem("user");
     }
 
     setLoading(false);
@@ -43,7 +55,6 @@ export const useAuth = () => {
   const logout = async () => {
     try {
       const response = await logOut();
-      document.cookie = `Authorization=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
       localStorage.removeItem("user");
 
       setUser(<User>{});

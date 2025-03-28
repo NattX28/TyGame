@@ -4,12 +4,13 @@ import {
   MessageCircleMore,
   Joystick,
   Contact,
+  ShieldCheck,
 } from "lucide-react";
 
 const lastCommunity = localStorage.getItem("lastCommunity");
 const feedURL = lastCommunity ? `/feed/${lastCommunity}` : "/explore";
 
-export const userSidebarItems = [
+const setupUserSidebarItems = [
   {
     title: "Home",
     url: feedURL,
@@ -35,4 +36,22 @@ export const userSidebarItems = [
     url: "/communities",
     icon: Joystick,
   },
-];
+];;
+
+const storedUser = localStorage.getItem("user");
+if (storedUser && storedUser !== "undefined") {
+  try {
+    const parsedUser = JSON.parse(storedUser);
+    if (parsedUser.role === "Admin" || parsedUser.role === "Super Admin") {
+      setupUserSidebarItems.push({
+        title: "Admin Panel",
+        url: "/admin",
+        icon: ShieldCheck,
+      });
+    }
+  } catch (error) {
+    console.error("Error parsing user from localStorage:", error);
+  }
+}
+
+export const userSidebarItems = setupUserSidebarItems;

@@ -3,7 +3,7 @@ import { Button } from "../ui/button";
 import Image from "next/image";
 import { MessageCircle, ThumbsUp } from "lucide-react";
 import { Post, User } from "@/types/types";
-import { getUserProfile, getUserImage } from "@/services/user/user";
+import { getUserData, getUserImage } from "@/services/user/user";
 import { getPostImage, likePost, unlikePost } from "@/services/post/post";
 import {
   Card,
@@ -27,7 +27,7 @@ const PostCard = ({ post }: { post: Post }) => {
     if (!userData) {
       const fetchUserData = async () => {
         try {
-          const data = await getUserProfile(post.user_id);
+          const data = await getUserData(post.user_id);
           setUserData(data);
         } catch (err) {
           console.log(err);

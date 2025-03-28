@@ -36,5 +36,14 @@ type CommunityResponse struct {
 	Description 	string    	`json:"description"`
 	Category    	string    	`json:"category"`
 	Image    			string    	`json:"image"`
+}
+
+type CommunityResponseAdmin struct {
+	ID          	uuid.UUID 	`json:"uuid"`
+	Name        	string    	`json:"name"`
+	Description 	string    	`json:"description"`
+	Category    	string    	`json:"category"`
+	Image    			string    	`json:"image"`
 	MemberCount 	int64     	`json:"member_count"`
+	PostCount   	int64     	`json:"post_count"`
 }

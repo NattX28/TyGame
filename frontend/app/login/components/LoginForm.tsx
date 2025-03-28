@@ -24,18 +24,20 @@ const LoginForm = () => {
   const router = useRouter();
   const onSubmit = async (values: LoginFormValues) => {
     try {
-      const response = await login(values.username, values.password);
-      // ตรวจสอบ response หรือ token ที่ได้มา แล้ว redirect
+      const response = await login(
+        values.username,
+        values.password
+      );
       console.log(response);
       router.push("/explore");
+
     } catch (error: any) {
-      console.error("Signup failed:", error);
+      console.error("Login failed:", error);
       Swal.fire({
         title: "ERROR!!",
         text: error.error,
         icon: "error",
       });
-      // setErrorMessage("Login failed. Please check your credentials.");
     }
   };
   const form = useForm({

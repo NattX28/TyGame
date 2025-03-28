@@ -47,7 +47,7 @@ func AddFriendHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	userIDStr, ok := claims["user_id"].(string)
+	userIDStr, ok := claims["userid"].(string)
 	if !ok {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Invalid user ID format",
@@ -63,20 +63,28 @@ func AddFriendHandler(c *fiber.Ctx) error {
 	}
 
 	// Parse friend_id from the request
-	friendID, err := uuid.Parse(c.FormValue("friend_id"))
+	type FriendRequest struct {
+    FriendID string `json:"userId"`
+	}
+
+	var friend FriendRequest
+	if err := c.BodyParser(&friend); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
+	}
+	friendUUID, err := uuid.Parse(friend.FriendID)
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid friend ID"})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid post ID"})
 	}
 
 	// Check if the friendship already exists
 	var existingFriendship models.Friend
-	result := db.DB.Where("(user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?)", userID, friendID, friendID, userID).First(&existingFriendship)
+	result := db.DB.Where("(user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?)", userID, friend.FriendID, friend.FriendID, userID).First(&existingFriendship)
 	if result.RowsAffected > 0 {
 		return c.Status(fiber.StatusConflict).JSON(fiber.Map{"error": "Already friends"})
 	}
 
 	// Create the friendship in the database
-	friendship := models.Friend{UserID: userID, FriendID: friendID}
+	friendship := models.Friend{UserID: userID, FriendID: friendUUID}
 	err = db.DB.Create(&friendship).Error
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Could not add friend"})

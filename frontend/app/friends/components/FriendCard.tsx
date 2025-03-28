@@ -1,16 +1,10 @@
 import DeleteButton from "@/components/shared/DeleteButton";
 import { unfollowFriend } from "@/services/user/friends";
-import { getUserImage } from "@/services/user/user";
+import { getUserData, getUserImage } from "@/services/user/user";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import Link from "next/link";
 
-interface Friend {
-  id: string;
-  name: string;
-  avatar: string;
-  isOnline: boolean;
-}
-
+import { Friend } from "@/types/types";
 interface FriendCardProps {
   friend: Friend;
   onUnfriend: (id: string) => void; // รับฟังก์ชันจาก FriendList
@@ -28,17 +22,18 @@ const FriendCard = ({ friend, onUnfriend }: FriendCardProps) => {
       console.log("delete friend error");
     }
   };
+
   return (
     <div
-      key={friend.id}
-      className="flex items-center gap-6 bg-forth rounded-lg transition-all hover:bg-forth py-2 px-4">
+      key={friend.userid}
+      className="flex items-center gap-6 bg-forth rounded-lg transition-all hover:bg-forth py-3 px-4">
       {/* Avatar */}
       <Link
-        href={`/profile/${friend.id}`}
+        href={`/profile/${friend.userid}`}
         className="flex items-center flex-1 space-x-4 cursor-pointer">
-        <Avatar className="h-16 w-16">
+        <Avatar className="h-11 w-11">
           <AvatarImage
-            src={getUserImage(friend.id)}
+            src={getUserImage(friend.userid)}
             alt="@shadcn"
             className="rounded-full"
           />
@@ -49,7 +44,7 @@ const FriendCard = ({ friend, onUnfriend }: FriendCardProps) => {
         </div>
       </Link>
       <DeleteButton
-        itemId={friend.id}
+        itemId={friend.userid}
         itemType="friend"
         onDelete={handleDeleteFriend}
         buttonText="Unfollow"

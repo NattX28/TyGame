@@ -60,11 +60,11 @@ func main() {
 		}
 	}
 
-	err = DownloadImage("https://raw.githubusercontent.com/NattX28/TyGame/refs/heads/main/backend/user-service/uploads/users/Default.jpg", filePath+"/Default.jpg")
-	if err != nil {
-		fmt.Printf("Error downloading image: %v\n", err)
-		return
-	}
+	// err = DownloadImage("https://raw.githubusercontent.com/NattX28/TyGame/refs/heads/main/backend/user-service/uploads/users/Default.jpg", filePath+"/Default.jpg")
+	// if err != nil {
+	// 	fmt.Printf("Error downloading image: %v\n", err)
+	// 	return
+	// }
 
 	// Connect to the database
 	db.Connect()
@@ -102,7 +102,7 @@ func main() {
 	adminRoutes.Use(middleware.JWTMiddleware)
 	adminRoutes.Use(middleware.CanManagement)
 	adminRoutes.Get("/count", routes.GetUserCount)
-	adminRoutes.Post("/recent-register", routes.GetUserRegistrationStats)
+	adminRoutes.Get("/recent-register", routes.GetUserRegistrationStats)
 	
 	userFocus := userRoutes.Group("/:userID")
 	userFocus.Get("/avatar", public.GetAvatarHandler)
@@ -110,14 +110,16 @@ func main() {
 	userFocus.Get("/", public.GetProfileHandler)
 
 	// Define friend management routes (Require JWT)
-	friendRoutes := app.Group("/friends")
+	friendRoutes := userRoutes.Group("/friends")
 	friendRoutes.Use(middleware.JWTMiddleware)
-	friendRoutes.Post("/add", friendmanagement.AddFriendHandler)
 	friendRoutes.Get("/get", friendmanagement.GetFriendsHandler)
+	friendRoutes.Post("/add", friendmanagement.AddFriendHandler)
 	friendRoutes.Delete("/remove", friendmanagement.RemoveFriendHandler)
+	friendRoutes.Get("/:userID/check", friendmanagement.CheckFriendsHandler)
+	friendRoutes.Get("/:userID/count", friendmanagement.CountFriendsHandler)
 
 	// Define protected user routes (Require JWT)
-	protectedRoutes := app.Group("/protected")
+	protectedRoutes := userRoutes.Group("/protected")
 	protectedRoutes.Use(middleware.JWTMiddleware)
 	protectedRoutes.Put("/update", usersmanagement.UpdateUserHandler)
 	protectedRoutes.Delete("/delete", usersmanagement.DeleteUserHandler)

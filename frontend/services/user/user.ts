@@ -43,6 +43,8 @@ export const register = async (
       email,
       password,
     });
+    
+    localStorage.setItem("user", JSON.stringify(data.user))
     return data;
   } catch (error: any) {
     console.error("Register failed:", error);
@@ -87,10 +89,17 @@ export const getUserImage = (id: string): string => {
   return path;
 };
 
-// get user data by id
+
+const userCache: Record<string, User> = {};
 export const getUserData = async (uuid: string): Promise<User> => {
+  if (userCache[uuid]) {
+    console.log("Returning cached user data for UUID:", uuid);
+    return userCache[uuid];
+  }
+
   try {
     const { data } = await api.get(`${BASE_URL_USER}/${uuid}`);
+    userCache[uuid] = data;
     return data;
   } catch (error) {
     console.log("get user data failed: ", error);

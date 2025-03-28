@@ -284,7 +284,6 @@ const Dashboard = () => {
                   name="New Users" 
                   fill="#3B82F6" 
                   radius={[4, 4, 0, 0]}
-                  background={{ fill: "bg-second" }}
                 />
               </BarChart>
             </ResponsiveContainer>

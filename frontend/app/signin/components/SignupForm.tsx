@@ -30,9 +30,9 @@ const SignupForm = () => {
         values.password,
         values.email
       );
-      // ตรวจสอบ response หรือ token ที่ได้มา แล้ว redirect
       console.log(response);
-      router.push("/feed");
+      router.push("/explore");
+
     } catch (error: any) {
       console.error("Signup failed:", error);
       Swal.fire({
@@ -40,7 +40,6 @@ const SignupForm = () => {
         text: error.error,
         icon: "error",
       });
-      // setErrorMessage("Login failed. Please check your credentials.");
     }
   };
 

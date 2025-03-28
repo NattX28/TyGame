@@ -3,6 +3,8 @@ import Search from "./Search";
 import Link from "next/link";
 
 const Navbar = () => {
+  
+
   return (
     <nav>
       <div className="flex justify-between items-center h-16">

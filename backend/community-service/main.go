@@ -62,7 +62,7 @@ func main() {
 	community_focus.Delete("/", middleware.CanManagement, routes.DeleteCommunityHandler)
 
 	
-	community_focus.Get("/member", middleware.CanAccess, routes.GetMemberCommunityHandler)
+	community_focus.Get("/members", middleware.CanAccess, routes.GetMemberCommunityHandler)
 
 	port := os.Getenv("PORT_COMMUNITY_SERVICE")
 	if port == "" {

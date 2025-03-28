@@ -9,3 +9,10 @@ type Friend struct {
 	UserID   uuid.UUID `gorm:"type:uuid"`
 	FriendID uuid.UUID `gorm:"type:uuid"`
 }
+
+
+type FriendResponse struct {
+	FriendID 		uuid.UUID `json:"userid"`
+	Name     		string    `json:"name"`
+	Username    string    `json:"username"`
+}

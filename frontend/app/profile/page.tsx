@@ -7,9 +7,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { getUserData } from "@/services/user/user";
 
-// wait to call api
 const Profile = () => {
-  // เสร็จแล้วรอ merge
   const [profile, setProfile] = useState<User>();
 
   useEffect(() => {
@@ -32,7 +30,7 @@ const Profile = () => {
   return (
     profile ? (
       <div className="max-w-4xl mx-auto pt-16 pb-4 px-12 space-y-16">
-        <ProfileHeader profile={profile} isOwnProfile={true} />
+        <ProfileHeader profile={profile} />
         <div className="w-full bg-second h-[1px]"></div>
         <CreatePostTrigger profile={profile} />
         <ProfileFeed profile={profile} />

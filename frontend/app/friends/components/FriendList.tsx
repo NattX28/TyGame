@@ -18,13 +18,11 @@ const FriendList = () => {
     fetchFriends();
   }, []);
 
-  if (!friends) return <div>Error cannot get friends</div>;
-
   const handleUnfriend = (friendId: string) => {
-    const comfirmed = confirm("Are you sure want to remove this friend?");
-    if (!comfirmed) return;
+    const confirmed = confirm("Are you sure you want to remove this friend?"); // Fixed typo in 'confirm'
+    if (!confirmed) return;
     setFriends((prev) =>
-      prev ? prev.filter((friend) => friend.id !== friendId) : []
+      prev ? prev.filter((friend) => friend.userid !== friendId) : []
     );
   };
 
@@ -33,9 +31,9 @@ const FriendList = () => {
       {friends.length === 0 ? (
         <p className="text-center text-forth">No friends found.</p>
       ) : (
-        friends.map((friend) => (
+        friends.map((friend: Friend) => (
           <FriendCard
-            key={friend.id}
+            key={friend.userid}
             friend={friend}
             onUnfriend={handleUnfriend}
           />

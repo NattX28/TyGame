@@ -37,7 +37,8 @@ $windowTitles = @(
     "party-service",
     "community-service",
     "api-gateway",
-    "next-server"
+    "next-server",
+    "frontend"
 )
 
 # Wait for windows to be created

@@ -8,9 +8,9 @@ export interface User {
 }
 //Friends
 export interface Friend {
-  id: string;
   userid: string;
-  friendid: string;
+  name: string;
+  username: string;
 }
 
 //// Community-services Category

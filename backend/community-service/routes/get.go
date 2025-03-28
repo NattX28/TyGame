@@ -15,13 +15,18 @@ func GetCommunityHandler(c *fiber.Ctx) error {
 	}
 
 	// Pull Community
-	var community models.Community
-	if err := db.DB.First(&community, commuID).Error; err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Community not found"})
+	var communityRes models.CommunityResponse
+	query := `
+			SELECT id, name, description, category, image
+			FROM communities
+			WHERE id = ?
+	`
+	if err := db.DB.Raw(query, commuID).Scan(&communityRes).Error; err != nil {
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Community not found"})
 	}
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message": "Success",
-		"community": community,
+		"community": communityRes,
 	})
 }

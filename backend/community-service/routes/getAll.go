@@ -18,7 +18,7 @@ func GetAllCommunities(c *fiber.Ctx) error {
 		}
 	}
 
-	var topCommunities []models.CommunityResponse
+	var topCommunities []models.CommunityResponseAdmin
 
 	if err := db.DB.Raw(`
 		SELECT 
@@ -46,7 +46,7 @@ func GetAllCommunities(c *fiber.Ctx) error {
 	}
 
 	if topCommunities == nil {
-		topCommunities = []models.CommunityResponse{}
+		topCommunities = []models.CommunityResponseAdmin{}
 	}
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{

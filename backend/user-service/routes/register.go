@@ -1,11 +1,14 @@
 package routes
 
 import (
+	"os"
+	"time"
 	"errors"
 	"user-service/db"
 	"user-service/models"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -67,8 +70,45 @@ func RegisterHandler(c *fiber.Ctx) error {
 		})
 	}
 
+	// Generate JWT token
+	secret := os.Getenv("JWT_SECRET")
+	claims := jwt.MapClaims{
+		"userid":         newUser.ID,
+		"username":       newUser.Username,
+		"email":          newUser.Email,
+		"role":           newUser.Role,
+		"name":           newUser.Name,
+		"imagename":      newUser.ImageName,
+		"cookie_version": newUser.CookieVersion, // Include cookie_version in claims
+		"exp":            time.Now().Add(24 * time.Hour).Unix(),
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	tokenString, err := token.SignedString([]byte(secret))
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to generate token",
+		})
+	}
+
+	EXP := time.Now().Add(24 * time.Hour)
+
+	c.Cookie(&fiber.Cookie{
+		Name:     "Authorization",
+		Value:    "Bearer " + tokenString,
+		Expires:  EXP,
+		HTTPOnly: true,
+		Secure:   true,
+		SameSite: "None",
+	})
+
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
-		"message": "User registered successfully",
-		"user_id": newUser.ID,
+		"message": "Register successful",
+		"user": fiber.Map{
+			"userid":        newUser.ID,
+			"role":          newUser.Role,
+			"name":          newUser.Name,
+			"username":      newUser.Username,
+			"exp":           EXP.Unix(),
+		},
 	})
 }

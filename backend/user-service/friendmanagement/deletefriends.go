@@ -46,7 +46,7 @@ func RemoveFriendHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	userIDStr, ok := claims["user_id"].(string)
+	userIDStr, ok := claims["userid"].(string)
 	if !ok {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Invalid user ID format",
@@ -60,13 +60,17 @@ func RemoveFriendHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	friendID, err := uuid.Parse(c.FormValue("friend_id"))
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid friend ID"})
+	type FriendRequest struct {
+    FriendID string `json:"userId"`
+	}
+
+	var friend FriendRequest
+	if err := c.BodyParser(&friend); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
 	}
 
 	// Remove the friendship from the database
-	if err := db.DB.Where("(user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?)", userID, friendID, friendID, userID).Delete(&models.Friend{}).Error; err != nil {
+	if err := db.DB.Where("(user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?)", userID, friend.FriendID, friend.FriendID, userID).Delete(&models.Friend{}).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Could not remove friend"})
 	}
 
