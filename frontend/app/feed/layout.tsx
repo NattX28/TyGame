@@ -5,7 +5,6 @@ import { useParams } from "next/navigation";
 import FindPartyButton from "@/components/party/FindPartyButton";
 import PeopleInCommunity from "@/components/people/PeopleInCommunity";
 import { useEffect, useState } from "react";
-import { count } from "console";
 import { getCommunity } from "@/services/community/communities";
 import { Community } from "@/types/types";
 

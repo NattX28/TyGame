@@ -10,23 +10,29 @@ import (
     "post-service/models"
 )
 
+
 func BanUserHandler(c *fiber.Ctx) error {
-
-	userID, err := uuid.Parse(c.Params("UserID"))
-	if err != nil {
-			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid UserID"})
+	var banReq models.BanUserRequest
+	if err := c.BodyParser(&banReq); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid request body",
+		})
 	}
 
-	banUser := models.BanUser{
-		ID:        uuid.New(),
-		UserID:    userID,
-		Timestamp: time.Now().Unix(),
-		CreatedAt: time.Now(),
+	var banuser models.BanUser
+	if err := db.DB.First(&banuser, banReq.ID).Error; err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": "User aready banned",
+		})
 	}
 
-	if err := db.DB.Create(&banUser).Error; err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to ban user"})
+	if err := db.DB.Create(&banReq).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to ban user",
+		})
 	}
 
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "User banned successfully"})
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "User banned successfully",
+	})
 }

@@ -29,12 +29,12 @@ func LikeCommentHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	var likeReq models.Like
-	if err := db.DB.Where("user_id = ? AND comment_id = ?", userID, commentID).First(&likeReq).Error; err == nil {
+	var checkLike models.Like
+	if err := db.DB.Where("user_id = ? AND comment_id = ?", userID, commentID).First(&checkLike).Error; err == nil {
 		return c.Status(fiber.StatusConflict).JSON(fiber.Map{"error": "You have already liked this comment"})
 	}
 
-	likeReq = models.Like{
+	likeReq := models.Like{
 		UserID: 		userID,
 		CommentID: 	&commentID,
 	}

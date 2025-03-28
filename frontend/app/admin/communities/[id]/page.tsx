@@ -177,9 +177,10 @@ const DetailCommunityPage = ({ param }: { param: string }) => {
         </div>
 
         {/* Table Header */}
-        <div className="grid grid-cols-[10%_50%_25%_25%] gap-4 mt-10 mb-4 text-xs font-semibold uppercase tracking-wide text-gray-400">
+        <div className="grid grid-cols-[5%_35%_20%_20%_20%] gap-4 mt-10 mb-4 text-xs font-semibold uppercase tracking-wide text-gray-400">
           <div>No.</div>
           <div>Username</div>
+          <div>Status</div>
           <div>Timeout</div>
           <div>Action</div>
         </div>
@@ -189,7 +190,7 @@ const DetailCommunityPage = ({ param }: { param: string }) => {
           {users.map((user, index) => (
             <div
               key={user.username}
-              className="py-4 space-y-3 md:space-y-0 grid grid-cols-[10%_50%_25%_25%] gap-4 md:items-center">
+              className="py-4 space-y-3 md:space-y-0 grid grid-cols-[5%_35%_20%_20%_20%] gap-4 md:items-center">
               {/* Number */}
               <div className="text-sm text-white">{index + 1}</div>
 
@@ -207,6 +208,14 @@ const DetailCommunityPage = ({ param }: { param: string }) => {
                   <p className="text-sm text-gray-400">{user.username}</p>
                 </div>
               </div>
+
+              (
+                <div className={`text-sm text-red-600`}>
+                  {"Banned"}
+                </div> : <div className={`text-sm text-red-600`}>
+                  {"Banned"}
+                </div>
+              )
 
               {/* Date */}
               <div className="text-sm text-gray-500 dark:text-gray-400">

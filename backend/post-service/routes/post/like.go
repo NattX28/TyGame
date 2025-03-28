@@ -27,16 +27,15 @@ func LikePostHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	var likeReq models.Like
-	if err := db.DB.Where("user_id = ? AND post_id = ?", userID, postID).First(&likeReq).Error; err == nil {
+	var checkLike models.Like
+	if err := db.DB.Where("user_id = ? AND post_id = ?", userID, postID).First(&checkLike).Error; err == nil {
 		return c.Status(fiber.StatusConflict).JSON(fiber.Map{"error": "You have already liked this post"})
 	}
 
-	likeReq = models.Like{
-		ID:      uuid.New(),
+	likeReq := models.Like{
 		UserID:  userID,
 		PostID:  &postID,
-	}
+	}	
 
 	if err := db.DB.Create(&likeReq).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to like the post"})

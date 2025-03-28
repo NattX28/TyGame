@@ -73,6 +73,12 @@ func main() {
 	commentFocus.Get("/like", comment.LikeCommentHandler)
 	commentFocus.Get("/unlike", comment.UnlikeCommentHandler)
 
+	admins := posts.Group("/admin")
+	admins.Use(middleware.CanManagement)
+	// admins.Post("/ban", comment.BanUserHandler)
+	// admins.Post("/unban", comment.BanUserHandler)
+	// admins.Post("/unban", comment.BanUserHandler)
+
 	port := os.Getenv("PORT_POST_SERVICE")
   if port == "" {
     port = "5002"
