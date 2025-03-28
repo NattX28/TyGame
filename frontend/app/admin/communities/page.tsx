@@ -21,15 +21,15 @@ const CommunitiesPage = () => {
     };
     fetchCommuCard();
   }, []);
-    
+  
   return (                                                    
-    <>
-      <div className="flex flex-col flex-wrap items-center">
+    <div className="mx-4">
+      <div className="mt-10 mx-6 flex flex-row flex-wrap gap-4 items-center">
         <AdminAddCommunity />
         <AdminEditCommunity />
       </div>
       <AdminCommunityList communities={communities} />
-    </>
+    </div>
   );
 };
 export default CommunitiesPage;

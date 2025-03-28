@@ -26,7 +26,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
         <AdminSidebar />
       </div>
       {/* page.tsx */}
-      <main className="overflow-y-auto mx-auto">{children}</main>
+      <main className="overflow-y-auto w-full">{children}</main>
     </div>
   );
 };

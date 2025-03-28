@@ -48,6 +48,8 @@ const ProfileHeader = ({
         <ProfileActions
           profile={profile}
           isOwnProfile={isOwnProfile}
+          friendCount={CFriend}
+          setFriendCount={setCFriend}
         />
         <ProfileStats posts={0} friends={CFriend} />
         <ProfileBio bio={profile.description} />

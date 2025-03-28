@@ -1,56 +1,32 @@
 package admin
 
 import (
-	"github.com/gofiber/fiber/v2"
-	"github.com/google/uuid"
+    "time"
 
-	"post-service/db"
-	"post-service/models"
+    "github.com/gofiber/fiber/v2"
+    "github.com/google/uuid"
+
+    "post-service/db"
+    "post-service/models"
 )
 
-func CreateCommentHandler(c *fiber.Ctx) error {
-	postID, err := uuid.Parse(c.Params("PostID"))
+func BanUserHandler(c *fiber.Ctx) error {
+
+	userID, err := uuid.Parse(c.Params("UserID"))
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid post ID"})
-	}
-	
-	var commentForm models.CommentFormReq
-	if err := c.BodyParser(&commentForm); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid UserID"})
 	}
 
-	// Pull Data
-	var postReq models.Post
-	if err := db.DB.First(&postReq, postID).Error; err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Post not found"})
+	banUser := models.BanUser{
+		ID:        uuid.New(),
+		UserID:    userID,
+		Timestamp: time.Now().Unix(),
+		CreatedAt: time.Now(),
 	}
 
-	userID, err := uuid.Parse(c.Locals("UserID").(string))
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Failed to get userID",
-		})
+	if err := db.DB.Create(&banUser).Error; err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to ban user"})
 	}
 
-	// Can Access
-	if (postReq.Visibility != "public") {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Cant access this post"})
-	}
-
-	policy := bluemonday.StrictPolicy()
-	safeContent := policy.Sanitize(commentForm.Content)
-
-	comment := models.Comment{
-		PostID: 		 postID,
-		UserID:      userID,
-		Content:     safeContent,
-	}
-
-	// Store Data
-	result := db.DB.Create(&comment)
-	if result.Error != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to create comment"})
-	}
-	
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "Comment created successfully"})
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "User banned successfully"})
 }

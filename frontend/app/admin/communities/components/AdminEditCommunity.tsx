@@ -175,7 +175,7 @@ const AdminEditCommunity = () => {
   if (!communities) return <div>Loading communities...</div>;
   
   return (
-    <div className="mx-6 mt-8">
+    <div className="">
       <Button onClick={() => setIsOpen(true)}>Edit Community</Button>
 
       {isOpen && (

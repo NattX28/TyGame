@@ -137,7 +137,7 @@ const AdminAddCommunity = () => {
     }));
   };
   return (
-    <div className="mx-6 mt-8">
+    <div className="">
       <Button onClick={() => setIsOpen(true)}>Add Community</Button>
 
       {/* Add Community Modal */}

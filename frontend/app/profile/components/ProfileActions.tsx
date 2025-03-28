@@ -13,9 +13,13 @@ import { useEffect, useState } from "react";
 const ProfileActions = ({
   profile,
   isOwnProfile,
+  friendCount,
+  setFriendCount,
 }: {
   profile: User;
   isOwnProfile: boolean;
+  friendCount: number;
+  setFriendCount: React.Dispatch<React.SetStateAction<number>>;
 }) => {
   const [isFollowing, setIsFollowing] = useState(false);
 
@@ -23,8 +27,10 @@ const ProfileActions = ({
     try {
       if (isFollowing) {
         await unfollowFriend(profile.id);
+        setFriendCount(friendCount - 1);
       } else {
         await followfriends(profile.id);
+        setFriendCount(friendCount + 1);
       }
       setIsFollowing(!isFollowing);
     } catch (err) {
