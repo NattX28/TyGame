@@ -33,11 +33,13 @@ const AdminSidebar = () => {
         <div className="flex flex-col items-center justify-center gap-3">
           <Avatar className="max-h-24 max-w-24">
             <AvatarImage
+              width={96}
+              height={96}
               src={getUserImage(user.userid)}
               alt="@shadcn"
-              className="rounded-full object-cover"
+              className="rounded-full object-cover aspect-square"
             />
-            <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+            <AvatarFallback className="rounded-lg">{user.username && user.username.substring(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
           <div className="grid flex-1 text-center text-sm leading-tight">
             <span className="truncate font-semibold">{user.name}</span>

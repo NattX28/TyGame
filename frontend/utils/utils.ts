@@ -7,13 +7,11 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
-const lastCommunity = localStorage.getItem("lastCommunity");
-const feedURL = lastCommunity ? `/feed/${lastCommunity}` : "/explore";
 
 const setupUserSidebarItems = [
   {
     title: "Home",
-    url: feedURL,
+    url: "/explore",
     icon: Home,
   },
   {

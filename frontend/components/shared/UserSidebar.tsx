@@ -12,6 +12,10 @@ const UserSidebar = () => {
   const pathname = usePathname();
   const { user, logout } = useAuth();
 
+  const lastCommunity = localStorage.getItem("lastCommunity");
+  const feedURL = lastCommunity ? `/feed/${lastCommunity}` : "/explore";
+  userSidebarItems[0].url = feedURL
+
   return (
     user && (<div className="px-4 py-8 h-full flex flex-col">
       {/* Top section */}
@@ -20,9 +24,11 @@ const UserSidebar = () => {
         <div className="flex flex-col items-center justify-center gap-3">
           <Avatar className="max-h-24 max-w-24">
             <AvatarImage
+              width={96}
+              height={96}
               src={getUserImage(user.userid)}
               alt="@shadcn"
-              className="rounded-full"
+              className="rounded-full object-cover aspect-square"
             />
             <AvatarFallback className="rounded-lg">CN</AvatarFallback>
           </Avatar>

@@ -67,6 +67,7 @@ func UploadProfileHandler(c *fiber.Ctx) error {
 		"image/jpeg": true,
 		"image/png":  true,
 		"image/gif":  true,
+		"image/jfif":  true,
 	}
 
 	contentType := file.Header.Get("Content-Type")
@@ -80,21 +81,29 @@ func UploadProfileHandler(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "File size exceeds 5MB limit"})
 	}
 
-	// Generate unique filename
 	extension := strings.ToLower(filepath.Ext(file.Filename))
 	filename := fmt.Sprintf("%d%s", time.Now().UnixNano(), extension)
 
-	// Define the upload path
 	uploadPath := fmt.Sprintf("./uploads/users/%s", filename)
 
-	// Save the file
+	var user models.User
+	if err := db.DB.Where("id = ?", userID).First(&user).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "User not found"})
+	}
+
+	if user.ImageName != "Default.jpg" {
+		oldImagePath := fmt.Sprintf("./uploads/users/%s", user.ImageName)
+		if _, err := os.Stat(oldImagePath); err == nil {
+			os.Remove(oldImagePath)
+		}
+	}
+
 	if err := c.SaveFile(file, uploadPath); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to save file"})
 	}
 
-	// Update user profile with new image filename
-	err = db.DB.Model(&models.User{}).Where("id = ?", userID).Update("image_name", filename).Error
-	if err != nil {
+	user.ImageName = filename
+	if err := db.DB.Save(&user).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to update profile image"})
 	}
 

@@ -29,7 +29,7 @@ func GetAvatarHandler(c *fiber.Ctx) error {
 	log.Println("Avatar path: ", filePath)
 	mydir, err := os.Getwd() 
 	if err != nil { 
-			fmt.Println(err) 
+		fmt.Println(err) 
 	} 
 	fmt.Println(mydir) 
 
@@ -44,7 +44,7 @@ func GetAvatarHandler(c *fiber.Ctx) error {
 func getContentType(path string) string {
 	ext := filepath.Ext(path)
 	switch ext {
-	case ".jpg", ".jpeg", ".png", ".gif":
+	case ".jpg", ".jpeg", ".png", ".gif", ".jfif":
 		return "image/" + ext[1:]
 	default:
 		return ""

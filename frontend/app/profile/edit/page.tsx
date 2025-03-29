@@ -10,13 +10,18 @@ import {
   updateUser,
 } from "@/services/user/protectedRoute";
 import { UserProfile } from "@/types/types";
-import { getUserData } from "@/services/user/user";
+import { getUserData, getUserImage } from "@/services/user/user";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function EditProfile() {
   const router = useRouter();
   const { user: userAuth } = useAuth();
 
+  const [userRaw, setUserRaw] = useState<UserProfile>({
+    id: "",
+    name: "",
+    bio: "",
+  });
   const [user, setUser] = useState<UserProfile>({
     id: "",
     name: "",
@@ -34,16 +39,22 @@ export default function EditProfile() {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        if (userAuth == undefined) {
-          throw new Error("get user data failed");
+        if (!userAuth.userid) {
+          return
         }
         const userData = await getUserData(userAuth.userid);
-        if (userData.id != undefined) {
+        if (userData) {
           setUser({
             id: userData.id,
             name: userData.name,
             bio: userData.description || "",
           });
+          setUserRaw({
+            id: userData.id,
+            name: userData.name,
+            bio: userData.description || "",
+          })
+          setError("");
         }
       } catch (err) {
         setError("Failed to load profile data");
@@ -52,7 +63,7 @@ export default function EditProfile() {
     };
 
     fetchUserProfile();
-  }, []);
+  }, [userAuth]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -98,6 +109,13 @@ export default function EditProfile() {
 
       const result = await updateUser(updateData);
       setSuccess("Profile updated successfully!");
+      const updatedUser = {
+        ...userAuth,
+        name: updateData.name,
+        bio: updateData.description,
+      };
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+
 
       // อัปเดต state ด้วยข้อมูลที่ได้รับกลับมา
       setUser((prev) => ({
@@ -121,15 +139,8 @@ export default function EditProfile() {
     fileInputRef.current?.click();
   };
 
-  // กำหนด URL ของรูปภาพโปรไฟล์
-  const getProfileImageUrl = () => {
-    if (previewUrl) return previewUrl;
-    if (user.image_name) return `/uploads/users/${user.image_name}`;
-    return "/api/placeholder/150/150";
-  };
-
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 md:p-6">
+    user.id && <div className="w-full max-w-4xl mx-auto p-4 md:p-6">
       <div className="bg-frame rounded-xl shadow-lg overflow-hidden">
         <div className="bg-main h-32 relative">
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-[#900000] to-[#151515] opacity-80"></div>
@@ -142,7 +153,7 @@ export default function EditProfile() {
                 className="relative w-32 h-32 rounded-full border-4 border-main bg-second overflow-hidden cursor-pointer group"
                 onClick={triggerFileInput}>
                 <Image
-                  src={getProfileImageUrl()}
+                  src={previewUrl || getUserImage(user.id)}
                   alt="Profile avatar"
                   fill
                   className="object-cover"
@@ -223,22 +234,26 @@ export default function EditProfile() {
                   </p>
                 </div>
 
-                <div className="flex justify-end space-x-4 pt-4">
-                  <button
-                    type="button"
-                    onClick={() => router.push("/profile")}
-                    className="px-6 py-2.5 rounded-lg bg-main text-main-color border border-fifth hover:bg-forth transition-colors flex items-center">
-                    <X className="w-4 h-4 mr-2" />
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={isLoading}
-                    className="px-6 py-2.5 rounded-lg bg-third text-main-color hover:bg-third focus:ring-4 focus:ring-[#ce1212]/30 transition-colors disabled:opacity-70 flex items-center">
-                    <Save className="w-4 h-4 mr-2" />
-                    {isLoading ? "Saving..." : "Save Changes"}
-                  </button>
-                </div>
+                {((
+                  (userRaw.id != user.id) || (userRaw.name != user.name) || (userRaw.bio != user.bio)
+                ) || previewUrl) && (
+                  <div className="flex justify-end space-x-4 pt-4">
+                    <button
+                      type="button"
+                      onClick={() => router.push("/profile")}
+                      className="px-6 py-2.5 rounded-lg bg-main text-main-color border border-fifth hover:bg-forth transition-colors flex items-center">
+                      <X className="w-4 h-4 mr-2" />
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isLoading}
+                      className="px-6 py-2.5 rounded-lg bg-third text-main-color hover:bg-third focus:ring-4 focus:ring-[#ce1212]/30 transition-colors disabled:opacity-70 flex items-center">
+                      <Save className="w-4 h-4 mr-2" />
+                      {isLoading ? "Saving..." : "Save Changes"}
+                    </button>
+                  </div>
+                )}
               </form>
             </div>
           </div>

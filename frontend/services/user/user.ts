@@ -1,7 +1,7 @@
 import { api, Endpoint_Gateway } from "../api";
 import { LoginResponse, RegisterResponse } from "@/types/auth";
 import { MessageBackend } from "@/types/samePattern";
-import { User } from "@/types/types";
+import { User, UserProfile } from "@/types/types";
 
 const BASE_URL_USER: string = "/users";
 
@@ -92,8 +92,8 @@ export const getUserImage = (id: string): string => {
 
 const userCache: Record<string, User> = {};
 export const getUserData = async (uuid: string): Promise<User> => {
+  if (!uuid) throw new Error("get user data failed");
   if (userCache[uuid]) {
-    console.log("Returning cached user data for UUID:", uuid);
     return userCache[uuid];
   }
 
@@ -102,7 +102,6 @@ export const getUserData = async (uuid: string): Promise<User> => {
     userCache[uuid] = data;
     return data;
   } catch (error) {
-    console.log("get user data failed: ", error);
     throw new Error("get user data failed");
   }
 };

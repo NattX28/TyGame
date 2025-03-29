@@ -64,7 +64,7 @@ func UpdateUserHandler(c *fiber.Ctx) error {
 	// Parse request body
 	type UpdateRequest struct {
 		Name        string `json:"name"`
-		Password    string `json:"password"`
+		// Password    string `json:"password"`
 		Description string `json:"description"` // Added description field
 	}
 
@@ -94,15 +94,15 @@ func UpdateUserHandler(c *fiber.Ctx) error {
 		user.Name = req.Name
 	}
 
-	if req.Password != "" {
-		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
-		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-				"error": "Failed to hash password",
-			})
-		}
-		user.Password = string(hashedPassword)
-	}
+	// if req.Password != "" {
+	// 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	// 	if err != nil {
+	// 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+	// 			"error": "Failed to hash password",
+	// 		})
+	// 	}
+	// 	user.Password = string(hashedPassword)
+	// }
 
 	if req.Description != "" { // Update description if provided
 		user.Description = req.Description

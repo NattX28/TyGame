@@ -5,12 +5,12 @@ import { AuthResponse } from "./../../types/auth";
 import { MessageBackend } from "@/types/samePattern";
 import { User } from "@/types/types";
 
-const BASE_URL_PROTECTED: string = "/protected";
+const BASE_URL_PROTECTED: string = "users/protected";
 
 export const updateProfilePic = async (imageFile: File) => {
   try {
     const formData = new FormData();
-    formData.append("image", imageFile); // ตรงกับชื่อฟิลด์ที่ Backend คาดหวัง
+    formData.append("image", imageFile);
 
     const { data } = await api.post(
       `${BASE_URL_PROTECTED}/upload-profile`,
@@ -29,11 +29,10 @@ export const updateProfilePic = async (imageFile: File) => {
   }
 };
 
-// Update User - ปรับตามโครงสร้างของ UpdateUserHandler ใน Backend
 export const updateUser = async (updateData: UpdateUserRequest) => {
   try {
     const { data } = await api.put(
-      `${BASE_URL_PROTECTED}/profile`,
+      `${BASE_URL_PROTECTED}/update`,
       updateData,
       {
         headers: {

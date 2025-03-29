@@ -68,6 +68,7 @@ func CreatePostHandler(c *fiber.Ctx) error {
 			"image/jpeg": true,
 			"image/png":  true,
 			"image/gif":  true,
+			"image/jfif":  true,
 		}
 
 		contentType := file.Header.Get("Content-Type")
