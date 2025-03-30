@@ -91,11 +91,6 @@ const CommentContainer = ({ userAuth, comment, postId, destroy }: { userAuth: Us
                   {optionsVisible && (
                     <div className="absolute bg-second border rounded shadow-lg mt-2 right-0 z-10">
                       <ul className="text-sm text-white">
-                        {userAuth && (userAuth.userid == comment.UserID) && (
-                          <li className="px-4 py-2 hover:bg-gray-400 hover:text-second-color cursor-pointer">
-                            Edit
-                          </li>
-                        )}
                         <li 
                           className="px-4 py-2 hover:bg-gray-400 hover:text-second-color cursor-pointer"
                           onClick={handleDeleteComment}

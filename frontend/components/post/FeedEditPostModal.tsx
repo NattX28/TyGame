@@ -139,7 +139,7 @@ const FeedEditPostModal = ({
       <div className="fixed inset-0 flex bg-black/75 items-center justify-center z-50">
         <Card className="w-full max-w-lg mx-4 text-white bg-main">
           <CardHeader className="relative border-b">
-            <h2 className="text-xl font-semibold text-center">Create Post</h2>
+            <h2 className="text-xl font-semibold text-center">Edit Post</h2>
             <Button
               variant="ghost"
               size="icon"
