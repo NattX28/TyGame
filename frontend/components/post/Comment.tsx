@@ -69,7 +69,7 @@ const CommentContainer = ({ userAuth, comment, postId, destroy }: { userAuth: Us
               {likeCount > 0 &&
                 <div className="ml-4">{`${likeCount.toString()} likes`}</div>
               }
-              {userAuth && userAuth.userid == comment.UserID && (
+              {userAuth && (userAuth.userid == comment.UserID || userAuth.role == "Admin" || userAuth.role == "Super Admin") && (
                 <button 
                   className={`relative ml-4 opacity-0 group-hover:opacity-100 transition-opacity`}
                   onClick={toggleOptions}
@@ -91,9 +91,11 @@ const CommentContainer = ({ userAuth, comment, postId, destroy }: { userAuth: Us
                   {optionsVisible && (
                     <div className="absolute bg-second border rounded shadow-lg mt-2 right-0 z-10">
                       <ul className="text-sm text-white">
-                        <li className="px-4 py-2 hover:bg-gray-400 hover:text-second-color cursor-pointer">
-                          Edit
-                        </li>
+                        {userAuth && (userAuth.userid == comment.UserID) && (
+                          <li className="px-4 py-2 hover:bg-gray-400 hover:text-second-color cursor-pointer">
+                            Edit
+                          </li>
+                        )}
                         <li 
                           className="px-4 py-2 hover:bg-gray-400 hover:text-second-color cursor-pointer"
                           onClick={handleDeleteComment}

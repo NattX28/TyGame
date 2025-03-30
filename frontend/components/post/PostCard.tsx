@@ -149,7 +149,7 @@ const PostCard = (
               }
             </div>
             <div>
-              {userAuth && (userAuth.userid == post.user_id) && (
+              {userAuth && (userAuth.userid == post.user_id || userAuth.role == "Admin" || userAuth.role == "Super Admin") && (
                 <button 
                   className={`relative ml-4 transition-opacity`}
                   onClick={toggleOptions}
@@ -163,11 +163,13 @@ const PostCard = (
                   {optionsVisible && (
                     <div className="absolute bg-second border rounded shadow-lg mt-2 right-0 z-10">
                       <ul className="text-sm text-white">
-                        <li className="px-4 py-2 hover:bg-gray-400 hover:text-second-color cursor-pointer"
-                          onClick={handleEditPost}
-                        >
-                          Edit
-                        </li>
+                        {userAuth && (userAuth.userid == post.user_id) && (
+                          <li className="px-4 py-2 hover:bg-gray-400 hover:text-second-color cursor-pointer"
+                            onClick={handleEditPost}
+                          >
+                            Edit
+                          </li>
+                        )}
                         <li 
                           className="px-4 py-2 hover:bg-gray-400 hover:text-second-color cursor-pointer"
                           onClick={handleDeleteComment}

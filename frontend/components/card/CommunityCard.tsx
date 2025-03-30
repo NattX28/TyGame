@@ -38,7 +38,7 @@ const CommunityCard = ({ community }: { community: Community }) => {
         <div className="flex gap-2">
           <Badge
             variant="secondary"
-            className="transition-colors duration-300 group-hover:bg-third group-hover:text-main-color">
+            className="transition-colors duration-300 group-hover:bg-third group-hover:text-main-color z-50">
             {community.category}
           </Badge>
         </div>
@@ -49,7 +49,7 @@ const CommunityCard = ({ community }: { community: Community }) => {
           {/* Community Avatar */}
           <Avatar className="w-16 h-16 md:w-20 md:h-20 transition-transform duration-300 group-hover:scale-110 group-hover:ring-2 group-hover:ring-third">
             <AvatarImage src={getCommunityImage(community.image)} alt="Community Avatar" />
-            <AvatarFallback>GC</AvatarFallback>
+            <AvatarFallback>{community.name.slice(0, 2)}</AvatarFallback>
           </Avatar>
 
           {/* Community Info */}

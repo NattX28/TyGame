@@ -15,6 +15,11 @@ func DeletePostHandler(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid post ID"})
 	}
 
+	Role, ok := c.Locals("Role").(string)
+	if !ok {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Authorization Fail"})
+	}
+
 	// Pull Data
 	var post models.Post
 	if err := db.DB.First(&post, postID).Error; err != nil {
@@ -28,7 +33,7 @@ func DeletePostHandler(c *fiber.Ctx) error {
 			"error": "Failed to get userID",
 		})
 	}
-	if (post.UserID != userID) {
+	if (!(post.UserID == userID || Role == "Admin" || Role == "Super Admin")) {
 		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"error": "No Authorization"})
 	}
 

@@ -29,7 +29,12 @@ func DeleteCommentHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	if (comment.UserID != userID) {
+	Role, ok := c.Locals("Role").(string)
+	if !ok {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Authorization Fail"})
+	}
+
+	if !(comment.UserID == userID || Role == "Admin" || Role == "Super Admin") {
 		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"error": "No Authorization"})
 	}
 
