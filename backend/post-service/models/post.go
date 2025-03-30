@@ -15,11 +15,27 @@ type Post struct {
 	Timestamp   	int64     		`json:"timestamp"`
 	CreatedAt   	time.Time 		`gorm:"autoCreateTime"`
 
-	Comments    	[]Comment 		`gorm:"foreignKey:PostID;onDelete:CASCADE"`
-	Likes       	[]Like    		`gorm:"foreignKey:PostID;onDelete:CASCADE"`
+	Comments    	[]Comment 		`gorm:"foreignKey:PostID;constraint:onDelete:CASCADE"` // Ensure cascade delete
+	Likes       	[]Like    		`gorm:"foreignKey:PostID;constraint:onDelete:CASCADE"` // Ensure cascade delete
 }
 
 type EditPostRequest struct {
 	Content       	string      `json:"content" 			gorm:"not null"`
 	Visibility    	string     	`json:"visibility,omitempty"`
+}
+
+func (p *Post) ToFeedPost(score float64, liked bool, likesCount int, commentsCount int) FeedPost {
+	return FeedPost{
+		ID:            p.ID,
+		CommunityID:   p.CommunityID,
+		UserID:        p.UserID,
+		Content:       p.Content,
+		Visibility:    p.Visibility,
+		Image:         p.Image,
+		Score:         score,
+		Liked:         liked,
+		LikesCount:    likesCount,
+		CommentsCount: commentsCount,
+		Timestamp:     p.Timestamp,
+	}
 }

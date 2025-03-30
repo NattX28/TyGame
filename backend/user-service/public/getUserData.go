@@ -8,8 +8,7 @@ import (
 	"github.com/google/uuid"
 )
 
-// GetProfileHandler retrieves the user's profile information
-func GetProfileHandler(c *fiber.Ctx) error {
+func GetUserDataHandler(c *fiber.Ctx) error {
 	userID, err := uuid.Parse(c.Params("userID"))
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid user ID"})

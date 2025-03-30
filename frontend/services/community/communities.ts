@@ -26,14 +26,20 @@ export const getAmountCommunity = async (): Promise<number> => {
   }
 };
 
-// ดึง Community ตาม ID
-export const getCommunity = async (id: string): Promise<Community> => {
+const CommunityCache: Record<string, Community> = {};
+export const getCommunity = async (uuid: string): Promise<Community> => {
+  if (!uuid) throw new Error("get user data failed");
+  if (CommunityCache[uuid]) {
+    return CommunityCache[uuid];
+  }
+
   try {
-    const { data } = await api.get(`${BASE_URL_COMMU}/${id}`);
-    return data.community; // คืนค่า Community ตาม ID ที่ส่งมา
+    const { data } = await api.get(`${BASE_URL_COMMU}/${uuid}`);
+    CommunityCache[uuid] = data.community;
+    return data.community;
   } catch (error) {
-    console.error(`getCommunity error (id: ${id}): `, error);
-    throw new Error(`Failed to fetch community with id ${id}`);
+    console.error(`getCommunity error (id: ${uuid}): `, error);
+    throw new Error(`Failed to fetch community with id ${uuid}`);
   }
 };
 

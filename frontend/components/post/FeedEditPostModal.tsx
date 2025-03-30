@@ -1,5 +1,6 @@
-import React, { useState, useRef } from "react";
-import FormData from "form-data";
+"use client";
+import React, { useState, useRef, useEffect, use } from "react";
+// Removed the import of "form-data" as we are using the native FormData.
 import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +16,8 @@ import {
 import { ImageIcon, X } from "lucide-react";
 import { z } from "zod";
 import { getUserImage } from "@/services/user/user";
-import { createPost } from "@/services/post/post";
+import { editPost, getPostImage } from "@/services/post/post";
+import { Post } from "@/types/types";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ACCEPTED_IMAGE_TYPES = [
@@ -35,21 +37,38 @@ const imageSchema = z.object({
     ),
 });
 
-const FeedPostModal = ({
+const FeedEditPostModal = ({
   isOpen,
   onClose,
+  post,
+  handleEditUpdate,
+  initialContent = "",
+  initialVisibility = "Public",
 }: {
   isOpen: boolean;
   onClose: () => void;
+  post: Post;
+  handleEditUpdate: (content: string, image: string) => void;
+  initialContent?: string;
+  initialVisibility?: string;
 }) => {
   const idCommunity = useParams().id as string;
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
-  const [postContent, setPostContent] = useState("");
+  const [postContent, setPostContent] = useState(initialContent);
+  const [visibility, setVisibility] = useState(initialVisibility);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (post && post.image) {
+      setPostContent(post.content);
+      setImagePreview(getPostImage(post.image))
+    }
+  }
+  , [isOpen]);
 
   const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -80,11 +99,19 @@ const FeedPostModal = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
-      const post = await createPost(selectedImage, idCommunity, postContent, "public");
-      console.log(post);
-      
+      const formData = new FormData();
+      formData.append("content", postContent);
+      formData.append("visibility", visibility);
+      if (selectedImage) {
+        formData.append("image", selectedImage);
+      }
+
+      const postRes = await editPost(post.uuid, formData);
+      handleEditUpdate(postRes.Content, postRes.Image);
+      console.log("Post updated successfully:", postRes);
+
       setPostContent("");
       setSelectedImage(null);
       setImagePreview(null);
@@ -94,6 +121,7 @@ const FeedPostModal = ({
       setError(error.message || "An error occurred");
     }
   };
+
   const removeImage = (e:any) => {
     e.preventDefault();
     setSelectedImage(null);
@@ -209,4 +237,4 @@ const FeedPostModal = ({
   );
 };
 
-export default FeedPostModal;
+export default FeedEditPostModal;

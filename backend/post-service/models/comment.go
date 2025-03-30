@@ -10,10 +10,11 @@ type Comment struct {
   PostID    	uuid.UUID 	`gorm:"type:uuid;not null"`
   UserID    	uuid.UUID 	`gorm:"type:uuid;not null"`
 	Content   	string    	`gorm:"not null"`
-	CreatedAt 	time.Time 	`gorm:"default:current_timestamp"`
+	Timestamp   int64
+	CreatedAt   time.Time 	`gorm:"autoCreateTime"`
 		
-	Post      	Post      	`gorm:"foreignKey:PostID;onDelete:CASCADE"`
-	Likes     	[]Like    	`gorm:"foreignKey:CommentID;onDelete:CASCADE"`
+	Post      	Post      	`gorm:"foreignKey:PostID;constraint:onDelete:CASCADE"`
+	Likes     	[]Like    	`gorm:"foreignKey:CommentID;constraint:onDelete:CASCADE"`
 }
 
 type CommentFormReq struct {
@@ -21,9 +22,11 @@ type CommentFormReq struct {
 }
 
 type CommentFormRes struct {
-	ID       		uuid.UUID		`json:"id"`
-	UserID   		uuid.UUID		`json:"user_id"`
-	Content  		string   		`json:"content"`
-	CreatedAt 	int64     	`json:"timestamp"`
-	LikeCount		int      		`json:"like_count" gorm:"not null;default:0"`
+	ID       		uuid.UUID		`json:"ID"`
+	PostID	 		uuid.UUID		`json:"PostID"`
+	UserID   		uuid.UUID		`json:"UserID"`
+	Content  		string			`json:"Content"`
+	Timestamp   int64     	`json:"Timestamp"`
+	LikeCount		int					`json:"LikeCount"`
+	Liked				bool				`json:"Liked"`
 }

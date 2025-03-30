@@ -44,7 +44,7 @@ func GetAvatarHandler(c *fiber.Ctx) error {
 func getContentType(path string) string {
 	ext := filepath.Ext(path)
 	switch ext {
-	case ".jpg", ".jpeg", ".png", ".gif", ".jfif":
+	case ".jpg", ".jpeg", ".png", ".gif", ".jfif", ".webp":
 		return "image/" + ext[1:]
 	default:
 		return ""

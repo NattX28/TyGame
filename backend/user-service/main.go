@@ -98,6 +98,7 @@ func main() {
 	userRoutes.Post("/login", routes.LoginHandler)
 	userRoutes.Post("/logout", routes.LogoutHandler)
 	userRoutes.Post("/refresh-token", routes.RefreshTokenHandler)
+	userRoutes.Post("/getusersdata", public.GetUsersDataHandler)
 
 	adminRoutes := userRoutes.Group("/admin")
 	adminRoutes.Use(middleware.JWTMiddleware)
@@ -112,7 +113,7 @@ func main() {
 	userFocus.Get("/avatar", public.GetAvatarHandler)
 	userFocus.Get("/checkban", admin.CheckUseBanned)
 	userFocus.Use(middleware.JWTMiddleware)
-	userFocus.Get("/", public.GetProfileHandler)
+	userFocus.Get("/", public.GetUserDataHandler)
 
 	// Define friend management routes (Require JWT)
 	friendRoutes := userRoutes.Group("/friends")

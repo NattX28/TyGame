@@ -4,15 +4,15 @@ import { Button } from "@/components/ui/button"
 import FeedPostModal from './FeedPostModal'
 
 export default function CreatePostButton() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
   
   return (
     <>
       <Button onClick={() => setIsOpen(true)}>post</Button>
-      <FeedPostModal 
+      <FeedPostModal
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
       />
     </>
-  )
+  );
 }

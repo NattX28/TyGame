@@ -54,7 +54,7 @@ func main() {
 	feeds := posts.Group("/feeds")
 	// feeds.Get("/", middleware.JWTMiddleware, post.LikePostHandler)
 	feeds.Get("community/:CommunityID", feed.GetFeedCommunity)
-	// feeds.Get("friend/", middleware.JWTMiddleware, post.LikePostHandler)
+	feeds.Get("user/:UserID", feed.GetFeedUser)
 	// feeds.Get("friend/:CommunityID", middleware.JWTMiddleware, post.LikePostHandler)
 
 	postFocus := posts.Group("/:PostID")
@@ -73,7 +73,6 @@ func main() {
 	commentFocus.Delete("/", comment.DeleteCommentHandler)
 	commentFocus.Get("/like", comment.LikeCommentHandler)
 	commentFocus.Get("/unlike", comment.UnlikeCommentHandler)
-
 
 	port := os.Getenv("PORT_POST_SERVICE")
   if port == "" {

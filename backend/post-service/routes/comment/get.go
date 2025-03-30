@@ -33,16 +33,23 @@ func GetCommentsHandler(c *fiber.Ctx) error {
 	}
 
 	var comments []models.CommentFormRes
-	result := db.DB.
-		Model(&models.Comment{}).
-		Select("comments.id, comments.user_id, comments.content, EXTRACT(EPOCH FROM comments.created_at) AS created_at_unix, COUNT(likes.id) AS like_count").
-		Joins("LEFT JOIN likes ON likes.comment_id = comments.id").
-		Where("comments.post_id = ?", postReq.ID).
-		Group("comments.id").
-		Order("comments.created_at DESC").
-		Find(&comments)
+	query := `
+		SELECT comments.id, comments.post_id, comments.user_id, comments.content, comments.timestamp, 
+		       COUNT(likes.id) AS like_count,
+		       EXISTS(SELECT 1 FROM likes WHERE likes.comment_id = comments.id AND user_id = ?) AS Liked
+		FROM comments
+		LEFT JOIN likes ON likes.comment_id = comments.id
+		WHERE comments.post_id = ?
+		GROUP BY comments.id
+		ORDER BY comments.timestamp DESC
+	`
+	result := db.DB.Raw(query, userID, postReq.ID).Scan(&comments)
 	if result.Error != nil {
 		return result.Error
+	}
+
+	if (len(comments) == 0) {
+		comments = []models.CommentFormRes{}
 	}
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{

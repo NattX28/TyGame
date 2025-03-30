@@ -35,11 +35,11 @@ const OtherUserProfile = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto pt-16 pb-4 px-12 space-y-16">
+    <div className="max-w-4xl mx-auto pt-16 pb-4 px-12">
       <ProfileHeader
         profile={profileData}
       />
-      <div className="w-full bg-second h-[1px]"></div>
+      <div className="w-full bg-second h-[3px] my-16"></div>
       <ProfileFeed profile={profileData} />
     </div>
   );

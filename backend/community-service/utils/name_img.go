@@ -21,6 +21,7 @@ func GenerateUniqueFilename(file multipart.File) string {
 		"image/jpeg": ".jpg",
 		"image/png":  ".png",
 		"image/gif":  ".gif",
+		"image/webp":  ".webp",
 	}
 
 	ext, ok := extMap[fileType]

@@ -84,6 +84,7 @@ export const refreshToken = async (): Promise<MessageBackend> => {
 
 //get user image
 export const getUserImage = (id: string): string => {
+  if (!id) return "";
   const path = `${Endpoint_Gateway}/users/${id}/avatar`;
   // console.log(path);
   return path;
@@ -91,6 +92,7 @@ export const getUserImage = (id: string): string => {
 
 
 const userCache: Record<string, User> = {};
+
 export const getUserData = async (uuid: string): Promise<User> => {
   if (!uuid) throw new Error("get user data failed");
   if (userCache[uuid]) {
@@ -103,5 +105,33 @@ export const getUserData = async (uuid: string): Promise<User> => {
     return data;
   } catch (error) {
     throw new Error("get user data failed");
+  }
+};
+
+export const getUsersData = async (userids: string[]): Promise<Record<string, User>> => {
+  if (!userids || userids.length === 0) throw new Error("get user data failed");
+
+  const uncachedUserIds: string[] = []
+  const userDataMap: Record<string, User> = {};
+  userids.forEach((id) => {
+    if (userCache[id]) {
+      userDataMap[id] = userCache[id];
+    } else {
+      uncachedUserIds.push(id);
+    }
+  });
+
+  try {
+    if (uncachedUserIds.length > 0) {
+      const { data } = await api.post(`${BASE_URL_USER}/getusersdata`, { userIds: uncachedUserIds });
+      data.users.forEach((user: User) => {
+        userCache[user.id] = user;
+        userDataMap[user.id] = user;
+      });
+    }
+    
+    return userDataMap;
+  } catch (error) {
+    throw error;
   }
 };

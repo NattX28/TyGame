@@ -24,6 +24,7 @@ func ProfileCommunityHandler(c *fiber.Ctx) error {
 		".jpeg": true,
 		".png":  true,
 		".gif":  true,
+		".webp": true,
 	}
 
 	if !allowedExtensions[strings.ToLower(filepath.Ext(nameFile))] {

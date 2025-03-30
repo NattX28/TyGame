@@ -13,8 +13,8 @@ type Like struct {
 	CommentID  		*uuid.UUID 		`json:"comment_id,omitempty" 	gorm:"index:idx_like_comment_user"`
 	CreatedAt  		time.Time  		`json:"created_at" 						gorm:"autoCreateTime"`
 	
-	Post    	 		*Post    			`json:"post,omitempty" 				gorm:"foreignKey:PostID;onDelete:CASCADE"`
-	Comment 	 		*Comment 			`json:"comment,omitempty" 		gorm:"foreignKey:CommentID;onDelete:CASCADE"`
+	Post    	 		*Post    			`json:"post,omitempty" 				gorm:"foreignKey:PostID;constraint:onDelete:CASCADE"`   // Ensure cascade delete
+	Comment 	 		*Comment 			`json:"comment,omitempty" 		gorm:"foreignKey:CommentID;constraint:onDelete:CASCADE"` // Ensure cascade delete
 }
 
 func (u *Like) BeforeCreate(tx *gorm.DB) error {

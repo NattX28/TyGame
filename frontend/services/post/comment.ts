@@ -6,7 +6,7 @@ const BASE_URL_COMMENT: string = "/posts";
 export const editComment = async (
   postID: string,
   CommentID: string
-): Promise<getCommentsResponse> => {
+): Promise<Comment> => {
   try {
     const { data } = await api.put(
       `${BASE_URL_COMMENT}/${postID}/${CommentID}`

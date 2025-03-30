@@ -1,6 +1,7 @@
 package post
 
 import (
+	"os"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 
@@ -29,6 +30,10 @@ func DeletePostHandler(c *fiber.Ctx) error {
 	}
 	if (post.UserID != userID) {
 		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"error": "No Authorization"})
+	}
+
+	if post.Image != "" {
+		os.Remove("uploads/posts/" + post.Image);
 	}
 
 	// Delete Data

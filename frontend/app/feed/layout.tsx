@@ -1,13 +1,12 @@
 "use client";
 import UserSidebar from "@/components/shared/UserSidebar";
-import Button from "./[id]/components/ModalBtn";
+import CreatePostButton from "./[id]/components/ModalBtn";
 import { useParams } from "next/navigation";
 import FindPartyButton from "@/components/party/FindPartyButton";
 import PeopleInCommunity from "@/components/people/PeopleInCommunity";
 import { useEffect, useState } from "react";
 import { getCommunity } from "@/services/community/communities";
 import { Community } from "@/types/types";
-
 
 export default function FeedLayout({
   children,
@@ -43,7 +42,7 @@ export default function FeedLayout({
         <header className="p-2 md:p-4 bg-main shadow-md sticky top-0 z-30 flex justify-between items-center">
           <h1 className="text-2xl font-bold">TyGame <span className="text-[#ce1212]">{community ? `| ${community.name}` : ""}</span></h1>
           <FindPartyButton />
-          <Button />
+          <CreatePostButton />
         </header>
         <main className="flex-1 p-4">{children}</main>
       </div>

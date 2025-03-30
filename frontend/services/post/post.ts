@@ -1,6 +1,6 @@
 import { getCommentsResponse, getMessageResponse } from "@/types/response";
 import { api, Endpoint_Gateway } from "../api";
-import { Post } from "@/types/types";
+import { Comment, EditPostResponse, Post } from "@/types/types";
 
 const BASE_URL_POSTS: string = "/posts";
 
@@ -13,7 +13,7 @@ export const createPost = async (
   community_id: string,
   content: string,
   visibility: string
-): Promise<getCommentsResponse> => {
+): Promise<Post> => {
   try {
     const formData = new FormData();
     if (imageFile) {
@@ -28,7 +28,7 @@ export const createPost = async (
         "Content-Type": "multipart/form-data"
       }
     });
-    return data;
+    return data.post;
   } catch (error) {
     console.log("create post failed", error);
     throw new Error("create post failed");
@@ -37,15 +37,15 @@ export const createPost = async (
 
 export const editPost = async (
   postID: string,
-  content: string,
-  visibility: string,
-): Promise<getMessageResponse> => {
+  formData: FormData,
+): Promise<EditPostResponse> => {
   try {
-    const { data } = await api.put(`${BASE_URL_POSTS}/${postID}`,{
-      content,
-      visibility,
+    const { data } = await api.put(`${BASE_URL_POSTS}/${postID}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
-    return data;
+    return data.post;
   } catch (error) {
     console.log("edit post failed", error);
     throw new Error("edit post failed");
@@ -90,10 +90,10 @@ export const unlikePost = async (
 
 export const getComments = async (
   postID: string
-): Promise<getCommentsResponse> => {
+): Promise<Comment[]> => {
   try {
     const { data } = await api.get(`${BASE_URL_POSTS}/${postID}/comments`);
-    return data;
+    return data.comments;
   } catch (error) {
     console.log("get all comments failed", error);
     throw new Error("get comments failed");
@@ -103,12 +103,12 @@ export const getComments = async (
 export const createComments = async (
   postID: string,
   content: string,
-): Promise<getCommentsResponse> => {
+): Promise<Comment> => {
   try {
     const { data } = await api.post(`${BASE_URL_POSTS}/${postID}/comments`, {
       content
     });
-    return data;
+    return data.comment;
   } catch (error) {
     console.log("create comments failed", error);
     throw new Error("create comments failed");

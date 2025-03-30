@@ -75,27 +75,28 @@ export interface EditPostRequest {
   Content: string;
 }
 
+export interface EditPostResponse {
+  postID: string;
+  Content: string;
+  Image: string;
+}
+
 // Comment
 export interface Comment {
   ID: string;
   PostID: string;
   UserID: string;
   Content: string;
-  CreatedAt: Date;
-  post: Post;
-  Likes: Like[];
+  Timestamp: number;
+  LikeCount?: number;
+  Post?: Post;
+  Likes?: Like[];
+  User?: User;
+  Liked: boolean;
 }
 
 export interface CommentFormReq {
   Content: string;
-}
-
-export interface CommentFormRes {
-  ID: string;
-  UserID: string;
-  Content: string;
-  CreatedAt: Date;
-  Likecount: number;
 }
 
 //Like

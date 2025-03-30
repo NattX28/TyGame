@@ -119,5 +119,9 @@ func CreatePostHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Post created successfully"})
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+		"message": "Post created successfully",
+		"post": post.ToFeedPost(0, false, 0, 0), // Default values for score, liked, likesCount, and commentsCount
+	})
 }
+

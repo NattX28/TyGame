@@ -25,6 +25,7 @@ func Connect() {
 
 	log.Println("Connected to the database")
 	
+	// DropTables()
 	Migrate()
 }
 
@@ -35,6 +36,14 @@ func Migrate() {
 	}
 
 	log.Println("Database migrated")
+}
+
+func DropTables() {
+	err := DB.Migrator().DropTable(&models.Post{}, &models.Comment{}, &models.Like{})
+	if err != nil {
+		log.Fatalf("Unable to drop tables: %v", err)
+	}
+	log.Println("Tables dropped successfully")
 }
 
 func Close() {

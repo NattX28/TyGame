@@ -44,3 +44,11 @@ type AllUserData struct {
 	Timestamp   *int64  `json:"timestamp,omitempty"`
 	Description *string `json:"description,omitempty"`
 }
+
+
+type UserResForUser struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Username    string `json:"username"`
+	Description string `json:"description"`
+}

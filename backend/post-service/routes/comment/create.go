@@ -1,6 +1,7 @@
 package comment
 
 import (
+	"time"
 	"github.com/gofiber/fiber/v2"
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/google/uuid"
@@ -45,6 +46,7 @@ func CreateCommentHandler(c *fiber.Ctx) error {
 		PostID: 		 postID,
 		UserID:      userID,
 		Content:     safeContent,
+		Timestamp:   time.Now().Unix(),
 	}
 
 	// Store Data
@@ -52,6 +54,19 @@ func CreateCommentHandler(c *fiber.Ctx) error {
 	if result.Error != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to create comment"})
 	}
-	
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "Comment created successfully"})
+
+	commentRes := models.CommentFormRes{
+		ID:        comment.ID,
+		PostID:    comment.PostID,
+		UserID:    comment.UserID,
+		Content:   comment.Content,
+		Timestamp: comment.Timestamp,
+		LikeCount: 0,
+		Liked:     false,
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "Comment created successfully",
+		"comment": commentRes,
+	})
 }
