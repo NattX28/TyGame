@@ -36,7 +36,7 @@ const ProfileHeader = ({
         <AvatarImage
           width={144}
           height={144}
-          src={getUserImage(user.userid)}
+          src={getUserImage(profile.id)}
           alt="@shadcn"
           className="rounded-full object-cover aspect-square"
         />

@@ -1,8 +1,12 @@
 import axios from "axios";
 
+// const deployEnv = process.env.NEXT_DEPLOY || "local";
+// const Endpoint_Gateway = deployEnv === "prod" ? process.env.NEXT_PUBLIC_API_URL : "http://localhost:8080";
+// const Endpoint_Gateway_ws = deployEnv === "prod" ? process.env.NEXT_PUBLIC_WS_URL : "ws://localhost:8080";
+
 const deployEnv = process.env.NEXT_DEPLOY || "local";
-const Endpoint_Gateway = deployEnv === "prod" ? process.env.NEXT_PUBLIC_API_URL : "http://localhost:8080";
-const Endpoint_Gateway_ws = deployEnv === "prod" ? process.env.NEXT_PUBLIC_WS_URL : "ws://localhost:8080";
+const Endpoint_Gateway = "http://localhost:8080";
+const Endpoint_Gateway_ws = "ws://localhost:8080";
 
 const api = axios.create({
   baseURL: Endpoint_Gateway, // URL for backend
