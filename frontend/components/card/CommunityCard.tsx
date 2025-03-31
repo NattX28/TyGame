@@ -21,7 +21,7 @@ const CommunityCard = ({ community }: { community: Community }) => {
       }
   
       const join = await joinCommunity(community.uuid);
-      router.push(`/feed/${join.uuid}`);
+      router.push(`/feed/${join.ID}`);
     } catch (error) {
       router.push(`/login`);
     }
