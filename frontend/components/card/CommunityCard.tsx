@@ -13,17 +13,17 @@ const CommunityCard = ({ community }: { community: Community }) => {
   const router = useRouter();
 
   const handleJoin = async (id: string) => {
-    if (!user) {
-      // ถ้า user เป็น null แสดงว่ายังไม่ได้ล็อกอิน
-      router.push("/login"); // redirect ไปหน้า login
-      return;
-    }
-
-    const join = await joinCommunity(community.uuid);
-    if (join) {
+    try {
+      if (!user) {
+        // ถ้า user เป็น null แสดงว่ายังไม่ได้ล็อกอิน
+        router.push("/login"); // redirect ไปหน้า login
+        return;
+      }
+  
+      const join = await joinCommunity(community.uuid);
       router.push(`/feed/${join.uuid}`);
-    } else {
-      router.push("/login");
+    } catch (error) {
+      router.push(`/login`);
     }
   };
 
