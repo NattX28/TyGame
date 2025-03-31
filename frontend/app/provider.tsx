@@ -6,25 +6,19 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 // real
-// const PUBLIC_PATHS = ["/", "/communities", "/login", "/register"];
-// test
-const PUBLIC_PATHS = [
-  "/",
-  "/communities",
-  "/login",
-  "/register",
+const PUBLIC_PATHS = ["/", "/explore", "/login", "/register"];
+
+// real
+const PROTECTED_PATHS = [
   "/feed",
   "/profile",
   "/chat",
-  "/admin",
-  "/admin/dashboard",
-  "/admin/communities",
+  "/community",
+  "/party",
+  "/friends",
 ];
-// real
-// const PROTECTED_PATHS = ["/feed", "/profile", "/chat"];
-// test
-const PROTECTED_PATHS = ["/void"];
-const ADMIN_PATHS = ["/void"];
+
+const ADMIN_PATHS = ["/admin"];
 
 const ALL_VALID_PATHS = [...PUBLIC_PATHS, ...PROTECTED_PATHS, ...ADMIN_PATHS];
 

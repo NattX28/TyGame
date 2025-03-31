@@ -1,25 +1,20 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const ADMIN_PATHS = ["/void"]; // เดี๋ยวมาแก้
-// ============== สำหรับการใช้งานจริง ==============
-// const PUBLIC_PATHS = ["/", "/explore", "/login", "/register"];
-// const PROTECTED_PATHS = ["/feed", "/profile", "/chat"];
+// real
+const PUBLIC_PATHS = ["/", "/explore", "/login", "/register"];
 
-// ============== สำหรับการทดสอบ ==============
-const PROTECTED_PATHS = ["/void"];
-const PUBLIC_PATHS = [
-  "/",
-  "/communities",
-  "/login",
-  "/register",
+// real
+const PROTECTED_PATHS = [
   "/feed",
   "/profile",
   "/chat",
-  "/admin",
-  "/admin/dashboard",
-  "/admin/communities",
+  "/community",
+  "/party",
+  "/friends",
 ];
+
+const ADMIN_PATHS = ["/admin"];
 
 // Combine all valid paths
 const ALL_VALID_PATHS = [...PUBLIC_PATHS, ...PROTECTED_PATHS, ...ADMIN_PATHS];
