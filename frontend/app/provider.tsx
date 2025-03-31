@@ -11,7 +11,8 @@ const ADMIN_PATHS = ["/admin"];
 const ALL_VALID_PATHS = [...PUBLIC_PATHS, ...PROTECTED_PATHS, ...ADMIN_PATHS];
 
 export default function Providers({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
+  const { loading } = useAuth();
+  const user = localStorage.getItem("user");
   const router = useRouter();
   const pathname = usePathname();
 
@@ -34,7 +35,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     if (!user && !isPublicPath) {
       router.push("/login");
     }
-  }, [user, loading, pathname, router]);
+  }, [loading, pathname, router]);
 
   if (loading) return <LoadingScreen />;
 
