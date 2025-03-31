@@ -13,7 +13,7 @@ export default function FeedLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [community, setCommunity] = useState<Community|null>();
+  const [community, setCommunity] = useState<Community | null>();
   const idCommunity = useParams().id as string;
   useEffect(() => {
     const fetchCommunity = async () => {
@@ -26,7 +26,7 @@ export default function FeedLayout({
         }
       }
     };
-  
+
     fetchCommunity();
   }, [idCommunity]);
 
@@ -40,8 +40,13 @@ export default function FeedLayout({
 
       <div className="flex flex-col min-h-screen">
         <header className="p-2 md:p-4 bg-main shadow-md sticky top-0 z-30 flex justify-between items-center">
-          <h1 className="text-2xl font-bold">TyGame <span className="text-[#ce1212]">{community ? `| ${community.name}` : ""}</span></h1>
-          <FindPartyButton />
+          <h1 className="text-2xl font-bold">
+            TyGame{" "}
+            <span className="text-[#ce1212]">
+              {community ? `| ${community.name}` : ""}
+            </span>
+          </h1>
+          <FindPartyButton communityId={idCommunity} />
           <CreatePostButton />
         </header>
         <main className="flex-1 p-4">{children}</main>
@@ -50,7 +55,7 @@ export default function FeedLayout({
       <aside className="hidden lg:block h-screen sticky top-0">
         <div className="h-full bg-main p-4 overflow-y-auto border-second border-l-2">
           <h2 className="text-xl font-semibold mb-6 text-center">Members</h2>
-          <PeopleInCommunity/>
+          <PeopleInCommunity />
         </div>
       </aside>
     </div>

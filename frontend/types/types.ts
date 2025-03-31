@@ -147,12 +147,13 @@ export interface PartyResponse {
   party_id: string;
   current_members: number;
   max_slots: number;
+  community_id: string;
 }
 
 // chatMessage
 
 export interface ChatMessage {
-  id: number
+  id: number;
   room_id: string;
   sender_id: string;
   content: string;

@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"party-service/models"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -21,7 +22,16 @@ func Connect() {
 
 	log.Println("Connected to the database")
 	
+	// DropTables();
 	Migrate()
+}
+
+func DropTables() {
+    err := DB.Migrator().DropTable(&models.Party{}, &models.PartyMember{})
+    if err != nil {
+        log.Fatalf("Unable to drop tables: %v", err)
+    }
+    log.Println("Tables dropped successfully")
 }
 
 func Migrate() {

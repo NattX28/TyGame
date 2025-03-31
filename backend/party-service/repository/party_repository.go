@@ -10,12 +10,13 @@ import (
 	"gorm.io/gorm"
 )
 
-func FindAvailableParty(maxSlots int) (*models.Party, error) {
+func FindAvailableParty(maxSlots int,communityID uuid.UUID) (*models.Party, error) {
 	var party models.Party
 	// หาห้องที่ว่างและกำหนดจำนวนคนที่ผู้ใช้อยากเข้าด้วย
 	result := db.DB.Preload("Members").
-		Where("status = ? AND MaxSlots = ?", models.PartyStatusOpen, maxSlots).
-		First(&party)
+        Where("status = ? AND max_slots = ? AND community_id = ?", 
+              models.PartyStatusOpen, maxSlots, communityID).
+        First(&party)
 
 	// ถ้าไม่เจอข้อมูล ให้ return nil, nil แทน
 	if result.Error != nil {
@@ -28,10 +29,11 @@ func FindAvailableParty(maxSlots int) (*models.Party, error) {
 	return &party, nil
 }
 
-func CreateParty(maxSlots int) (*models.Party, error) {
+func CreateParty(maxSlots int,communityID uuid.UUID) (*models.Party, error) {
 	party := &models.Party{
 		Status:    models.PartyStatusOpen,
 		MaxSlots:  maxSlots,
+		CommunityID: communityID,
 		CreatedAt: time.Now(),
 	}
 
