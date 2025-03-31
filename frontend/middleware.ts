@@ -75,7 +75,7 @@ export async function middleware(request: NextRequest) {
   // return NextResponse.next();
 
   // คอมเมนต์โค้ดด้านล่างไว้ชั่วคราวสำหรับการทดสอบ
-  
+
   // Handle authentication and authorization for valid paths
   if (!token && isProtectedPath) {
     return NextResponse.redirect(new URL("/login", request.url));
