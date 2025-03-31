@@ -74,7 +74,7 @@ func CreatePostHandler(c *fiber.Ctx) error {
 		contentType := file.Header.Get("Content-Type")
 		if !allowedTypes[contentType] {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-				"error": "Invalid file type. Allowed: JPEG, PNG, GIF",
+				"error": "Invalid file type. Allowed: JPEG, PNG, GIF, JFIF",
 			})
 		}
 
