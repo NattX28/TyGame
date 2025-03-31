@@ -83,6 +83,8 @@ export async function middleware(request: NextRequest) {
   if (isAdminPath && userRole !== "admin") {
     return NextResponse.redirect(new URL("/login", request.url));
   }
+
+  return NextResponse.next();
 }
 
 export const config = {
