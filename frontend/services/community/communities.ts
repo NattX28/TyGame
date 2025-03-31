@@ -65,8 +65,8 @@ export const joinCommunity = async (commuID: string) => {
     return data.community;
   } catch (error) {
     console.error("Join Community error: ", error);
+    return false;
   }
-  return undefined
 };
 
 

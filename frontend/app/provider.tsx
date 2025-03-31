@@ -51,7 +51,6 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     // สำหรับการทดสอบ เราจะข้ามการตรวจสอบการเข้าถึงและอนุญาตทุก path
     // คอมเมนต์โค้ดด้านล่างไว้ชั่วคราว
 
-    /*
     // Only handle redirects for valid paths
     if (isValidPath) {
       if (!user && !isPublicPath) {
@@ -59,7 +58,6 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         router.push("/login");
       }
     }
-    */
   }, [user, loading, pathname, router]);
 
   if (loading) return <LoadingScreen />;
@@ -78,9 +76,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   // ในโหมดทดสอบเราจะไม่ block การเรนเดอร์ เพื่อให้เข้าถึงทุก path ได้
   // คอมเมนต์โค้ดด้านล่างไว้ชั่วคราว
 
-  /*
   if (isValidPath && !user && !isPublicPath) return null;
-  */
 
   // ทุก path จะแสดงผลได้ในโหมดทดสอบ
   return <>{children}</>;
