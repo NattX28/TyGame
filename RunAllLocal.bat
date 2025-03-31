@@ -2,7 +2,7 @@
 setlocal EnableDelayedExpansion
 
 REM Define the base directory
-set BASE_DIR=C:\Personal\University\Year2 Term2\Software Engineer\TyGame
+set BASE_DIR=E:\MyFloder\University\TyGame
 
 REM Start services with titles
 start "user-service" cmd /k "cd /d %BASE_DIR%\backend\user-service && air"
