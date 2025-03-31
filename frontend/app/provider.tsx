@@ -31,6 +31,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     if (loading) return;
     console.log("pathname in provider : ", pathname);
 
+    /*
     // ตรวจสอบว่า path ถูกต้อง
     const isValidPath = ALL_VALID_PATHS.some(
       (validPath) =>
@@ -58,8 +59,10 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         router.push("/login");
       }
     }
+    */
   }, [user, loading, pathname, router]);
 
+  /*
   if (loading) return <LoadingScreen />;
 
   // ตรวจสอบว่า path ถูกต้องและเป็น public path โดยใช้วิธีเดียวกันในทุกที่
@@ -77,7 +80,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   // คอมเมนต์โค้ดด้านล่างไว้ชั่วคราว
 
   if (isValidPath && !user && !isPublicPath) return null;
-
+  */
   // ทุก path จะแสดงผลได้ในโหมดทดสอบ
   return <>{children}</>;
 }

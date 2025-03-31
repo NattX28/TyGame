@@ -74,6 +74,10 @@ export async function middleware(request: NextRequest) {
   // อนุญาตให้เข้าถึงทุก path ในโหมดทดสอบ
   // return NextResponse.next();
 
+  if (token) {
+    return NextResponse.next();
+  }
+
   // คอมเมนต์โค้ดด้านล่างไว้ชั่วคราวสำหรับการทดสอบ
   // Handle authentication and authorization for valid paths
   if (!token && isProtectedPath) {
