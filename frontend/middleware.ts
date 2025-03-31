@@ -36,7 +36,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  if (isAdminPath && userRole !== "admin") {
+  if (isAdminPath && (userRole !== "Admin" && userRole !== "Super Admin")) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
