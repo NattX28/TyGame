@@ -6,20 +6,12 @@ import { Button } from "../ui/button";
 import { Community } from "@/types/types";
 import { useRouter } from "next/navigation";
 import { joinCommunity, getCommunityImage } from "@/services/community/communities";
-import { useAuth } from "@/hooks/useAuth";
 
 const CommunityCard = ({ community }: { community: Community }) => {
-  const { user } = useAuth(); // ใช้ user จาก useAuth
   const router = useRouter();
 
   const handleJoin = async (id: string) => {
-    try {
-      if (!user) {
-        // ถ้า user เป็น null แสดงว่ายังไม่ได้ล็อกอิน
-        router.push("/login"); // redirect ไปหน้า login
-        return;
-      }
-  
+    try {  
       const join = await joinCommunity(community.uuid);
       router.push(`/feed/${join.ID}`);
     } catch (error) {
