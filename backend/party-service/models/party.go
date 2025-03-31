@@ -18,6 +18,7 @@ type Party struct {
     ID        uint          `gorm:"primaryKey;autoIncrement"`
     Status    PartyStatus   `gorm:"not null;default:'OPEN'"`
     MaxSlots  int           `gorm:"not null"`
+    CommunityID  uuid.UUID     `gorm:"not null"`
     CreatedAt time.Time     `gorm:"not null"`
     Members   []PartyMember `gorm:"foreignKey:PartyID"`
 }

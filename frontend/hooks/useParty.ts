@@ -1,4 +1,4 @@
-import { Endpoint_Gateway_ws } from "@/services/api";
+import { Endpoint_Party_ws } from "@/services/api";
 import { useEffect, useState } from "react";
 
 export const useParty = (partyId: string, userId: string) => {
@@ -10,7 +10,7 @@ export const useParty = (partyId: string, userId: string) => {
     if (!partyId || !userId) return;
 
     const socket = new WebSocket(
-      `${Endpoint_Gateway_ws}/party/ws/${partyId}?user_id=${userId}`
+      `${Endpoint_Party_ws}/ws/${partyId}?user_id=${userId}`
     );
 
     socket.onopen = () => {

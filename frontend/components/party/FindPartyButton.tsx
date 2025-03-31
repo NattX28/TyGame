@@ -11,8 +11,8 @@ import {
 } from "@/components/ui/select";
 import { Search, Loader2 } from "lucide-react";
 
-const FindPartyButton = () => {
-  const { findParty, loading, error } = useFindParty();
+const FindPartyButton = ({ communityId }: { communityId: string }) => {
+  const { findPartyHook, loading, error } = useFindParty();
   const [maxSlots, setMaxSlots] = useState("4");
 
   const handleSelectChange = (value: string) => {
@@ -21,7 +21,7 @@ const FindPartyButton = () => {
 
   return (
     <div className="flex  items-center gap-2">
-      <Select value={maxSlots.toString()} onValueChange={handleSelectChange}>
+      <Select value={maxSlots} onValueChange={handleSelectChange}>
         <SelectTrigger className="w-24 h-9">
           <SelectValue placeholder="Players" />
         </SelectTrigger>
@@ -34,7 +34,10 @@ const FindPartyButton = () => {
         </SelectContent>
       </Select>
 
-      <Button size="sm" onClick={() => findParty(maxSlots)} disabled={loading}>
+      <Button
+        size="sm"
+        onClick={() => findPartyHook(maxSlots, communityId)}
+        disabled={loading}>
         {loading ? (
           <>
             <Loader2 className="mr-1 h-3 w-3 animate-spin" />
