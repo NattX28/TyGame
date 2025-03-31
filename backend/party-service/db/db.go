@@ -22,7 +22,7 @@ func Connect() {
 
 	log.Println("Connected to the database")
 	
-	// DropTables();
+	DropTables();
 	Migrate()
 }
 

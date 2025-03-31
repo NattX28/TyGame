@@ -17,7 +17,7 @@ function PartyRoom() {
       <Banner users={users} />
       <div className="flex-grow" />
       <div className="mx-auto w-5/6">
-        <Chat messages={messages} sendMessage={sendMessage} />
+        <Chat user={userID} messages={messages} sendMessage={sendMessage} />
       </div>
     </div>
   );

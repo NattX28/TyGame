@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { getUserData } from "@/services/user/user";
 
 interface ChatProps {
+  user: string;
   messages: string[];
   sendMessage: (message: string) => void;
 }
 
-const Chat = ({ messages, sendMessage }: ChatProps) => {
+const Chat = ({ user,messages, sendMessage }: ChatProps) => {
+  const userID = useAuth().user.userid;
   const [message, setMessage] = useState("");
 
   const messagesEnd = useRef<HTMLDivElement | null>(null);
@@ -14,6 +18,7 @@ const Chat = ({ messages, sendMessage }: ChatProps) => {
       messagesEnd.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
+
 
   const handleSendMessage = () => {
     if (message.trim() !== "") {
@@ -27,7 +32,7 @@ const Chat = ({ messages, sendMessage }: ChatProps) => {
       <div className="flex flex-col space-y-2 mb-4 h-64 overflow-y-auto">
         {messages.map((msg, index) => (
           <div key={index} className="flex flex-row">
-            <p className="font-bold mr-2 ">You:</p>
+            <p className="font-bold mr-2 ">{user===userID ?`you: `: `asd: `}</p>
             <span>{msg}</span>
           </div>
         ))}
