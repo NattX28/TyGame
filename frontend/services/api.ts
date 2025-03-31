@@ -5,7 +5,7 @@ const Endpoint_Gateway = prod
   ? "https://tygame.up.railway.app"
   : "http://localhost:8080";
 const Endpoint_Party_ws = prod
-  ? "ws://tygame.up.railway.app"
+  ? "wss://tygame.up.railway.app"
   : "ws://localhost:5005";
 
 const api = axios.create({
