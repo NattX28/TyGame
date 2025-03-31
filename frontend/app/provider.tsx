@@ -13,6 +13,7 @@ const ALL_VALID_PATHS = [...PUBLIC_PATHS, ...PROTECTED_PATHS, ...ADMIN_PATHS];
 export default function Providers({ children }: { children: React.ReactNode }) {
   const { loading } = useAuth();
   const user = localStorage.getItem("user");
+  
   const router = useRouter();
   const pathname = usePathname();
 

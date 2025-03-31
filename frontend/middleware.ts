@@ -8,17 +8,9 @@ const ALL_VALID_PATHS = [...PUBLIC_PATHS, ...PROTECTED_PATHS, ...ADMIN_PATHS];
 
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
-  const token = request.cookies.get("Authorization")?.value;
-
-  let userRole = null;
-  if (token) {
-    try {
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      userRole = payload.role;
-    } catch (err) {
-      console.error("Invalid Token");
-    }
-  }
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  
+  let userRole = user.role;
 
   const isPublicPath = PUBLIC_PATHS.some(
     (publicPath) => path === publicPath || path.startsWith(`${publicPath}/`)
@@ -40,7 +32,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/404", request.url)); // Redirect to a 404 page for invalid paths
   }
 
-  if (!token && isProtectedPath) {
+  if (!user.userid && isProtectedPath) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
