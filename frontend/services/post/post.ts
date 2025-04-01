@@ -1,6 +1,6 @@
 import { getCommentsResponse, getMessageResponse } from "@/types/response";
 import { api, Endpoint_Gateway } from "../api";
-import { Comment, EditPostResponse, Post } from "@/types/types";
+import { Comment, EditPostResponse, Post, StatPost } from "@/types/types";
 
 const BASE_URL_POSTS: string = "/posts";
 
@@ -17,16 +17,16 @@ export const createPost = async (
   try {
     const formData = new FormData();
     if (imageFile) {
-      formData.append("image", imageFile)
+      formData.append("image", imageFile);
     }
-    formData.append("community_id", community_id)
-    formData.append("content", content)
-    formData.append("visibility", visibility)
+    formData.append("community_id", community_id);
+    formData.append("content", content);
+    formData.append("visibility", visibility);
 
     const { data } = await api.post(`${BASE_URL_POSTS}`, formData, {
       headers: {
-        "Content-Type": "multipart/form-data"
-      }
+        "Content-Type": "multipart/form-data",
+      },
     });
     return data.post;
   } catch (error) {
@@ -37,7 +37,7 @@ export const createPost = async (
 
 export const editPost = async (
   postID: string,
-  formData: FormData,
+  formData: FormData
 ): Promise<EditPostResponse> => {
   try {
     const { data } = await api.put(`${BASE_URL_POSTS}/${postID}`, formData, {
@@ -64,9 +64,7 @@ export const deletePost = async (
   }
 };
 
-export const likePost = async (
-  postID: string
-): Promise<getMessageResponse> => {
+export const likePost = async (postID: string): Promise<getMessageResponse> => {
   try {
     const { data } = await api.get(`${BASE_URL_POSTS}/${postID}/like`);
     return data;
@@ -88,9 +86,7 @@ export const unlikePost = async (
   }
 };
 
-export const getComments = async (
-  postID: string
-): Promise<Comment[]> => {
+export const getComments = async (postID: string): Promise<Comment[]> => {
   try {
     const { data } = await api.get(`${BASE_URL_POSTS}/${postID}/comments`);
     return data.comments;
@@ -102,11 +98,11 @@ export const getComments = async (
 
 export const createComments = async (
   postID: string,
-  content: string,
+  content: string
 ): Promise<Comment> => {
   try {
     const { data } = await api.post(`${BASE_URL_POSTS}/${postID}/comments`, {
-      content
+      content,
     });
     return data.comment;
   } catch (error) {
@@ -115,12 +111,12 @@ export const createComments = async (
   }
 };
 
-export const countposts = async (userId: string): Promise<number> => {
+export const GetStatPosts = async (): Promise<StatPost[]> => {
   try {
-    const { data } = await api.get(`${BASE_URL_POSTS}/count/${userId}`);
-    return data.post_count;
+    const { data } = await api.get(`${BASE_URL_POSTS}/admin/getstatposts`);
+    return data.post_stats;
   } catch (error) {
     console.log("check post failed: ", error);
     throw new Error("check post failed");
   }
-}
+};

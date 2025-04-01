@@ -10,7 +10,18 @@ import {
   Legend,
 } from "chart.js";
 import { UsersRound, Flame, Activity, Handshake } from "lucide-react";
-import { Bar, BarChart, XAxis, Label, PolarRadiusAxis, RadialBar, RadialBarChart, ResponsiveContainer, CartesianGrid, YAxis } from "recharts";
+import {
+  Bar,
+  BarChart,
+  XAxis,
+  Label,
+  PolarRadiusAxis,
+  RadialBar,
+  RadialBarChart,
+  ResponsiveContainer,
+  CartesianGrid,
+  YAxis,
+} from "recharts";
 import {
   Card,
   CardContent,
@@ -26,8 +37,13 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { getAllUserAllCommunity, getStatRegister } from "@/services/user/admin";
-import { getAmountCommunity, listAllCommunities } from "@/services/community/communities";
-import { Community, StatRegister } from "@/types/types";
+import {
+  getAmountCommunity,
+  listAllCommunities,
+  getCommunitys,
+} from "@/services/community/communities";
+import { Community, StatPost, StatRegister } from "@/types/types";
+import { GetStatPosts } from "@/services/post/post";
 
 Chart.register(
   CategoryScale,
@@ -67,6 +83,7 @@ const Dashboard = () => {
   const [topCommunities, setTopCommunities] = useState<Community[]>([]);
   const [monthLimit, setMonthLimit] = useState(6);
   const [statRegis, setStatRegis] = useState<StatRegister[]>([]);
+  const [statPost, setStatPost] = useState<StatPost[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -74,15 +91,36 @@ const Dashboard = () => {
 
     const fetchStats = async () => {
       try {
-        const [resUserTotal, resCommuTotal, resTopCommu] = await Promise.all([
-          getAllUserAllCommunity(),
-          getAmountCommunity(),
-          listAllCommunities(5),
-        ]);
+        const [resUserTotal, resCommuTotal, resTopCommu, resTopPost] =
+          await Promise.all([
+            getAllUserAllCommunity(),
+            getAmountCommunity(),
+            listAllCommunities(5),
+            GetStatPosts(),
+          ]);
 
         setTotalUsers(resUserTotal);
         setTotalCommunities(resCommuTotal);
-        setTopCommunities(resTopCommu);
+
+        // Add community_name to resTopCommu
+        const updatedTopCommu = resTopCommu.map((community) => ({
+          ...community,
+          community_name: community.name,
+        }));
+        setTopCommunities(updatedTopCommu);
+
+        const communityIDs = resTopPost.map((post) => post.community_id);
+        const communities = await getCommunitys(communityIDs);
+        const updatedTopPost = resTopPost.map((post) => {
+          const community = communities.find(
+            (comm) => comm.uuid === post.community_id
+          );
+          return {
+            ...post,
+            community_name: community ? community.name : "Unknown",
+          };
+        });
+        setStatPost(updatedTopPost);
       } catch (error) {
         console.error("Error fetching stats:", error);
       } finally {
@@ -95,9 +133,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const [resStatRegis] = await Promise.all([
-          getStatRegister(monthLimit),
-        ]);
+        const [resStatRegis] = await Promise.all([getStatRegister(monthLimit)]);
 
         setStatRegis(resStatRegis);
       } catch (error) {
@@ -113,7 +149,6 @@ const Dashboard = () => {
       setMonthLimit(value);
     }
   };
-
 
   // Config Bar Chart
   const BarConfig = {
@@ -169,23 +204,23 @@ const Dashboard = () => {
           {/* Bar Chart */}
           <Card className="bg-second border-none shadow-none z-0">
             <CardHeader className="text-white">
-              <CardTitle>Admin Analysis</CardTitle>
+              {/* <CardTitle>Admin Analysis</CardTitle>
               <CardDescription>
                 Tools For Analysis Top Community.
-              </CardDescription>
+              </CardDescription> */}
             </CardHeader>
             <CardContent>
               <ChartContainer config={BarConfig}>
-                <BarChart accessibilityLayer data={topCommunities}>
+                <BarChart accessibilityLayer data={statPost}>
                   <XAxis
-                    dataKey="name"
+                    dataKey="community_name"
                     tickLine={false}
                     tickMargin={10}
                     axisLine={false}
                     tickFormatter={(name) => name.slice(0, 10)}
                   />
                   <Bar
-                    dataKey="member_count"
+                    dataKey="post_count"
                     stackId="a"
                     fill="var(--color-commu)"
                     radius={[4, 4, 0, 0]}
@@ -213,10 +248,10 @@ const Dashboard = () => {
           {/* Bar Chart */}
           <Card className="bg-second border-none shadow-none z-0">
             <CardHeader className="text-white">
-              <CardTitle>Admin Analysis</CardTitle>
+              {/* <CardTitle>Admin Analysis</CardTitle>
               <CardDescription>
                 Tools For Analysis Top Community.
-              </CardDescription>
+              </CardDescription> */}
             </CardHeader>
             <CardContent>
               <ChartContainer config={BarConfig}>
@@ -248,41 +283,45 @@ const Dashboard = () => {
       <div className="w-full mt-6">
         <div className="p-4 bg-second rounded-lg">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-white text-lg font-medium">User Registrations - Last {monthLimit} Months</h2>
-            <select 
+            <h2 className="text-white text-lg font-medium">
+              User Registrations - Last {monthLimit} Months
+            </h2>
+            <select
               value={monthLimit}
               onChange={(e) => setMonthLimit(parseInt(e.target.value))}
-              className="bg-second text-white rounded p-1 text-sm border border-gray-700"
-            >
+              className="bg-second text-white rounded p-1 text-sm border border-gray-700">
               <option value="3">3 months</option>
               <option value="6">6 months</option>
               <option value="12">12 months</option>
             </select>
           </div>
-          
+
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={statRegis}
                 margin={{ top: 5, right: 20, left: 0, bottom: 5 }}
-                barSize={20}
-              >
-                <CartesianGrid strokeDasharray="3 3" stroke="#374151" vertical={false} />
-                <XAxis 
-                  dataKey="month" 
+                barSize={20}>
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="#374151"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="month"
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fill: '#9CA3AF' }}
+                  tick={{ fill: "#9CA3AF" }}
                 />
-                <YAxis 
+                <YAxis
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fill: '#9CA3AF' }}
+                  tick={{ fill: "#9CA3AF" }}
                 />
-                <Bar 
-                  dataKey="count" 
-                  name="New Users" 
-                  fill="#3B82F6" 
+                <Bar
+                  dataKey="count"
+                  name="New Users"
+                  fill="#3B82F6"
                   radius={[4, 4, 0, 0]}
                 />
               </BarChart>

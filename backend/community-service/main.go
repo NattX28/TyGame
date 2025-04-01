@@ -1,13 +1,13 @@
 package main
 
 import (
-	"os"
 	"log"
+	"os"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/joho/godotenv"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/joho/godotenv"
 
 	"community-service/middleware"
 
@@ -54,6 +54,8 @@ func main() {
 	communities.Get("/profile/:nameFile", routes.ProfileCommunityHandler)
 	communities.Use(middleware.JWTMiddleware)
 	communities.Post("/create", middleware.CanManagement, routes.CreateCommunityHandler)
+
+	communities.Post("/getcommus", middleware.CanAccess, routes.GetCommunitiesHandler)
 
 	community_focus := communities.Group("/:CommuID")
 	community_focus.Get("/", middleware.CanAccess, routes.GetCommunityHandler)

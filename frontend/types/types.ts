@@ -69,6 +69,12 @@ export interface Post {
   timestamp: number;
 }
 
+export interface StatPost {
+  community_id: string;
+  post_amount: number;
+  community_name?: string;
+}
+
 // EditPostRequest
 export interface EditPostRequest {
   ID: string;
@@ -160,12 +166,12 @@ export interface ChatMessage {
   timestamp: number;
 }
 
-export interface Message{
+export interface Message {
   type: string;
   senderID: string;
   senderName: string;
   content: string;
-}  
+}
 
 export interface Room {
   room_id: string;

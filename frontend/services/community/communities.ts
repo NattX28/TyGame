@@ -6,9 +6,13 @@ const BASE_URL_COMMU: string = "/communities";
 
 //// GET
 // get all community
-export const listAllCommunities = async (limit?: number): Promise<Community[]> => {
+export const listAllCommunities = async (
+  limit?: number
+): Promise<Community[]> => {
   try {
-    const { data } = await api.get(`${BASE_URL_COMMU}/getall${limit ? `?limit=${limit}` : ''}`);
+    const { data } = await api.get(
+      `${BASE_URL_COMMU}/getall${limit ? `?limit=${limit}` : ""}`
+    );
     return data.communities; // คืนค่า array ของ Community
   } catch (error) {
     console.error("listAllCommunities error: ", error);
@@ -69,15 +73,14 @@ export const joinCommunity = async (commuID: string) => {
   }
 };
 
-
 //// POST
 // create community
 export const createCommunity = async (formData: FormData) => {
   try {
     const { data } = await api.post(`${BASE_URL_COMMU}/create`, formData, {
       headers: {
-        "Content-Type": "multipart/form-data"
-      }
+        "Content-Type": "multipart/form-data",
+      },
     });
     return data;
   } catch (error) {
@@ -87,12 +90,12 @@ export const createCommunity = async (formData: FormData) => {
 };
 
 //// PUT
-export const editCommunity = async (uuid:string, formData: FormData) => {
+export const editCommunity = async (uuid: string, formData: FormData) => {
   try {
     const { data } = await api.put(`${BASE_URL_COMMU}/${uuid}`, formData, {
       headers: {
-        "Content-Type": "multipart/form-data"
-      }
+        "Content-Type": "multipart/form-data",
+      },
     });
     return data;
   } catch (error) {
@@ -110,5 +113,23 @@ export const deleteCommunity = async (id: string) => {
   } catch (error) {
     console.error("Delete Community error: ", error);
     throw new Error("Delete community failed");
+  }
+};
+
+export const getCommunitys = async (
+  commuIDs: string[],
+  limit?: number
+): Promise<Community[]> => {
+  try {
+    const { data } = await api.post(
+      `${BASE_URL_COMMU}/getcommus${limit ? `?limit=${limit}` : ""}`,
+      {
+        commuIDs: commuIDs,
+      }
+    );
+    return data.communities; // คืนค่า array ของ Community
+  } catch (error) {
+    console.error("getCommunitys error: ", error);
+    throw new Error("Failed to fetch communities");
   }
 };

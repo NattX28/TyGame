@@ -1,20 +1,20 @@
 package main
 
 import (
-	"time"
 	"log"
 	"os"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/joho/godotenv"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-	
+	"github.com/joho/godotenv"
+
 	"post-service/middleware"
 	"post-service/public"
-	"post-service/routes/post"
-	"post-service/routes/feed"
 	"post-service/routes/comment"
-	
+	"post-service/routes/feed"
+	"post-service/routes/post"
+
 	"post-service/db"
 )
 
@@ -25,7 +25,7 @@ func main() {
 	filePath := "./uploads/posts"
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
 		if err := os.MkdirAll(filePath, os.ModePerm); err != nil {
-				return
+			return
 		}
 	}
 
@@ -48,9 +48,11 @@ func main() {
 
 	posts := app.Group("/posts")
 	posts.Use(middleware.JWTMiddleware)
-  posts.Post("/", middleware.CheckUseBanned, post.CreatePostHandler)
-  posts.Get("/image/:nameFile", public.GetImageHandler)
+	posts.Post("/", middleware.CheckUseBanned, post.CreatePostHandler)
+	posts.Get("/image/:nameFile", public.GetImageHandler)
 	posts.Get("/count/:userID", public.GetPostCountHandler)
+
+	posts.Get("/admin/getstatposts", middleware.CanAccess, public.GetAllPostEachCommu)
 
 	feeds := posts.Group("/feeds")
 	// feeds.Get("/", middleware.JWTMiddleware, post.LikePostHandler)

@@ -30,3 +30,33 @@ func GetCommunityHandler(c *fiber.Ctx) error {
 		"community": communityRes,
 	})
 }
+
+func GetCommunitiesHandler(c *fiber.Ctx) error {
+	var requestBody struct {
+		CommuIDs []uuid.UUID `json:"commuIDs"`
+	}
+
+	if err := c.BodyParser(&requestBody); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
+	}
+
+	if len(requestBody.CommuIDs) == 0 {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "No community IDs provided"})
+	}
+
+	// Pull Communities
+	var communitiesRes []models.CommunityResponse
+	query := `
+			SELECT id, name, description, category, image
+			FROM communities
+			WHERE id IN ?
+	`
+	if err := db.DB.Raw(query, requestBody.CommuIDs).Scan(&communitiesRes).Error; err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Communities not found"})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message":    "Success",
+		"communities": communitiesRes,
+	})
+}
