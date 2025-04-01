@@ -47,6 +47,7 @@ func (h *Hub) Run() {
     }
 }
 
+// ---------old--------
 func (h *Hub) addClient(client *Client) {
     h.mu.Lock()
     h.Clients[client] = true
@@ -60,23 +61,78 @@ func (h *Hub) addClient(client *Client) {
     }
     msgBytes, _ := json.Marshal(msg)
     h.broadcastToParty(client.PartyID, msgBytes)
+
+    userIDs := []uuid.UUID{}
+    h.mu.Lock()
+    for _, c := range h.PartyClients[client.PartyID] {
+        if c.UserID != client.UserID {
+            userIDs = append(userIDs, c.UserID)
+        }
+    }
+    h.mu.Unlock()
+
+    msg2 := WebSocketMessage2{
+        Type:       "USERS_JOINED",
+        PartyID:    client.PartyID,
+        UserIDS:    userIDs,
+    }
+    msgBytes2, _ := json.Marshal(msg2)
+    client.Send <- msgBytes2
 }
 
-// ในไฟล์ hub.go
-func (h *Hub) removeClient(client *Client) {
-    h.mu.Lock()
-    if _, ok := h.Clients[client]; ok {
-        delete(h.Clients, client)
-        close(client.Send)
+// -------new---------
+// func (h *Hub) removeClient(client *Client) {
+//     h.mu.Lock()
+//     defer h.mu.Unlock()
+
+//     if _, ok := h.Clients[client]; ok {
+//         log.Printf("[Hub] Removing client %s from party %d", client.UserID, client.PartyID)
         
-        // ลบ client จากรายการ client ในตี้
-        partyClients := h.PartyClients[client.PartyID]
-        for i, c := range partyClients {
-            if c == client {
-                h.PartyClients[client.PartyID] = append(partyClients[:i], partyClients[i+1:]...)
-                break
-            }
-        }
+//         // 1. ลบ client จาก maps
+//         delete(h.Clients, client)
+//         close(client.Send)
+
+//         // 2. อัพเดท PartyClients
+//         newPartyClients := make([]*Client, 0)
+//         for _, c := range h.PartyClients[client.PartyID] {
+//             if c != client {
+//                 newPartyClients = append(newPartyClients, c)
+//             }
+//         }
+
+//         // 3. จัดการ broadcast และ cleanup
+//         if len(newPartyClients) == 0 {
+//             log.Printf("[Hub] No clients remaining in party %d, removing party", client.PartyID)
+//             delete(h.PartyClients, client.PartyID)
+//         } else {
+//             h.PartyClients[client.PartyID] = newPartyClients
+//             // ส่งข้อความแจ้งสมาชิกที่เหลือ
+//             msg := WebSocketMessage{
+//                 Type:    TypeUserLeft,
+//                 PartyID: client.PartyID,
+//                 UserID:  client.UserID,
+//             }
+//             msgBytes, _ := json.Marshal(msg)
+//             h.broadcastToParty(client.PartyID, msgBytes)
+//         }
+//     }
+// }
+
+func (h *Hub) removeClient(client *Client) {
+	h.mu.Lock()
+	defer h.mu.Unlock() // remain
+
+	if _, ok := h.Clients[client]; ok {
+		delete(h.Clients, client)
+		close(client.Send)
+
+		partyClients := h.PartyClients[client.PartyID]
+		for i, c := range partyClients {
+			if c == client {
+				h.PartyClients[client.PartyID] = append(partyClients[:i], partyClients[i+1:]...)
+				break
+			}
+		}
 
         // อันนี้คือส่วนที่เพิ่มเข้ามา: ลบผู้ใช้ออกจากตี้ในฐานข้อมูล
         go func(partyID uint, userID uuid.UUID) {
@@ -85,13 +141,17 @@ func (h *Hub) removeClient(client *Client) {
                 log.Printf("Error deleting user %s from party %d: %v", userID, partyID, err)
                 return
             }
-
+            log.Printf("User %s removed from party %d", userID, partyID)
+            
             // เช็คจำนวนสมาชิกที่เหลือในตี้
             var count int64
             if err := db.DB.Model(&models.PartyMember{}).Where("party_id = ?", partyID).Count(&count).Error; err != nil {
                 log.Printf("Error counting party members %d: %v", partyID, err)
                 return
             }
+
+            // Log the remaining member count for debugging
+            log.Printf("Remaining members in party %d: %d", partyID, count)
 
             // ถ้าตี้ว่างไ(ม่เหลือคนแล้ว) ให้ลบตี้
             if count == 0 {
@@ -116,21 +176,20 @@ func (h *Hub) removeClient(client *Client) {
             }
         }(client.PartyID, client.UserID)
 
-        // ส่งข้อความแจ้งให้สมาชิกที่เหลือว่ามีคนออก
-        if len(h.PartyClients[client.PartyID]) == 0 {
-            delete(h.PartyClients, client.PartyID)
-        } else {
-            msg := WebSocketMessage{
-                Type:    TypeUserLeft,
-                PartyID: client.PartyID,
-                UserID:  client.UserID,
-            }
-            msgBytes, _ := json.Marshal(msg)
-            h.broadcastToParty(client.PartyID, msgBytes)
-        }
-    }
-    h.mu.Unlock()
+		if len(h.PartyClients[client.PartyID]) == 0 {
+			delete(h.PartyClients, client.PartyID)
+		} else {
+			msg := WebSocketMessage{
+				Type:    TypeUserLeft,
+				PartyID: client.PartyID,
+				UserID:  client.UserID,
+			}
+			msgBytes, _ := json.Marshal(msg)
+			h.broadcastToParty(client.PartyID, msgBytes)
+		}
+	}
 }
+
 
 func (h *Hub) broadcastToParty(partyID uint, message []byte) {
     h.mu.Lock()

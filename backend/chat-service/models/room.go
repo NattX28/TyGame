@@ -5,17 +5,18 @@ import (
 )
 
 type Room struct {
-	RoomID 		uuid.UUID 	`gorm:"primaryKey"`
-	IsGroup 	bool
-	Name        string      `gorm:"size:255"`
-	RoomMembers []RoomMember `gorm:"foreignKey:RoomID;onDelete:CASCADE"`
+	RoomID 				uuid.UUID 	`gorm:"primaryKey"`
+	IsGroup 			bool
+	Name        	string      `gorm:"size:255"`
+	ImageRoom   	string      `gorm:"size:255;default:'Default.jpg'"`
+	RoomMembers 	[]RoomMember `gorm:"foreignKey:RoomID;onDelete:CASCADE"`
 }
 
 type RoomMember struct {
-	RoomID               uuid.UUID 	`gorm:"primaryKey;index"`
+	RoomID               uuid.UUID 		`gorm:"primaryKey;index"`
 	UserID               uuid.UUID 		`gorm:"primaryKey;index"`
-	Verify               bool   		`gorm:"default:false"`
-	Block                bool   		`gorm:"default:false"`
+	Verify               bool   			`gorm:"default:false"`
+	Block                bool   			`gorm:"default:false"`
 	LastSeenMessageID    *uuid.UUID  	`gorm:"index"`
 }
 
@@ -26,9 +27,10 @@ type ReqCreateRoom struct {
 
 
 type RecentRoom struct {
-	RoomID    uuid.UUID `json:"room_id"`
-	IsGroup   bool      `json:"is_group"`
-	RoomName  string    `json:"room_name"`
-	LastMsg   *string   `json:"last_message"`
-	Timestamp *int64    `json:"timestamp"`
+	RoomID    		uuid.UUID `json:"room_id"`
+	IsGroup   		bool      `json:"is_group"`
+	RoomName  		string    `json:"room_name"`
+	ImageRoom 		string    `json:"image_room"`
+	LastMsg   		*string   `json:"last_message"`
+	Timestamp 		*int64    `json:"timestamp"`
 }

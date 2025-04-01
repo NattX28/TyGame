@@ -1,9 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"io"
-	"net/http"
 	"log"
 	"os"
 	"time"
@@ -22,32 +19,6 @@ import (
 	"user-service/usersmanagement"
 )
 
-
-func DownloadImage(url string, filepath string) error {
-	resp, err := http.Get(url)
-	if err != nil {
-		return fmt.Errorf("failed to fetch image: %v", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("failed to fetch image, status code: %d", resp.StatusCode)
-	}
-
-	outFile, err := os.Create(filepath)
-	if err != nil {
-		return fmt.Errorf("failed to create file: %v", err)
-	}
-	defer outFile.Close()
-
-	_, err = io.Copy(outFile, resp.Body)
-	if err != nil {
-		return fmt.Errorf("failed to save image: %v", err)
-	}
-
-	return nil
-}
-
 func main() {
 	err := godotenv.Load()
 	if err != nil {
@@ -60,12 +31,6 @@ func main() {
 				return
 		}
 	}
-
-	// err = DownloadImage("https://raw.githubusercontent.com/NattX28/TyGame/refs/heads/main/backend/user-service/uploads/users/Default.jpg", filePath+"/Default.jpg")
-	// if err != nil {
-	// 	fmt.Printf("Error downloading image: %v\n", err)
-	// 	return
-	// }
 
 	// Connect to the database
 	db.Connect()

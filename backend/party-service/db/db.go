@@ -27,11 +27,11 @@ func Connect() {
 }
 
 func DropTables() {
-    err := DB.Migrator().DropTable(&models.Party{}, &models.PartyMember{})
-    if err != nil {
-        log.Fatalf("Unable to drop tables: %v", err)
-    }
-    log.Println("Tables dropped successfully")
+	err := DB.Migrator().DropTable(&models.Party{}, &models.PartyMember{})
+	if err != nil {
+			log.Fatalf("Unable to drop tables: %v", err)
+	}
+	log.Println("Tables dropped successfully")
 }
 
 func Migrate() {

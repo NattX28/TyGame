@@ -4,23 +4,28 @@ import { useParams } from "next/navigation";
 
 import Chat from "../components/Message";
 import Banner from "../components/Profile";
-import { useAuth } from "@/hooks/useAuth";
 
-function PartyRoom() {
+function Main() {
   const partyID = useParams().id as string;
-  const userID = useAuth().user.userid;
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  if (!user.userid) {
+    return (
+      <div>Fail</div>
+    );
+  }
 
-  const { messages, sendMessage, users } = useParty(partyID, userID);
+  const { messages, sendMessage, users, isConnected } = useParty(partyID, user.userid);
+
   return (
     <div className="flex flex-col min-h-screen">
       <div className="flex-grow" />
       <Banner users={users} />
       <div className="flex-grow" />
       <div className="mx-auto w-5/6">
-        <Chat user={userID} messages={messages} sendMessage={sendMessage} />
+        <Chat messages={messages} sendMessage={sendMessage} isConnected={isConnected}/>
       </div>
     </div>
   );
 }
 
-export default PartyRoom;
+export default Main;

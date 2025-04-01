@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"errors"
+	"log"
 	"party-service/db"
 	"party-service/models"
 	"party-service/repository"
@@ -8,6 +10,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type FindPartyRequest struct {
@@ -17,6 +20,9 @@ type FindPartyRequest struct {
 func IsUserInAnyParty(userID uuid.UUID) bool {
 	var partymember models.PartyMember
 	if err := db.DB.Where("user_id = ?", userID).First(&partymember).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Printf("User %s is not in any party", userID) // Add this log
+		}
 		return false
 	}
 

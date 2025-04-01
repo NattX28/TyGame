@@ -17,6 +17,7 @@ export const login = async (
       password,
     });
     
+    localStorage.setItem("token", data.token)
     localStorage.setItem("user", JSON.stringify(data.user))
     return data;
   } catch (error: any) {
@@ -44,6 +45,7 @@ export const register = async (
       password,
     });
     
+    localStorage.setItem("token", JSON.stringify(data.token))
     localStorage.setItem("user", JSON.stringify(data.user))
     return data;
   } catch (error: any) {
@@ -84,7 +86,7 @@ export const refreshToken = async (): Promise<MessageBackend> => {
 
 //get user image
 export const getUserImage = (id: string): string => {
-  if (!id) return "";
+  if (id == "") return "";
   const path = `${Endpoint_Gateway}/users/${id}/avatar`;
   // console.log(path);
   return path;

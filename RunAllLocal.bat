@@ -7,6 +7,7 @@ set BASE_DIR=E:\MyFloder\University\TyGame
 REM Start services with titles
 start "user-service" cmd /k "cd /d %BASE_DIR%\backend\user-service && air"
 start "post-service" cmd /k "cd /d %BASE_DIR%\backend\post-service && air"
+start "chat-service" cmd /k "cd /d %BASE_DIR%\backend\chat-service && air"
 start "party-service" cmd /k "cd /d %BASE_DIR%\backend\party-service && air"
 start "community-service" cmd /k "cd /d %BASE_DIR%\backend\community-service && air"
 start "api-gateway" cmd /k "cd /d %BASE_DIR%\backend\api-gateway && air"

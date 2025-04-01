@@ -10,13 +10,16 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { createRoomReq } from "@/services/chat/chat";
 
 const ProfileActions = ({
+  MyUserId,
   profile,
   isOwnProfile,
   friendCount,
   setFriendCount,
 }: {
+  MyUserId: string;
   profile: User;
   isOwnProfile: boolean;
   friendCount: number;
@@ -39,6 +42,17 @@ const ProfileActions = ({
       console.log(err);
     }
   }
+
+  async function handleChatRequest() {
+    try {
+      const RoomId = await createRoomReq("",  [profile.id, MyUserId]);
+      router.push(`/chat/${RoomId}`);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  
 
   useEffect(() => {
     const fetchFollowingStatus = async () => {
@@ -92,7 +106,11 @@ const ProfileActions = ({
           )}
           {isFollowing ? "Unfollow" : "Follow"}
         </Button>
-        <Button className="rounded-md" size={"sm"}>
+        <Button
+          className="rounded-md"
+          size={"sm"}
+          onClick={handleChatRequest}
+        >
           <MessageSquare className="mr-2 h-4 w-4" />
           Message
         </Button>

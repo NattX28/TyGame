@@ -19,6 +19,7 @@ type Form struct {
 }
 
 type FormResponse struct {
+	ID			uuid.UUID
 	Event 	string
 	Content string
 	RoomID	uuid.UUID

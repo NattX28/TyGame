@@ -13,7 +13,7 @@ var DB *gorm.DB
 func Connect() {
 	var err error
 
-	databaseURL := os.Getenv("DATABASE_URL_PARTY_SERVICE")
+	databaseURL := os.Getenv("DATABASE_URL_CHAT_SERVICE")
 	DB, err = gorm.Open(postgres.Open(databaseURL), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Unable to connect to the database: %v", err)

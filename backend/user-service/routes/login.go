@@ -91,5 +91,6 @@ func LoginHandler(c *fiber.Ctx) error {
 			"username":      user.Username,
 			"exp":           EXP.Unix(),
 		},
+		"token": tokenString,
 	})
 }

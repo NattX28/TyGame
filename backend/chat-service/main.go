@@ -7,8 +7,10 @@ import (
 
 	"chat-service/db"
 	"chat-service/routes"
+	"chat-service/public"
 	"chat-service/middleware"
 
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
@@ -37,22 +39,22 @@ func main() {
 		AllowCredentials: true,
 	}))
 
-    app.Use(middleware.JWTMiddleware)
+    // app.Use(middleware.JWTMiddleware)
 
 	chatService := app.Group("/chat")
 
     chatService.Get("/ws", websocket.New(routes.WebSocket))
-
-    chatService.Post("/users/block", routes.BlockUser)
     
+    chatService.Get("/room/:nameFile", public.GetImageRoomHandler)
+    chatService.Use(middleware.JWTMiddleware)
+    chatService.Post("/users/block", routes.BlockUser)
     chatService.Post("/rooms/create", routes.CreateRoom)
-    chatService.Post("/rooms/contact", routes.GetRecentRoom)
-
-    chatService.Get("/rooms/:room_id/", routes.GetMessages)
+    chatService.Get("/rooms/contacts", routes.GetRecentRoom)
+    chatService.Get("/rooms/:room_id", routes.GetMessages)
 
     port := os.Getenv("PORT_CHAT_SERVICE")
     if port == "" {
-        port = "5005"
+        port = "5003"
     }
 
     log.Printf("Server starting on port %s", port)

@@ -39,11 +39,13 @@ export const useAuth = () => {
         } else {
           setUser(<User>{});
           localStorage.removeItem("user");
+          localStorage.removeItem("token");
         }
       } catch (error) {
         console.error("Error parsing user from localStorage:", error);
         setUser(<User>{});
         localStorage.removeItem("user");
+        localStorage.removeItem("token");
       }
     } else {
       setUser(<User>{});
@@ -56,6 +58,7 @@ export const useAuth = () => {
     try {
       const response = await logOut();
       localStorage.removeItem("user");
+      localStorage.removeItem("token");
 
       setUser(<User>{});
       router.push("/login");

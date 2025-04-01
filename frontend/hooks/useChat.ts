@@ -1,16 +1,51 @@
-import { Endpoint_Gateway_ws } from "@/services/api";
+import { Endpoint_Chat_ws } from "@/services/api";
+import { getRecentRooms } from "@/services/chat/chat";
+import { getUserData } from "@/services/user/user";
+import { ChatMessage, Room } from "@/types/types";
 import { useEffect, useState } from "react";
 
-export const useParty = (partyId: string, userId: string) => {
-  const [messages, setMessages] = useState<string[]>([]);
-  const [users, setUsers] = useState<string[]>([]);
+export const useChat = (roomId?: string) => {
+  const [messages, setMessages] = useState<Record<string, ChatMessage[]>>({});
+  const [Rooms, setRooms] = useState<Room[]>([]);
+  const [focusRoom, setFocusRoom] = useState<Room | null>(null);
+
   const [ws, setWs] = useState<WebSocket | null>(null);
 
+  const token = localStorage.getItem("token") || ""
+
   useEffect(() => {
-    if (!partyId || !userId) return;
+    const fetchrooms = async () => {
+      try {
+        const response = await getRecentRooms();
+        const modifiedRooms = await Promise.all(
+          response.map(async (room) => {
+            const userData = await getUserData(room.room_name);
+            return {
+              ...room,
+              user: userData,
+              room_name: room.is_group ? room.room_name : userData.name,
+            };
+          })
+        );
+        setRooms(modifiedRooms);
+        if (roomId) {
+          console.log("Find Room", roomId);
+          const room = modifiedRooms.find((room) => room.room_id === roomId);
+          if (room) {
+            console.log("Set focus to", room);
+            setFocusRoom(room);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching recent rooms:", error);
+      }
+    }
+    fetchrooms();
 
     const socket = new WebSocket(
-      `${Endpoint_Gateway_ws}/chat/ws/${partyId}?user_id=${userId}`
+      `${Endpoint_Chat_ws}/chat/ws?token=${token}${
+        roomId ? `&room_id=${roomId}` : ""
+      }`
     );
 
     socket.onopen = () => {
@@ -21,14 +56,48 @@ export const useParty = (partyId: string, userId: string) => {
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
 
-      if (data.type === "message") {
-        // ข้อความใหม่
-        setMessages((prev) => [...prev, data.content]);
-      } else if (data.type === "user-joined") {
-        // ผู้ใช้ที่เข้ามาใหม่
-        setUsers((prev) => [...prev, data.username]);
+      if (data.Event == "New Message") {
+        // New message
+        const newMessage: ChatMessage = {
+          id: data.ID,
+          content: data.Content,
+          room_id: data.RoomID,
+          sender_id: data.SenderID,
+          timestamp: data.Timestamp,
+        };
+
+        setMessages((prev) => {
+          const updatedMessages = {
+            ...prev,
+            [newMessage.room_id]: [
+              newMessage,
+              ...(prev[newMessage.room_id] || []),
+            ],
+          };
+          console.log("Updated messages:", updatedMessages); // Log the updated state here
+          return updatedMessages;
+        });
+      } else if (data.type === "new-room") {
+        // New room
+        setRooms((prev) => [
+          ...prev,
+          {
+            room_id: data.room_id,
+            is_group: data.is_group,
+            room_name: data.room_name,
+            image_room: data.image_room,
+            last_message: data.last_message,
+            timestamp: data.timestamp,
+          },
+        ]);
+      } else if (data.Event === "Message History") {
+        // Old chat
+        setMessages((prev) => ({
+          ...prev,
+          [data.room_id]: data.messages,
+        }));
       }
-    };
+    }
 
     socket.onerror = (error) => {
       console.error("❌ WebSocket error:", error);
@@ -42,16 +111,45 @@ export const useParty = (partyId: string, userId: string) => {
     return () => {
       socket.close();
     };
-  }, [partyId, userId]);
+  }, []);
+
+  const changeRoom = (room_id: string) => {
+    console.log("Message History Check");
+    if (!messages[room_id]) {
+      console.log("Message History Fetching");
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        const messageData = {
+          Event: "Req History Message",
+          RoomID: room_id,
+          Content: "1",
+        };
+        ws.send(JSON.stringify(messageData));
+      } else {
+        console.log("Websocket not connected");
+      }
+    }
+  };
 
   const sendMessage = (message: string) => {
+    if (!focusRoom) {
+      console.log("No room selected, not sending message.");
+      return;
+    }
+    if (!message || message.trim() === "") {
+      console.log("Message is empty, not sending.");
+      return;
+    }
     if (ws && ws.readyState === WebSocket.OPEN) {
-      const messageData = { type: "message", content: message };
+      const messageData = {
+        Event: "Message",
+        RoomID: focusRoom.room_id,
+        Content: message
+      };
       ws.send(JSON.stringify(messageData));
     } else {
       console.log("Websocket not connected");
     }
   };
 
-  return { messages, sendMessage, users }; // คืนค่า users เพื่อแสดงผู้ใช้ในห้อง
+  return { messages, sendMessage, changeRoom, Rooms, focusRoom, setFocusRoom };
 };

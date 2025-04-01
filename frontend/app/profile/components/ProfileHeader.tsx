@@ -32,20 +32,17 @@ const ProfileHeader = ({
   return (
     <div className="flex items-start gap-24 mb-8 px-8">
       {/* Avatar */}
-      <Avatar className="max-h-36 max-w-36">
-        <AvatarImage
-          width={144}
-          height={144}
-          src={getUserImage(profile.id)}
-          alt="@shadcn"
-          className="rounded-full object-cover aspect-square"
-        />
-        <AvatarFallback className="rounded-lg">{profile.username.substring(0, 2).toUpperCase()}</AvatarFallback>
+      <Avatar className="w-36 h-36 rounded-full mr-4">
+        <AvatarImage className="rounded-full" src={getUserImage(profile.id)} alt="User Avatar" />
+        <AvatarFallback className="flex items-center justify-center w-full h-full bg-gray-500 rounded-full text-6xl">
+          {profile.username.substring(0, 2)}
+        </AvatarFallback>
       </Avatar>
 
       {/* profile info */}
       <div className="flex-1 space-y-6">
         <ProfileActions
+          MyUserId={user.userid}
           profile={profile}
           isOwnProfile={isOwnProfile}
           friendCount={CFriend}

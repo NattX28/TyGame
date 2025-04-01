@@ -57,13 +57,13 @@ func main() {
 	})
 
 	app.Get("/ws/:party_id", websocket.New(func(c *websocket.Conn) {
-	partyID := c.Params("party_id")
-	userID := c.Query("user_id")
+		partyID := c.Params("party_id")
+		userID := c.Query("user_id")
 
-	partyIDUint, _ := strconv.ParseUint(partyID, 10, 64)
-	userIDUUID, _ := uuid.Parse(userID)
+		partyIDUint, _ := strconv.ParseUint(partyID, 10, 64)
+		userIDUUID, _ := uuid.Parse(userID)
 
-	wsServer.ServeWs(hub, c, uint(partyIDUint), userIDUUID)
+		wsServer.ServeWs(hub, c, uint(partyIDUint), userIDUUID)
 	}))
 
 	port := os.Getenv("PORT_PARTY_SERVICE")

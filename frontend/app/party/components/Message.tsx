@@ -1,16 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { getUserData } from "@/services/user/user";
-
+import { Message } from "@/types/types"
 interface ChatProps {
-  user: string;
-  messages: string[];
-  sendMessage: (message: string) => void;
+  messages: Message[];
+  sendMessage: (message: Message) => void;
+  isConnected: boolean; // เพิ่ม prop นี้
 }
 
-const Chat = ({ user,messages, sendMessage }: ChatProps) => {
-  const userID = useAuth().user.userid;
+const Chat = ({ messages, sendMessage,isConnected }: ChatProps) => {
   const [message, setMessage] = useState("");
+  const { user } = useAuth();
+  const userID = user.userid;
+  const userName = user.username;
 
   const messagesEnd = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -19,10 +20,31 @@ const Chat = ({ user,messages, sendMessage }: ChatProps) => {
     }
   }, [messages]);
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        handleSendMessage();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [message]);
 
   const handleSendMessage = () => {
+    if (!isConnected) {
+      console.log("Cannot send message - WebSocket not connected");
+      return;
+    }
+    
     if (message.trim() !== "") {
-      sendMessage(message);
+      sendMessage({ 
+        type: "message", 
+        senderID: userID, 
+        content: message, 
+        senderName: userName 
+      });
       setMessage("");
     }
   };
@@ -32,8 +54,9 @@ const Chat = ({ user,messages, sendMessage }: ChatProps) => {
       <div className="flex flex-col space-y-2 mb-4 h-64 overflow-y-auto">
         {messages.map((msg, index) => (
           <div key={index} className="flex flex-row">
-            <p className="font-bold mr-2 ">{user===userID ?`you: `: `asd: `}</p>
-            <span>{msg}</span>
+            <p className="font-bold mr-2 ">{msg.senderID === userID ? "You:" : `${msg.senderName}:`}</p>
+            <span>{msg.content}</span>
+            {/* <span>{msg}</span> */}
           </div>
         ))}
         <div ref={messagesEnd} className="h-1" />
@@ -46,13 +69,24 @@ const Chat = ({ user,messages, sendMessage }: ChatProps) => {
           onChange={(e) => setMessage(e.target.value)}
           className="flex-1 p-2 bg-white border rounded-md focus:outline-none text-black min-w-5"
           placeholder="Type a message..."
+          disabled={!isConnected}
         />
         <button
           onClick={handleSendMessage}
-          className="px-4 py-2 chat-bg hover:bg-blue-700 rounded-md">
+          disabled={!isConnected}
+          className={`px-4 py-2 rounded-md ${
+            isConnected 
+              ? "chat-bg hover:bg-blue-700" 
+              : "bg-gray-500 cursor-not-allowed"
+          }`}>
           Send
         </button>
       </div>
+      {!isConnected && (
+        <div className="text-red-500 text-sm mt-2 text-center">
+          Disconnected - Please refresh the page
+        </div>
+      )}
     </div>
   );
 };

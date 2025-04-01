@@ -128,7 +128,7 @@ const PostCard = (
           <CardHeader className="p-4 flex flex-row items-center space-y-0 gap-3">
             <Avatar className="h-10 w-10">
               <AvatarImage src={getUserImage(post.user_id)} alt={post.user_id} />
-              <AvatarFallback>{userData.name.slice(0, 2)}</AvatarFallback>
+              <AvatarFallback className="flex items-center justify-center w-full h-full bg-gray-500 rounded-full">{userData.name.slice(0, 2)}</AvatarFallback>
             </Avatar>
             <div className="flex-1 flex flex-col">
               {

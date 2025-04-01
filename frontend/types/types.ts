@@ -160,6 +160,23 @@ export interface ChatMessage {
   timestamp: number;
 }
 
+export interface Message{
+  type: string;
+  senderID: string;
+  senderName: string;
+  content: string;
+}  
+
+export interface Room {
+  room_id: string;
+  is_group: boolean;
+  room_name: string;
+  image_room: string;
+  last_message: string;
+  timestamp: number;
+  user?: User;
+}
+
 export interface ChatRoomFocus {
   room_id: string;
   is_group: boolean;
@@ -169,10 +186,10 @@ export interface RecentRoom {
   room_id: string;
   is_group: boolean;
   room_name: string;
+  image_room: string;
   last_message: string;
   timestamp: number;
 }
-
 export interface UserProfile {
   id: string | null;
   name: string;

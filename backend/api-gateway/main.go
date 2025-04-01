@@ -33,10 +33,10 @@ func main() {
 		postServiceURL = "http://localhost:5002"
 	}
 
-	// chatServiceURL := os.Getenv("CHAT_SERVICE_URL")
-	// if chatServiceURL == "" {
-	// 	chatServiceURL = "http://localhost:5003"
-	// }
+	chatServiceURL := os.Getenv("CHAT_SERVICE_URL")
+	if chatServiceURL == "" {
+		chatServiceURL = "http://localhost:5003"
+	}
 
 	communityServiceURL := os.Getenv("COMMUNITY_SERVICE_URL")
 	if communityServiceURL == "" {
@@ -50,7 +50,7 @@ func main() {
 
 	log.Printf("🔗 User Service URL: %s", userServiceURL)
 	log.Printf("🔗 Post Service URL: %s", postServiceURL)
-	// log.Printf("🔗 Chat Service URL: %s", chatServiceURL)
+	log.Printf("🔗 Chat Service URL: %s", chatServiceURL)
 	log.Printf("🔗 Community Service URL: %s", communityServiceURL)
 	log.Printf("🔗 Party Service URL: %s", partyServiceURL)
 
@@ -81,17 +81,17 @@ func main() {
 	})
 
 	// เหลือ chat service ไว้วางตรงนี้ได้เลย
-	// app.All("/chat/*", func(c *fiber.Ctx) error {
-	// 	url := postServiceURL + c.OriginalURL()
-	// 	log.Printf("➡️ Forwarding to Post Service: %s", url)
-	// 	if err := proxy.Do(c, url); err != nil {
-	// 		log.Printf("❌ Post Service unavailable: %v", err)
-	// 		return c.Status(fiber.StatusServiceUnavailable).JSON(fiber.Map{
-	// 			"error": "Post Service unavailable",
-	// 		})
-	// 	}
-	// 	return nil
-	// })
+	app.All("/chat/*", func(c *fiber.Ctx) error {
+		url := chatServiceURL + c.OriginalURL()
+		log.Printf("➡️ Forwarding to Chat Service: %s", url)
+		if err := proxy.Do(c, url); err != nil {
+			log.Printf("❌ Chat Service unavailable: %v", err)
+			return c.Status(fiber.StatusServiceUnavailable).JSON(fiber.Map{
+				"error": "Chat Service unavailable",
+			})
+		}
+		return nil
+	})
 
 	// Proxy ไปยัง Community Service
 	app.All("/communities/*", func(c *fiber.Ctx) error {

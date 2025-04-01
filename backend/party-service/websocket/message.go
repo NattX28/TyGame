@@ -19,6 +19,12 @@ type WebSocketMessage struct {
 	Content interface{} `json:"content"`
 }
 
+type WebSocketMessage2 struct {
+	Type    MessageType `json:"type"`
+	PartyID uint        `json:"party_id"`
+	UserIDS  []uuid.UUID   `json:"user_ids"`
+}
+
 type PartyUpdateData struct {
 	CurrentMembers int      `json:"current_members"`
 	MaxSlots       int      `json:"max_slots"`

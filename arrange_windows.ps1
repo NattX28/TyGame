@@ -35,6 +35,7 @@ $windowTitles = @(
     "user-service",
     "post-service",
     "party-service",
+    "chat-service",
     "community-service",
     "api-gateway",
     "next-server",

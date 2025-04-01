@@ -34,7 +34,7 @@ func CreateParty(maxSlots int,communityID uuid.UUID) (*models.Party, error) {
 		Status:    models.PartyStatusOpen,
 		MaxSlots:  maxSlots,
 		CommunityID: communityID,
-		CreatedAt: time.Now(),
+		CreatedAt:   time.Now(),
 	}
 
 	if err := db.DB.Create(party).Error; err != nil {
@@ -88,48 +88,51 @@ func GetPartyMembers(partyID uint) ([]models.PartyMember, error) {
 }
 
 func LeaveParty(userID uuid.UUID) error {
-	var member models.PartyMember
-	tx := db.DB.Begin()
+    var member models.PartyMember
+    tx := db.DB.Begin()
 
-	// ค้นหาว่า User อยู่ห้องไหน
-	if err := tx.Where("user_id = ?", userID).First(&member).Error; err != nil {
-		tx.Rollback()
-		return errors.New("user is not in any party")
-	}
+    // ค้นหาว่า User อยู่ห้องไหน
+    if err := tx.Where("user_id = ?", userID).First(&member).Error; err != nil {
+        tx.Rollback()
+        return errors.New("user is not in any party")
+    }
 
-	// ดึงข้อมูลห้องที่ User อยู่ออกมา
-	var party models.Party
-	if err := tx.First(&party, member.PartyID).Error; err != nil {
-		tx.Rollback()
-		return errors.New("party not found")
-	}
+    // ดึงข้อมูลห้องที่ User อยู่ออกมา
+    var party models.Party
+    if err := tx.First(&party, member.PartyID).Error; err != nil {
+        tx.Rollback()
+        return errors.New("party not found")
+    }
 
-	// ลบ User ออกจากห้อง
-	if err := tx.Delete(&member).Error; err != nil {
-		tx.Rollback()
-		return err
-	}
+    // ลบ User ออกจากห้อง
+    if err := tx.Where("user_id = ? AND party_id = ?", userID, member.PartyID).Delete(&models.PartyMember{}).Error; err != nil {
+        tx.Rollback()
+        return err
+    }
 
-	// เช็คว่าห้องยังมีสมาชิกเหลือไหม
-	var remainingMembers int64
-	tx.Model(&models.PartyMember{}).Where("party_id = ?", party.ID).Count(&remainingMembers)
+    // เช็คว่าห้องยังมีสมาชิกเหลือไหม
+    var remainingMembers int64
+    if err := tx.Model(&models.PartyMember{}).Where("party_id = ?", party.ID).Count(&remainingMembers).Error; err != nil {
+        tx.Rollback()
+        return err
+    }
 
-	if remainingMembers == 0 {
-		// ถ้าไม่มีสมาชิกเหลือ → ลบห้อง
-		if err := tx.Delete(&party).Error; err != nil {
-			tx.Rollback()
-			return err
-		}
-	} else {
-		// ถ้ายังมีสมาชิกอยู่ → เปลี่ยน status กลับเป็น Open
-		if party.Status == models.PartyStatusFull {
-			party.Status = models.PartyStatusOpen
-			if err := tx.Save(&party).Error; err != nil {
-				tx.Rollback()
-				return err
-			}
-		}
-	}
+    if remainingMembers == 0 {
+        // ถ้าไม่มีสมาชิกเหลือ → ลบห้อง
+        if err := tx.Delete(&party).Error; err != nil {
+            tx.Rollback()
+            return err
+        }
+    } else {
+        // ถ้ายังมีสมาชิกอยู่ → เปลี่ยน status กลับเป็น Open
+        if party.Status == models.PartyStatusFull {
+            party.Status = models.PartyStatusOpen
+            if err := tx.Save(&party).Error; err != nil {
+                tx.Rollback()
+                return err
+            }
+        }
+    }
 
-	return tx.Commit().Error
+    return tx.Commit().Error
 }

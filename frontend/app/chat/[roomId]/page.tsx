@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
-import Search from "./components/Search";
-import RoomComponant from "./components/RoomComponant";
-import MessageComponant from "./components/MessageComponant";
-import InputMessage from "./components/InputMessage";
+import Search from "../components/Search";
+import RoomComponant from "../components/RoomComponant";
+import MessageComponant from "../components/MessageComponant";
+import InputMessage from "../components/InputMessage";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { ChatMessage, RecentRoom, ChatRoomFocus, Room } from "@/types/types";
 import { getChatRoomImage } from "@/services/chat/chat";

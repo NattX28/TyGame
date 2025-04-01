@@ -1,14 +1,17 @@
 package routes
 
 import (
+	"os"
 	"log"
 	"sync"
 	"time"
+  "strconv"
 
 	"chat-service/db"
 	"chat-service/models"
 
 	"github.com/google/uuid"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/gofiber/contrib/websocket"
 )
 
@@ -43,79 +46,6 @@ func writeMessages(client *models.Client) {
 }
 
 // WebSocket handler
-func WebSocket(c *websocket.Conn) {
-	userID, err := uuid.Parse(c.Locals("UserID").(string))
-	if err != nil {
-		log.Println("Invalid UUID:", err)
-		return
-	}
-
-	// Read lock to check if the client exists
-	mu.RLock()
-	client, exists := clients[userID]
-	mu.RUnlock()
-
-	if !exists {
-		// Upgrade to write lock to create a new client
-		mu.Lock()
-		client = &models.Client{
-			UserID: userID,
-			Conn:   []*websocket.Conn{},
-			Send:   make(chan models.FormResponse),
-		}
-		clients[userID] = client
-		mu.Unlock()
-	}
-
-	// Write lock to modify client connections
-	mu.Lock()
-	client.Conn = append(client.Conn, c)
-	mu.Unlock()
-
-	log.Println("New connection for user:", userID)
-
-	// Start message writer
-	go writeMessages(client)
-
-	roomID := c.Query("room_id")
-	pageStr := c.Query("page", "1")
-	page, err := strconv.Atoi(pageStr)
-	if err != nil || page <= 0 {
-		page = 1
-	}
-
-	// Send the message history when WebSocket is connected
-	sendMessageHistory(c, roomID, page)
-
-	for {
-		var form models.Form
-		err := c.ReadJSON(&form)
-		if err != nil {
-			log.Println("Read error:", err)
-			break
-		}
-
-		switch form.Event {
-		case "send message":
-			SendMessage(client, form)
-		default:
-			log.Println("Unknown command:", form.Event)
-		}
-	}
-
-	// Remove the closed connection
-	mu.Lock()
-	for i := 0; i < len(client.Conn); i++ {
-		if client.Conn[i] == c {
-			client.Conn = append(client.Conn[:i], client.Conn[i+1:]...)
-			break
-		}
-	}
-	if len(client.Conn) == 0 {
-		delete(clients, userID) // Remove client if no connections are left
-	}
-	mu.Unlock()
-}
 
 func SendMessage(client *models.Client, form models.Form) {
 	roomID, err := uuid.Parse(form.RoomID)
@@ -131,12 +61,11 @@ func SendMessage(client *models.Client, form models.Form) {
 		return
 	}
 	
-	// Store the message in the database (assuming you have a Message model)
 	message := models.Message{
 		RoomID:    roomID,
 		SenderID:  client.UserID,
 		Content:   form.Content,
-		Timestamp: time.Now().Unix(),,
+		Timestamp: time.Now().Unix(),
 	}
 	
 	if err := db.DB.First(&models.Room{}, roomID).Error; err != nil {
@@ -157,7 +86,8 @@ func SendMessage(client *models.Client, form models.Form) {
 	
 	// Create the message payload to send to all members
 	messagePayload := models.FormResponse{
-		Event:   "new message",
+		ID:		 message.ID,
+		Event:   "New Message",
 		Content: message.Content,
 		RoomID:  roomID,
 		SenderID:  client.UserID,
@@ -212,20 +142,125 @@ func SendMessageHistory(c *websocket.Conn, roomID string, page int) {
         return
     }
 
-    // Format the messages into a response
-    var responseMessages []models.MessageResponse
-    for _, msg := range messages {
-        responseMessages = append(responseMessages, models.MessageResponse{
-            ID:        msg.ID,
-            SenderID:  msg.SenderID,
-            Content:   msg.Content,
-            Timestamp: msg.Timestamp,
-        })
-    }
-
     // Send the message history to the client
-    err = c.WriteJSON(responseMessages)
+    err = c.WriteJSON(models.WsForm{
+			Event:    	"Message History",
+			RoomID:  		roomID,
+			Messages: 	messages,
+		})
     if err != nil {
         log.Println("Error sending message history:", err)
     }
+}
+
+var jwtSecret []byte
+
+func WebSocket(c *websocket.Conn) {
+	token := c.Query("token")
+	if token == "" {
+		log.Println("Missing token in query parameters")
+		c.Close()
+		return
+	}
+
+	if jwtSecret == nil {
+		jwtSecret = []byte(os.Getenv("JWT_SECRET"))
+	}
+
+	parsedToken, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
+		return jwtSecret, nil
+	})
+	if err != nil || !parsedToken.Valid {
+		log.Println("Invalid token:", err)
+		c.Close()
+		return
+	}
+
+	claims, ok := parsedToken.Claims.(jwt.MapClaims)
+	if !ok {
+		log.Println("Invalid token claims")
+		c.Close()
+		return
+	}
+
+	userID, ok := claims["userid"].(string)
+	if !ok {
+		log.Println("Invalid token claims: missing userID")
+		c.Close()
+		return
+	}
+
+	mu.RLock()
+	client, exists := clients[uuid.MustParse(userID)]
+	mu.RUnlock()
+
+	if !exists {
+		mu.Lock()
+		client = &models.Client{
+			UserID: uuid.MustParse(userID),
+			Conn:   []*websocket.Conn{},
+			Send:   make(chan models.FormResponse),
+		}
+		clients[uuid.MustParse(userID)] = client
+		mu.Unlock()
+	}
+
+	mu.Lock()
+	client.Conn = append(client.Conn, c)
+	mu.Unlock()
+
+	log.Println("New connection for user:", userID)
+
+	// Start message writer
+	go writeMessages(client)
+
+	roomID := c.Query("room_id")
+	pageStr := c.Query("page", "1")
+	page, err := strconv.Atoi(pageStr)
+	if err != nil || page <= 0 {
+		page = 1
+	}
+
+	// Send the message history when WebSocket is connected
+	SendMessageHistory(c, roomID, page)
+	
+	for {
+		var form models.Form
+		err := c.ReadJSON(&form)
+		if err != nil {
+			log.Println("Read error:", err)
+			break
+		}
+
+		switch form.Event {
+		case "Message":
+			SendMessage(client, form)
+		case "Req History Message":
+			page, err := strconv.Atoi(form.Content)
+			if err != nil {
+        page = 1
+    	}
+			SendMessageHistory(c, form.RoomID, page)
+		default:
+			log.Println("Unknown command:", form.Event)
+		}
+	}
+
+	// Remove the closed connection
+	mu.Lock()
+	for i := 0; i < len(client.Conn); i++ {
+		if client.Conn[i] == c {
+			client.Conn = append(client.Conn[:i], client.Conn[i+1:]...)
+			break
+		}
+	}
+	if len(client.Conn) == 0 {
+		parsedUserID, err := uuid.Parse(userID)
+		if err != nil {
+			log.Println("Error parsing userID:", err)
+		} else {
+			delete(clients, parsedUserID) // Remove client if no connections are left
+		}
+	}
+	mu.Unlock()
 }

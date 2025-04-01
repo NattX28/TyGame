@@ -110,5 +110,6 @@ func RegisterHandler(c *fiber.Ctx) error {
 			"username":      newUser.Username,
 			"exp":           EXP.Unix(),
 		},
+		"token": tokenString,
 	})
 }
