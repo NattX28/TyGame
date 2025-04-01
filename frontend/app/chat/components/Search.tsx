@@ -1,5 +1,5 @@
 
-const Search = ({pholder}:{pholder:string}) => {
+const Search = ({setSearchText}:{ setSearchText: (text: string) => void }) => {
   return (
     <div className="px-4">
       <div className="relative">
@@ -9,9 +9,10 @@ const Search = ({pholder}:{pholder:string}) => {
           </svg>
         </div>
         <input 
-          type="text" 
-          placeholder={pholder}
+          type="text"
+          placeholder={"Search chat"}
           className="w-full bg-transparent text-title placeholder-gray-500 rounded-full py-2 pl-10 pr-4 border-2 border-second focus:outline-none focus:border-second"
+          onChange={(e) => setSearchText(e.target.value)}
         />
       </div>
     </div>

@@ -1,17 +1,17 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Search from "./components/Search";
 import RoomComponant from "./components/RoomComponant";
 import MessageComponant from "./components/MessageComponant";
 import InputMessage from "./components/InputMessage";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import { ChatMessage, RecentRoom, ChatRoomFocus, Room } from "@/types/types";
 import { getChatRoomImage } from "@/services/chat/chat";
 import { useParams } from "next/navigation";
 import { useChat } from "@/hooks/useChat";
 import { getUserImage } from "@/services/user/user";
 
 const page = () => {
+  const [SearchText, setSearchText] = useState<string>("");
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const params = useParams();
   const roomid = (params && params.roomId) || undefined;
@@ -24,7 +24,7 @@ const page = () => {
         <div className="px-8 pt-4">
           <p className="text-2xl font-bold tracking-widest">CHAT</p>
         </div>
-        <Search pholder={"Search chat"} />
+        <Search setSearchText={setSearchText} />
         <div className="h-full w-full overflow-y-auto scrollbar-transparent">
         {
           Rooms === null ? (
@@ -32,7 +32,7 @@ const page = () => {
           ) : Rooms.length === 0 ? (
             <p>No recent rooms found.</p>
           ) : (
-            Rooms.map((room) => 
+            Rooms.filter((room) => room.room_name.toLowerCase().startsWith(SearchText.toLowerCase())).map((room) => 
               <RoomComponant key={room.room_id} messages={messages} room={room} onRoomSelect={()=>{
                 changeRoom(room.room_id);
                 setFocusRoom(room);
