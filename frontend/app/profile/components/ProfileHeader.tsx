@@ -7,6 +7,7 @@ import { User } from "@/types/types";
 import { getUserImage } from "@/services/user/user";
 import { useEffect, useState } from "react";
 import { countfriends } from "@/services/user/friends";
+import { countposts } from "@/services/post/post";
 
 const ProfileHeader = ({
   profile,
@@ -16,12 +17,15 @@ const ProfileHeader = ({
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const isOwnProfile = user.userid === profile.id;
   const [CFriend, setCFriend] = useState(0);
+  const [CPost, setCPost] = useState(0);
 
   useEffect(() => {
     const fetchFollowingStatus = async () => {
       try {
         const numFriend = await countfriends(profile.id);
         setCFriend(numFriend);
+        const numPost = await countposts(profile.id);
+        setCPost(numPost);
       } catch (error) {
         console.log("failed to count friends");
       }
@@ -48,7 +52,7 @@ const ProfileHeader = ({
           friendCount={CFriend}
           setFriendCount={setCFriend}
         />
-        <ProfileStats posts={0} friends={CFriend} />
+        <ProfileStats posts={CPost} friends={CFriend} />
         <ProfileBio bio={profile.description} />
       </div>
     </div>

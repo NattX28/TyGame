@@ -50,6 +50,7 @@ func main() {
 	posts.Use(middleware.JWTMiddleware)
   posts.Post("/", middleware.CheckUseBanned, post.CreatePostHandler)
   posts.Get("/image/:nameFile", public.GetImageHandler)
+	posts.Get("/count/:userID", public.GetPostCountHandler)
 
 	feeds := posts.Group("/feeds")
 	// feeds.Get("/", middleware.JWTMiddleware, post.LikePostHandler)

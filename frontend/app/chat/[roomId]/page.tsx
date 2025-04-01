@@ -8,12 +8,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { getChatRoomImage } from "@/services/chat/chat";
 import { useParams } from "next/navigation";
 import { useChat } from "@/hooks/useChat";
+import { useRouter } from "next/navigation";
 import { getUserImage } from "@/services/user/user";
 
 const page = () => {
   const [SearchText, setSearchText] = useState<string>("");
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const params = useParams();
+  const router = useRouter();
   const roomid = (params && params.roomId) || undefined;
 
   const { messages, sendMessage, changeRoom, Rooms, focusRoom, setFocusRoom } = useChat(roomid);
@@ -21,8 +23,17 @@ const page = () => {
   return (
     <div className="h-screen w-screen flex flex-row bg-black">
       <div className="h-full w-[400px] hidden md:flex md:flex-col gap-4 py-4 border-r border-second">
-        <div className="px-8 pt-4">
-          <p className="text-2xl font-bold tracking-widest">CHAT</p>
+        <div className="px-8 pt-4 flex text-center">
+          <button
+            onClick={() => {
+              const lastCommunity = localStorage.getItem("lastCommunity");
+              const feedURL = lastCommunity ? `/feed/${lastCommunity}` : "/explore";
+              router.push(feedURL)
+            }}
+            className="flex items-center gap-2 hover:bg-second/20 p-2 rounded-full">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house-icon lucide-house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          </button>
+          <span className="ml-4 mt-1 text-2xl font-bold tracking-widest">CHAT</span>
         </div>
         <Search setSearchText={setSearchText} />
         <div className="h-full w-full overflow-y-auto scrollbar-transparent">
@@ -96,12 +107,12 @@ const page = () => {
               {messages[focusRoom.room_id]?.map((msg) => (
                 <MessageComponant key={msg.id} userID={user.userid} message={msg} />
               ))}
-            </div>
+            </div>  
           </div>
           <InputMessage focusRoom={focusRoom} sendMessage={sendMessage} />
         </div>
       ) : (
-        <h1>Select Chat</h1>
+        <h1 className="m-auto text-2xl">Select a Room to Chat</h1>
       )}
     </div>
   );

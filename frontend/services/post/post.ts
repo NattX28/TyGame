@@ -114,3 +114,13 @@ export const createComments = async (
     throw new Error("create comments failed");
   }
 };
+
+export const countposts = async (userId: string): Promise<number> => {
+  try {
+    const { data } = await api.get(`${BASE_URL_POSTS}/count/${userId}`);
+    return data.post_count;
+  } catch (error) {
+    console.log("check post failed: ", error);
+    throw new Error("check post failed");
+  }
+}
