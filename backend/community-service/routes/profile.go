@@ -16,7 +16,7 @@ func ProfileCommunityHandler(c *fiber.Ctx) error {
 	}
 
 	// Construct full path (only allow files inside ./uploads/logo/)
-	filePath := filepath.Join("./uploads/profile/", nameFile)
+	filePath := filepath.Join("./uploads/profile", nameFile)
 
 	// Optionally, check file extension (allow only certain types)
 	allowedExtensions := map[string]bool{

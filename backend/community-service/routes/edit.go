@@ -1,13 +1,15 @@
 package routes
 
 import (
-	"os"
 	"fmt"
+	"os"
+	"path/filepath"
+
+	"mime/multipart"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/microcosm-cc/bluemonday"
 	"github.com/google/uuid"
-	"mime/multipart"
+	"github.com/microcosm-cc/bluemonday"
 
 	"community-service/db"
 	"community-service/models"
@@ -79,7 +81,9 @@ func EditCommunityHandler(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to edit community"})
 	}
 	if imageErr != nil {
-		if err := c.SaveFile(image, fmt.Sprintf(imagePath, filename)); err != nil {
+		imagePath := "./uploads/profile/"
+    	fullImagePath := filepath.Join(imagePath, community.Image)
+		if err := c.SaveFile(image, fullImagePath); err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 				"error": "Failed to save image",
 			})
