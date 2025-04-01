@@ -77,6 +77,28 @@ export const useChat = (roomId?: string) => {
           console.log("Updated messages:", updatedMessages); // Log the updated state here
           return updatedMessages;
         });
+
+        setRooms((prev) => {
+          const roomIndex = prev.findIndex((room) => room.room_id === newMessage.room_id);
+          if (roomIndex === -1) {
+            // Add new room to the beginning if it doesn't exist
+            const newRoom: Room = {
+              room_id: newMessage.room_id,
+              is_group: false, // Default value, adjust if necessary
+              room_name: "Unknown", // Default value, adjust if necessary
+              image_room: "", // Default value, adjust if necessary
+              last_message: newMessage.content,
+              timestamp: newMessage.timestamp,
+            };
+            return [newRoom, ...prev];
+          } else {
+            // Move the room to the beginning of the array
+            const updatedRoom = { ...prev[roomIndex], last_message: newMessage.content, timestamp: newMessage.timestamp };
+            const updatedRooms = [...prev];
+            updatedRooms.splice(roomIndex, 1); // Remove the room from its current position
+            return [updatedRoom, ...updatedRooms];
+          }
+        });
       } else if (data.type === "new-room") {
         // New room
         setRooms((prev) => [
